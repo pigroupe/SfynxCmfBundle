@@ -1,5 +1,5 @@
 {
-  "name": "sfynx-project/cmf-core-bundle",
+  "name": "sfynx-project/cmf-bundle",
   "type": "symfony-bundle",
   "description": "This Bundle provides tools to construct personnal CMS with managers allowed the creation of page with blocks and widgets. It include several cache systems like ESI, varnish tags, json file, http proxy, etc",
   "keywords": ["cmf", "ESI", "widget", "cacheHTTP"],
@@ -39,7 +39,7 @@
 
   "extra": {
     "branch-alias": {
-      "dev-master": "2.8-dev"
+      "dev-master": "2.3-dev"
     }
   }
 }
