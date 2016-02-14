@@ -1,7 +1,7 @@
 {
   "name": "sfynx-project/cmf-bundle",
   "type": "symfony-bundle",
-  "description": "This Bundle provides tools to construct personnal CMS with managers allowed the creation of page with blocks and widgets. It include several cache systems like ESI, varnish tags, json file, http proxy, etc",
+  "description": "This Bundle provides tools to construct personnal CMS with managers allowed the creation of page with blocks and widgets ( management varnish and memcache with reverse proxy, search lucene manager, render ESI, SEO pages, etc. )",
   "keywords": ["cmf", "ESI", "widget", "cacheHTTP"],
   "homepage": "http://pigroupe.github.io/cmf-sfynx/",
   "license": "MIT",
