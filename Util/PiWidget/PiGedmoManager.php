@@ -134,7 +134,7 @@ class PiGedmoManager extends PiWidgetExtension
         if (isset($GLOBALS['WIDGET_SLIDER']))
             return array_merge($result, $GLOBALS['WIDGET_SLIDER']);
         else
-            return $result;        
+            return $result;
     }    
     
     /**

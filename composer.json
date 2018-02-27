@@ -4,7 +4,7 @@
   "description": "This Bundle provides tools to construct personnal CMS with managers allowed the creation of page with blocks and widgets ( management varnish and memcache with reverse proxy, search lucene manager, render ESI, SEO pages, etc. )",
   "keywords": ["cmf", "ESI", "widget", "cacheHTTP"],
   "homepage": "http://pigroupe.github.io/cmf-sfynx/",
-  "license": "LGPL-3.0+",
+  "license": "LGPL-3.0-or-later",
   "authors": [
     {
       "name": "Etienne de Longeaux",
@@ -17,7 +17,10 @@
   ],
 
   "require": {
-    "symfony/framework-bundle": "~2.8"
+    "symfony/framework-bundle": "~2.8",
+    "doctrine/doctrine-fixtures-bundle": "^2.3.0",
+    "besimple/i18n-routing-bundle": "2.4.0",
+    "sfynx-project/auth-bundle": "2.x-dev"
   },
 
   "require-dev": {
