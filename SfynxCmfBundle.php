@@ -49,22 +49,22 @@ class SfynxCmfBundle extends Bundle
     {
         parent::build($container);
         // register extension
-        $container->addCompilerPass(new PiTwigEnvironmentPass());
+        //$container->addCompilerPass(new PiTwigEnvironmentPass());
         // register all route pages.
-        $container->addCompilerPass(new AddDependencyRoute());
+        //$container->addCompilerPass(new AddDependencyRoute());
     }
-    
+
     /**
      * Boots the Bundle.
      */
     public function boot()
     {
     }
-    
+
     /**
      * Shutdowns the Bundle.
      */
     public function shutdown()
     {
-    }    
+    }
 }

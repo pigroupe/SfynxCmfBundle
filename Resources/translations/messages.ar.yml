@@ -330,6 +330,7 @@ pi.form.label.select.choose.options: الاختيار خيارات
 pi.form.label.select.choose.type: اختيار نوع
 pi.form.label.select.choose.category: اختر فئة
 pi.form.label.select.choose.template: اختيار قالب
+pi.form.label.select.choose.css: اختر قائمة ملفات كس
 pi.form.label.select.choose.block: اختيار كتلة
 pi.form.label.select.choose.content: اختيار المحتوى
 pi.form.label.select.choose.snippet: اختيار قصاصة
@@ -414,7 +415,7 @@ pi.page.form.meta_content_type: محتوى ميتا نوع
 pi.page.form.cacheable: المحتوى الثابت؟
 pi.page.form.public: الزوار-مستقلة المحتوى؟
 pi.page.form.lifetime: العمر الكاش
-pi.page.form.route_name: (page_my_test:الصفحة رقم (مثلا
+pi.page.form.route_name: '(page_my_test:الصفحة رقم (مثلا'
 pi.page.form.url: عنوان مشترك لجميع صفحات ترجمة
 pi.page.form.status: الحالة
 pi.page.form.secure: تأمين وصول

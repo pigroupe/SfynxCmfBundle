@@ -330,6 +330,7 @@ pi.form.label.select.choose.options: Select options
 pi.form.label.select.choose.type: Choose a type
 pi.form.label.select.choose.category: Choose a category
 pi.form.label.select.choose.template: Choose a template
+pi.form.label.select.choose.css: Choose a list of css files
 pi.form.label.select.choose.block: Choose a block
 pi.form.label.select.choose.content: Choose a content
 pi.form.label.select.choose.snippet: Choose a snippet
@@ -414,7 +415,7 @@ pi.page.form.meta_content_type: Meta content type
 pi.page.form.cacheable: Static page ?
 pi.page.form.public: Visitor-independant content ?
 pi.page.form.lifetime: Cache Lifetime
-pi.page.form.route_name: Page ID (ex: page_my_test)
+pi.page.form.route_name: 'Page ID (ex: page_my_test)'
 pi.page.form.url: Url common to all translation pages
 pi.page.form.status: Status
 pi.page.form.secure: Secure access

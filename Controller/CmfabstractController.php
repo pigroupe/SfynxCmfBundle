@@ -15,7 +15,7 @@ namespace Sfynx\CmfBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Sfynx\CoreBundle\Controller\abstractController;
-use Sfynx\ToolBundle\Exception\ControllerException;
+use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ControllerException;
 
 /**
  * abstract controller.
@@ -38,7 +38,7 @@ abstract class CmfabstractController extends abstractController
      */
     public function deletetwigcacheajaxAction($type)
     {
-    	$request = $this->container->get('request');
+    	$request = $this->container->get('request_stack')->getCurrentRequest();
     	$em      = $this->getDoctrine()->getManager();    	 
     	if ($request->isXmlHttpRequest()) {
             $data        = $request->get('data', null);

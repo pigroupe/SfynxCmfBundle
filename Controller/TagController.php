@@ -17,14 +17,14 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Component\HttpFoundation\Response;
 
 use Sfynx\CmfBundle\Controller\CmfabstractController;
-use Sfynx\ToolBundle\Exception\ControllerException;
-use Sfynx\CmfBundle\Entity\Translation\TagTranslation;
-use Sfynx\CmfBundle\Entity\Tag;
-use Sfynx\CmfBundle\Form\TagType;
+use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ControllerException;
+use Sfynx\CmfBundle\Layers\Domain\Entity\Translation\TagTranslation;
+use Sfynx\CmfBundle\Layers\Domain\Entity\Tag;
+use Sfynx\CmfBundle\Application\Validation\Type\TagType;
 
 /**
  * Tag controller.
- * 
+ *
  * @subpackage Admin_Controllers
  * @package    Controller
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -32,10 +32,10 @@ use Sfynx\CmfBundle\Form\TagType;
 class TagController extends CmfabstractController
 {
     protected $_entityName = "SfynxCmfBundle:Tag";
-    
+
     /**
      * Lists all Tag entities.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return Response
      * @access public
@@ -44,14 +44,14 @@ class TagController extends CmfabstractController
     public function indexAction()
     {
         $em       = $this->getDoctrine()->getManager();
-        $locale   = $this->container->get('request')->getLocale();
-        $entities = $em->getRepository("SfynxCmfBundle:Tag")->findAllByEntity($locale, 'object');      
+        $locale   = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
+        $entities = $em->getRepository("SfynxCmfBundle:Tag")->findAllByEntity($locale, 'object');
 
         return $this->render('SfynxCmfBundle:Tag:index.html.twig', array(
             'entities' => $entities
         ));
     }
-    
+
     /**
      * Enabled Tag entities.
      *
@@ -65,7 +65,7 @@ class TagController extends CmfabstractController
     {
         return parent::enabledajaxAction();
     }
-    
+
     /**
      * Disable Tag  entities.
      *
@@ -91,13 +91,13 @@ class TagController extends CmfabstractController
      */
     public function selectajaxAction()
     {
-    	$request = $this->container->get('request');
+    	$request = $this->container->get('request_stack')->getCurrentRequest();
     	$em      = $this->getDoctrine()->getManager();
-    	$locale  = $this->container->get('request')->getLocale();
+    	$locale  = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
     	//
-    	$pagination = $this->container->get('request')->get('pagination', null);
-    	$keyword    = $this->container->get('request')->get('keyword', '');
-    	$MaxResults = $this->container->get('request')->get('max', 10);
+    	$pagination = $this->container->get('request_stack')->getCurrentRequest()->get('pagination', null);
+    	$keyword    = $this->container->get('request_stack')->getCurrentRequest()->get('keyword', '');
+    	$MaxResults = $this->container->get('request_stack')->getCurrentRequest()->get('max', 10);
     	// we set query
     	$query  = $em->getRepository("SfynxCmfBundle:Tag")
                 ->getAllByCategory('', null, '', '', false);
@@ -112,10 +112,10 @@ class TagController extends CmfabstractController
     	        'field_trans_name' => 'trans',
     	    ),
     	);
-    
+
     	return $this->selectajaxQuery($pagination, $MaxResults, $keyword, $query, $locale, true);
     }
-    
+
     /**
      * Select all entities.
      *
@@ -135,13 +135,13 @@ class TagController extends CmfabstractController
                 );
             }
     	}
-    	 
+
     	return $tab;
-    }    
-    	    
+    }
+
     /**
      * Finds and displays a Tag entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
      * @access public
@@ -150,8 +150,8 @@ class TagController extends CmfabstractController
     public function showAction($id)
     {
         $em     = $this->getDoctrine()->getManager();
-        $locale = $this->container->get('request')->getLocale();
-        $entity = $em->getRepository("SfynxCmfBundle:Tag")->findOneByEntity($locale, $id, 'object');        
+        $locale = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
+        $entity = $em->getRepository("SfynxCmfBundle:Tag")->findOneByEntity($locale, $id, 'object');
 
         if (!$entity) {
             throw ControllerException::NotFoundEntity('Tag');
@@ -168,18 +168,18 @@ class TagController extends CmfabstractController
 
     /**
      * Displays a form to create a new Tag entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function newAction()
     {
         $em     = $this->getDoctrine()->getManager();
-        $locale    = $this->container->get('request')->getLocale();
-        
+        $locale    = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
+
         $entity = new Tag();
         $form   = $this->createForm(new TagType($em, $locale), $entity, array('show_legend' => false));
 
@@ -191,18 +191,18 @@ class TagController extends CmfabstractController
 
     /**
      * Creates a new Tag entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function createAction()
     {
         $em         = $this->getDoctrine()->getManager();
-        $locale    = $this->container->get('request')->getLocale();
-        
+        $locale    = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
+
         $entity  = new Tag();
         $request = $this->getRequest();
         $form    = $this->createForm(new TagType($em, $locale), $entity, array('show_legend' => false));
@@ -224,22 +224,22 @@ class TagController extends CmfabstractController
 
     /**
      * Displays a form to edit an existing Tag entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function editAction($id)
     {
         $em     = $this->getDoctrine()->getManager();
-        $locale    = $this->container->get('request')->getLocale();
+        $locale    = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
         $entity = $em->getRepository("SfynxCmfBundle:Tag")->findOneByEntity($locale, $id, 'object');
 
         if (!$entity) {
             $entity = $em->getRepository("SfynxCmfBundle:Tag")->find($id);
-            $entity->addTranslation(new TagTranslation($locale));            
+            $entity->addTranslation(new TagTranslation($locale));
         }
 
         $editForm     = $this->createForm(new TagType($em, $locale), $entity, array('show_legend' => false));
@@ -254,17 +254,17 @@ class TagController extends CmfabstractController
 
     /**
      * Edits an existing Tag entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function updateAction($id)
     {
         $em        = $this->getDoctrine()->getManager();
-        $locale    = $this->container->get('request')->getLocale();
+        $locale    = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
         $entity = $em->getRepository("SfynxCmfBundle:Tag")->findOneByEntity($locale, $id, 'object');
 
         if (!$entity) {
@@ -277,15 +277,15 @@ class TagController extends CmfabstractController
         $editForm->bind($request = $this->getRequest(), $entity);
         if ($editForm->isValid()) {
             $entity->setTranslatableLocale($locale);
-            
+
             $other  = $entity->getGroupnameother();
             if (!empty($other)){
                 $entity->setGroupname($other);
                 $entity->setGroupnameother('');
                 $entity->translate($locale)->setGroupname($other);
                 $entity->translate($locale)->setGroupnameother('');
-            }          
-            
+            }
+
             $em->persist($entity);
             $em->flush();
 
@@ -301,10 +301,10 @@ class TagController extends CmfabstractController
 
     /**
      * Deletes a Tag entity.
-     * 
+     *
      * @Secure(roles="ROLE_SUPER_ADMIN")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -327,20 +327,20 @@ class TagController extends CmfabstractController
                 $em->remove($entity);
                 $em->flush();
             } catch (\Exception $e) {
-                $this->container->get('request')->getSession()->getFlashBag()->clear();
-                $this->container->get('request')->getSession()->getFlashBag()->add('notice', 'pi.session.flash.wrong.undelete');
+                $this->container->get('request_stack')->getCurrentRequest()->getSession()->getFlashBag()->clear();
+                $this->container->get('request_stack')->getCurrentRequest()->getSession()->getFlashBag()->add('notice', 'pi.session.flash.wrong.undelete');
             }
         }
 
         return $this->redirect($this->generateUrl('admin_tag'));
     }
 
-    private function createDeleteForm($id)
+    protected function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
             ->getForm()
         ;
     }
-    
+
 }

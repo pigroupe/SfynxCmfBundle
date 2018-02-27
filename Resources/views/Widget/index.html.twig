@@ -1,5 +1,5 @@
 {% block content %}
-    {% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-header.html.twig" %}
+    {% include getParameter('sfynx.template.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-header.html.twig" %}
 	<table id="grid_page_widget" >
 	    <thead>
 	        <tr>
@@ -37,7 +37,7 @@
 	    {% endfor %}
 	    </tbody>
 	</table>
-	{% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-footer.html.twig" %}
+	{% include getParameter('sfynx.template.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-footer.html.twig" %}
 	
 {% endblock %}
 
@@ -61,7 +61,7 @@
 					'rows_disable': {'sButtonText':'pi.grid.action.row_disable', 'route':'admin_widget_disablentity_ajax'},
 					'select_all': {'sButtonText':'pi.grid.action.select_all'},
 					'select_none': {'sButtonText':'pi.grid.action.select_none'},
-					'rows_default_deletetwigcache': {'sButtonText':"<img class='btn-action'src='"~getParameter('sfynx.auth.theme.layout.admin.grid.img')~"delete_cache.png'  title='" ~ 'pi.grid.action.row_deletcache'|trans ~ "'>"~ 'pi.grid.action.row_deletcache'|trans, 'route':'admin_widget_deletetwigcache_ajax', 'questionTitle':'pi.grid.action.row_deletcache'|trans, 'questionText':'Voulez-vous vider le cache ?'},
+					'rows_default_deletetwigcache': {'sButtonText':"<img class='btn-action'src='"~getParameter('sfynx.template.theme.layout.admin.grid.img')~"delete_cache.png'  title='" ~ 'pi.grid.action.row_deletcache'|trans ~ "'>"~ 'pi.grid.action.row_deletcache'|trans, 'route':'admin_widget_deletetwigcache_ajax', 'questionTitle':'pi.grid.action.row_deletcache'|trans, 'questionText':'Voulez-vous vider le cache ?'},
 				}		
 			} 			
 	%}

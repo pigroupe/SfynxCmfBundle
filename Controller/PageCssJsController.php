@@ -14,7 +14,7 @@ namespace Sfynx\CmfBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sfynx\CmfBundle\Controller\CmfabstractController;
-use Sfynx\ToolBundle\Exception\ControllerException;
+use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ControllerException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,13 +24,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
-use Sfynx\CmfBundle\Entity\Page;
-use Sfynx\CmfBundle\Repository\PageRepository;
-use Sfynx\CmfBundle\Form\PageCssJsType as PageType;
+use Sfynx\CmfBundle\Layers\Domain\Entity\Page;
+use Sfynx\CmfBundle\Layers\Infrastructure\Persistence\Repository\PageRepository;
+use Sfynx\CmfBundle\Application\Validation\Type\PageCssJsType as PageType;
 
 /**
  * PageByTrans controller.
- * 
+ *
  * @subpackage   Admin_Controllers
  * @package    Controller
  *
@@ -39,13 +39,13 @@ use Sfynx\CmfBundle\Form\PageCssJsType as PageType;
 class PageCssJsController extends CmfabstractController
 {
     protected $_entityName = "SfynxCmfBundle:Page";
-    
+
     /**
      * Lists all Page entities.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -59,14 +59,14 @@ class PageCssJsController extends CmfabstractController
             'entities' => $entities
         ));
     }
-    
+
     /**
      * Enabled Page entities.
      *
      * @Route("/admin/pagecssjs/enabled", name="admin_pagecssjs_enabledentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -74,14 +74,14 @@ class PageCssJsController extends CmfabstractController
     {
         return parent::enabledajaxAction();
     }
-    
+
     /**
      * Disable Page  entities.
      *
      * @Route("/admin/pagecssjs/disable", name="admin_pagecssjs_disablentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -92,10 +92,10 @@ class PageCssJsController extends CmfabstractController
 
     /**
      * Finds and displays a Page entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -119,10 +119,10 @@ class PageCssJsController extends CmfabstractController
 
     /**
      * Displays a form to create a new Page entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -140,10 +140,10 @@ class PageCssJsController extends CmfabstractController
 
     /**
      * Creates a new Page entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -157,33 +157,33 @@ class PageCssJsController extends CmfabstractController
         if ('POST' === $request->getMethod()) {
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
-    
+
                 // On persiste tous les translations d'une page.
                 foreach($entity->getTranslations() as $translationPage) {
                     $entity->addTranslation($translationPage);
                 }
                 $em->persist($entity);
                 $em->flush();
-    
+
                 return $this->redirect($this->generateUrl('admin_pagecssjs_show', array('id' => $entity->getId())));
-                
+
             }
-    
+
             return $this->render('SfynxCmfBundle:PageCssJs:new.html.twig', array(
                 'entity' => $entity,
                 'form'   => $form->createView()
             ));
         }
-        
+
         return array('form' => $form->createView());
     }
 
     /**
      * Displays a form to edit an existing Page entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -199,7 +199,7 @@ class PageCssJsController extends CmfabstractController
 
         $editForm = $this->createForm(new PageType($this->container), $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($id);
-        
+
         return $this->render('SfynxCmfBundle:PageCssJs:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
@@ -209,10 +209,10 @@ class PageCssJsController extends CmfabstractController
 
     /**
      * Edits an existing Page entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -221,7 +221,7 @@ class PageCssJsController extends CmfabstractController
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SfynxCmfBundle:Page')->find($id);
-        
+
         if (!$entity) {
             throw ControllerException::NotFoundEntity('Page');
         }
@@ -253,10 +253,10 @@ class PageCssJsController extends CmfabstractController
 
     /**
      * Deletes a Page entity.
-     * 
+     *
      * @Secure(roles="ROLE_SUPER_ADMIN")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -282,7 +282,7 @@ class PageCssJsController extends CmfabstractController
         return $this->redirect($this->generateUrl('admin_pagecssjs'));
     }
 
-    private function createDeleteForm($id)
+    protected function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')

@@ -1,94 +1,132 @@
 parameters:
-    piapp.admin.handler.requestHandler.class: Sfynx\CmfBundle\EventListener\HandlerRequest
-    piapp.admin.handler.controllerHandler.class: Sfynx\CmfBundle\EventListener\HandlerController
+    piapp.admin.handler.requestHandler.class: Sfynx\CmfBundle\Layers\Infrastructure\EventListener\HandlerRequest\HandlerRequestSubject
+    sfynx.cmf.handler.requesthandler.params:
+      date_expire: '%sfynx.core.cookies.date_expire%'
+      is_switch_redirection_seo_authorized: '%pi_app_admin.seo.redirection.authorized%'
+      seo_redirection_repository: '%pi_app_admin.seo.redirection.repository%'
+      seo_redirection_file_name: '%pi_app_admin.seo.redirection.file_name%'
+      is_prefix_locale: '%pi_app_admin.page.route.with_prefix_locale%'
+      is_scop_authorized: '%pi_app_admin.page.scop.authorized%'
+      scop_globals: '%pi_app_admin.page.scop.globals%'
+
+    piapp.admin.handler.controllerHandler.class: Sfynx\CmfBundle\Layers\Infrastructure\EventListener\HandlerController
     
-    piapp.admin.listener.postload.class: Sfynx\CmfBundle\EventListener\PostLoadListener
-    piapp.admin.listener.loadclassmetadata.class: Sfynx\CmfBundle\EventListener\loadClassMetadataListener
-    piapp.admin.listener.onflush.class: Sfynx\CmfBundle\EventListener\OnFlushListener
-    piapp.admin.listener.preremove.class: Sfynx\CmfBundle\EventListener\PreRemoveListener
-    piapp.admin.listener.postremove.class: Sfynx\CmfBundle\EventListener\PostRemoveListener
-    piapp.admin.listener.prepersist.class: Sfynx\CmfBundle\EventListener\PrePersistListener
-    piapp.admin.listener.postpersist.class: Sfynx\CmfBundle\EventListener\PostPersistListener
-    piapp.admin.listener.preupdate.class: Sfynx\CmfBundle\EventListener\PreUpdateListener
-    piapp.admin.listener.postupdate.class: Sfynx\CmfBundle\EventListener\PostUpdateListener
-    piapp.admin.listener.schema.class: Sfynx\CmfBundle\EventListener\SchemaListener
+    piapp.admin.listener.postload.class: Sfynx\CmfBundle\Layers\Infrastructure\EventListener\PostLoadListener
+    piapp.admin.listener.loadclassmetadata.class: Sfynx\CmfBundle\Layers\Infrastructure\EventListener\loadClassMetadataListener
+    piapp.admin.listener.onflush.class: Sfynx\CmfBundle\Layers\Infrastructure\EventListener\OnFlushListener
+    piapp.admin.listener.preremove.class: Sfynx\CmfBundle\Layers\Infrastructure\EventListener\PreRemoveListener
+    piapp.admin.listener.postremove.class: Sfynx\CmfBundle\Layers\Infrastructure\EventListener\PostRemoveListener
+    piapp.admin.listener.prepersist.class: Sfynx\CmfBundle\Layers\Infrastructure\EventListener\PrePersistListener
+    piapp.admin.listener.postpersist.class: Sfynx\CmfBundle\Layers\Infrastructure\EventListener\PostPersistListener
+    piapp.admin.listener.preupdate.class: Sfynx\CmfBundle\Layers\Infrastructure\EventListener\PreUpdateListener
+    piapp.admin.listener.postupdate.class: Sfynx\CmfBundle\Layers\Infrastructure\EventListener\PostUpdateListener
+    piapp.admin.listener.schema.class: Sfynx\CmfBundle\Layers\Infrastructure\EventListener\SchemaListener
 
 services:
     #               
     # handlers Configuration
     #
     pi_app_admin.request_handler:
-        class: %piapp.admin.handler.requestHandler.class%
-        arguments: [@service_container]
+        class: '%piapp.admin.handler.requestHandler.class%'
+        public : true
+        arguments:
+            - '@sfynx.tool.route.factory'
+            - '@sfynx.cache.filecache'
+            - '@event_dispatcher'
+            - '@templating'
+            - '@service_container'
+        calls:
+            - [ setParams, [ '%sfynx.cmf.handler.requesthandler.params%' ] ]
         tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 64 }
+            - { name: 'kernel.event_listener', event: 'kernel.request', method: 'onKernelRequest', priority: 64 }
 
 #    pi_app_admin.controller_handler:
-#        class: %piapp.admin.handler.controllerHandler.class%
-#        arguments: [@service_container]
+#        class: '%piapp.admin.handler.controllerHandler.class%'
+#        arguments:
+#            - '@service_container'
 #        tags:
-#            - { name: kernel.event_listener, event: kernel.response }  
+#            - { name: 'kernel.event_listener', event: 'kernel.response' }
 
             
     #               
     # Doctrine events Configuration
     #
     pi_app_admin.postload_listener:
-        class: %piapp.admin.listener.postload.class%
-        arguments: [@service_container]
+        class: '%piapp.admin.listener.postload.class%'
+        public : false
+        arguments:
+            - '@service_container'
         tags:
-            - { name: doctrine.event_listener, event: postLoad, connexion: default }
+            - { name: 'doctrine.event_listener', event: 'postLoad', connexion: 'default' }
 
 #    pi_app_admin.loadclassmetadata_listener:
-#        class: %piapp.admin.listener.loadclassmetadata.class%
-#        arguments: [@service_container]
+#        class: '%piapp.admin.listener.loadclassmetadata.class%'
+#        public : false
+#        arguments:
+#            - '@service_container'
 #        tags:
-#            - { name: doctrine.event_listener, event: loadClassMetadata, connexion: default }
+#            - { name: 'doctrine.event_listener', event: 'loadClassMetadata', connexion: 'default' }
 
 #    pi_app_admin.onflush_listener:
-#        class: %piapp.admin.listener.onflush.class%
-#        arguments: [@service_container]
+#        class: '%piapp.admin.listener.onflush.class%'
+#        public : false
+#        arguments:
+#            - '@service_container'
 #        tags:
-#            - { name: doctrine.event_listener, event: onFlush, connexion: default }
+#            - { name: d'octrine.event_listener', event: 'onFlush', connexion: 'default' }
 
     pi_app_admin.preremove_listener:
-        class: %piapp.admin.listener.preremove.class%
-        arguments: [@service_container]
+        class: '%piapp.admin.listener.preremove.class%'
+        public : false
+        arguments:
+            - '@service_container'
         tags:
-            - { name: doctrine.event_listener, event: preRemove, connexion: default }
+            - { name: 'doctrine.event_listener', event: 'preRemove', connexion: 'default' }
 
     pi_app_admin.postremove_listener:
-        class: %piapp.admin.listener.postremove.class%
-        arguments: [@service_container]
+        class: '%piapp.admin.listener.postremove.class%'
+        public : false
+        arguments:
+            - '@service_container'
         tags:
-            - { name: doctrine.event_listener, event: postRemove, connexion: default }
+            - { name: 'doctrine.event_listener', event: 'postRemove', connexion: 'default' }
 
     pi_app_admin.schema_listener:
-        class: %piapp.admin.listener.schema.class%
-        arguments: [@service_container]
+        class: '%piapp.admin.listener.schema.class%'
+        public : false
+        arguments:
+            - '@service_container'
         tags:
-            - { name: doctrine.event_listener, event: postGenerateSchema, connexion: default }
+            - { name: 'doctrine.event_listener', event: 'postGenerateSchema', connexion: 'default' }
 
     pi_app_admin.prepersist_listener:
-        class: %piapp.admin.listener.prepersist.class%
-        arguments: [@service_container]
+        class: '%piapp.admin.listener.prepersist.class%'
+        public : false
+        arguments:
+            - '@service_container'
         tags:
-            - { name: doctrine.event_listener, event: prePersist, connexion: default }   
+            - { name: 'doctrine.event_listener', event: 'prePersist', connexion: 'default' }
             
     pi_app_admin.postpersist_listener:
-        class: %piapp.admin.listener.postpersist.class%
-        arguments: [@service_container]
+        class: '%piapp.admin.listener.postpersist.class%'
+        public : false
+        arguments:
+            - '@service_container'
         tags:
-            - { name: doctrine.event_listener, event: postPersist, connexion: default }
+            - { name: 'doctrine.event_listener', event: 'postPersist', connexion: 'default' }
 
     pi_app_admin.preupdate_listener:
-        class: %piapp.admin.listener.preupdate.class%
-        arguments: [@service_container]
+        class: '%piapp.admin.listener.preupdate.class%'
+        public : false
+        arguments:
+            - '@service_container'
         tags:
-            - { name: doctrine.event_listener, event: preUpdate, connexion: default } 
+            - { name: 'doctrine.event_listener', event: 'preUpdate', connexion: 'default' }
 
     pi_app_admin.postupdate_listener:
-        class: %piapp.admin.listener.postupdate.class%
-        arguments: [@service_container]
+        class: '%piapp.admin.listener.postupdate.class%'
+        public : false
+        arguments:
+            - '@service_container'
         tags:
-            - { name: doctrine.event_listener, event: postUpdate, connexion: default }           
+            - { name: 'doctrine.event_listener', event: 'postUpdate', connexion: 'default' }

@@ -18,14 +18,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use Sfynx\CmfBundle\Controller\CmfabstractController;
-use Sfynx\ToolBundle\Exception\ControllerException;
-use Sfynx\CmfBundle\Entity\Page;
-use Sfynx\CmfBundle\Repository\PageRepository;
-use Sfynx\CmfBundle\Form\PageByTransType as PageType;
+use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ControllerException;
+use Sfynx\CmfBundle\Layers\Domain\Entity\Page;
+use Sfynx\CmfBundle\Layers\Infrastructure\Persistence\Repository\PageRepository;
+use Sfynx\CmfBundle\Application\Validation\Type\PageByTransType as PageType;
 
 /**
  * PageByTrans controller.
- * 
+ *
  * @subpackage Admin_Controllers
  * @package    Controller
  * @author     Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -33,7 +33,7 @@ use Sfynx\CmfBundle\Form\PageByTransType as PageType;
 class PageByTransController extends CmfabstractController
 {
     protected $_entityName = "SfynxCmfBundle:Page";
-    
+
     /**
      * Enabled Page entities.
      *
@@ -47,7 +47,7 @@ class PageByTransController extends CmfabstractController
     {
         return parent::enabledajaxAction();
     }
-    
+
     /**
      * Disable Page  entities.
      *
@@ -61,7 +61,7 @@ class PageByTransController extends CmfabstractController
     {
         return parent::disableajaxAction();
     }
-    
+
     /**
      * Delete Page entities.
      *
@@ -74,13 +74,13 @@ class PageByTransController extends CmfabstractController
     public function deleteajaxAction()
     {
         return parent::deletajaxAction();
-    }  
+    }
 
     /**
      * Delete twig cache Page
-     * 
+     *
      * @param string $type Type value
-     * 
+     *
      * @Route("/admin/pagebytrans/deletetwigcache", name="admin_pagebytrans_deletetwigcache_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return Response
@@ -90,13 +90,13 @@ class PageByTransController extends CmfabstractController
     public function deletetwigcacheajaxAction($type = 'page')
     {
     	return parent::deletetwigcacheajaxAction($type);
-    }    
-    
+    }
+
     /**
      * Lists all Page entities.
-     * 
+     *
      * @param string $status Status value
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return Response
      * @access public
@@ -104,25 +104,26 @@ class PageByTransController extends CmfabstractController
      */
     public function wizardAction($status)
     {
-        $locale    = $this->container->get('request')->getLocale();
+        $locale    = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
         $em        = $this->getDoctrine()->getManager();
-        $token     = $this->get('security.context')->getToken();
+        $token     = $this->get('security.token_storage')->getToken();
         $idUser    = $token->getUser()->getId();
         $RolesUser = $token->getUser()->getRoles();
-        if (in_array('ROLE_ADMIN', $RolesUser) 
-                || in_array('ROLE_SUPER_ADMIN', $RolesUser) 
-                || in_array('ROLE_CONTENT_MANAGER', $RolesUser)
+        if (in_array('ROLE_ADMIN', $RolesUser)
+            || in_array('ROLE_SUPER_ADMIN', $RolesUser)
+            || in_array('ROLE_CONTENT_MANAGER', $RolesUser)
         ) {
-            if ($status != "all")
+            if ($status != "all") {
                 $entities = $em->getRepository('SfynxCmfBundle:Page')
                     ->getAllPageByStatus($locale, $status)
                     ->getQuery()
                     ->getResult();
-            else
+            } else {
                 $entities = $em->getRepository('SfynxCmfBundle:Page')
                     ->getAllPageHtml()
                     ->getQuery()
                     ->getResult();
+            }
         } else {
             if ($status != "all") {
                 $entities = $em->getRepository('SfynxCmfBundle:Page')
@@ -136,16 +137,16 @@ class PageByTransController extends CmfabstractController
                         ->getResult();
             }
         }
-    
+
         return $this->render('SfynxCmfBundle:PageByTrans:wizard.html.twig', array(
                 'entities' => $entities,
                 'id_grid'  => 'grid_' . $status,
         ));
     }
-    
+
     /**
      * Lists all Page entities.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return Response
      * @access public
@@ -155,17 +156,17 @@ class PageByTransController extends CmfabstractController
     {
         $em       = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('SfynxCmfBundle:Page')->getAllPageHtml()->getQuery()->getResult();
-        
+
         return $this->render('SfynxCmfBundle:PageByTrans:index.html.twig', array(
             'entities' => $entities
         ));
-    }    
+    }
 
     /**
      * Finds and displays a Page entity.
-     * 
+     *
      * @param integer $id Id value
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return Response
      * @access public
@@ -175,7 +176,7 @@ class PageByTransController extends CmfabstractController
     {
         $em       = $this->getDoctrine()->getManager();
         $entity   = $em->getRepository('SfynxCmfBundle:Page')->find($id);
-        $NoLayout = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         if (!$entity) {
             throw ControllerException::NotFoundEntity('Page');
         }
@@ -184,13 +185,13 @@ class PageByTransController extends CmfabstractController
         return $this->render("SfynxCmfBundle:PageByTrans:show.html.twig", array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
-            'NoLayout'    => $NoLayout,                
+            'NoLayout'    => $NoLayout,
         ));
     }
 
     /**
      * Displays a form to create a new Page entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return Response
      * @access public
@@ -198,29 +199,29 @@ class PageByTransController extends CmfabstractController
      */
     public function newAction()
     {
-        $locale = $this->container->get('request')->getLocale();
-        $User   = $this->get('security.context')->getToken()->getUser();
-        
+        $locale = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
+        $User   = $this->get('security.token_storage')->getToken()->getUser();
+
         $entity = new Page();
         $entity->setMetaContentType(PageRepository::TYPE_TEXT_HTML);
         $entity->setUser($User);
-        
+
         $form   = $this->createForm(new PageType($this->container, $locale, $User->getRoles()), $entity, array('show_legend' => false));
-        $NoLayout = $this->container->get('request')->query->get('NoLayout');
-        
+        $NoLayout = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
+
         //$form->remove('page_css');
         //$form->remove('page_js');
-        
+
         return $this->render("SfynxCmfBundle:PageByTrans:new.html.twig", array(
             'entity' => $entity,
             'form'   => $form->createView(),
-            'NoLayout' => $NoLayout,                
+            'NoLayout' => $NoLayout,
         ));
     }
 
     /**
      * Creates a new Page entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return Response
      * @access public
@@ -228,47 +229,47 @@ class PageByTransController extends CmfabstractController
      */
     public function createAction()
     {
-        $NoLayout = $this->container->get('request')->query->get('NoLayout');
-        $locale   = $this->container->get('request')->getLocale();
-        $User     = $this->get('security.context')->getToken()->getUser();
-        
+        $NoLayout = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
+        $locale   = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
+        $User     = $this->get('security.token_storage')->getToken()->getUser();
+
         $entity   = new Page();
         $entity->setMetaContentType(PageRepository::TYPE_TEXT_HTML);
         $entity->setUser($User);
-        
+
         $request = $this->getRequest();
         $form    = $this->createForm(new PageType($this->container, $locale, $User->getRoles()), $entity, array('show_legend' => false));
         $form->bind($request);
-        
+
         if ('POST' === $request->getMethod()) {
             if ($form->isValid()) {
-                $em = $this->getDoctrine()->getManager();    
+                $em = $this->getDoctrine()->getManager();
                 // We persist all page translations
                 foreach($entity->getTranslations() as $translationPage) {
                     $entity->addTranslation($translationPage);
-                }                
+                }
                 $em->persist($entity);
                 $em->flush();
-    
-                return $this->redirect($this->generateUrl('admin_pagebytrans_show', array('id' => $entity->getId(), 'NoLayout' => $NoLayout)));                
+
+                return $this->redirect($this->generateUrl('admin_pagebytrans_show', array('id' => $entity->getId(), 'NoLayout' => $NoLayout)));
             }
-    
+
             return $this->render("SfynxCmfBundle:PageByTrans:new.html.twig", array(
                 'entity' => $entity,
                 'form'   => $form->createView(),
-                'NoLayout' => $NoLayout,                    
+                'NoLayout' => $NoLayout,
             ));
         }
-        
+
         return array('form' => $form->createView());
     }
 
     /**
      * Displays a form to edit an existing Page entity.
-     * 
+     *
      * @param Request $request The request instance
      * @param Page    $entity  A page entity
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return Response
      * @access public
@@ -276,30 +277,30 @@ class PageByTransController extends CmfabstractController
      */
     public function editAction(Request $request, Page $entity)
     {
-        $locale = $this->container->get('request')->getLocale();
-        $User   = $this->get('security.context')->getToken()->getUser();
-        $NoLayout = $this->container->get('request')->query->get('NoLayout');
-        
+        $locale = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
+        $User   = $this->get('security.token_storage')->getToken()->getUser();
+        $NoLayout = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
+
         //$this->get('pi_app_admin.form.page.type')->setInit($this->container, $locale, $User->getRoles());
         //$form = $this->get('pi_app_admin.form.pagebytrans');
-        
+
         $editForm = $this->createForm(new PageType($this->container, $locale, $User->getRoles()), $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($entity->getId());
-        
+
         return $this->render("SfynxCmfBundle:PageByTrans:edit.html.twig", array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            'NoLayout'    => $NoLayout,                
+            'NoLayout'    => $NoLayout,
         ));
     }
 
     /**
      * Edits an existing Page entity.
-     * 
+     *
      * @param Request $request The request instance
      * @param Page    $entity  A page entity
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return Response
      * @access public
@@ -307,22 +308,22 @@ class PageByTransController extends CmfabstractController
      */
     public function updateAction(Request $request, Page $entity)
     {
-        $locale   = $this->container->get('request')->getLocale();
-        $User     = $this->get('security.context')->getToken()->getUser();
-        $NoLayout = $this->container->get('request')->query->get('NoLayout');
-        if ($this->container->get('security.context')->isGranted("ROLE_SUPER_ADMIN")) {
+        $locale   = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
+        $User     = $this->get('security.token_storage')->getToken()->getUser();
+        $NoLayout = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
+        if ($this->container->get('security.authorization_checker')->isGranted("ROLE_SUPER_ADMIN")) {
             $originalTranslations = array();
             // Create an array of the current Widget objects in the database
             foreach ($entity->getTranslations() as $Translation) {
                 $originalTranslations[] = $Translation;
             }
-        }        
+        }
         $editForm   = $this->createForm(new PageType($this->container, $locale, $User->getRoles()), $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($entity->getId());
-        $editForm->bind($this->getRequest());        
+        $editForm->bind($this->getRequest());
         if ($editForm->isValid()) {
-            $em       = $this->getDoctrine()->getManager(); 
-            if ($this->container->get('security.context')->isGranted("ROLE_SUPER_ADMIN")) {
+            $em       = $this->getDoctrine()->getManager();
+            if ($this->container->get('security.authorization_checker')->isGranted("ROLE_SUPER_ADMIN")) {
                 // filter $originalWidgets to contain tags no longer present
                 foreach ($entity->getTranslations() as $Translation) {
                     foreach ($originalTranslations as $key => $toDel) {
@@ -336,14 +337,14 @@ class PageByTransController extends CmfabstractController
                     $Translation->setPage(null);
                     $em->remove($Translation);
                 }
-            }            
+            }
             // We persist all page translations
             foreach($entity->getTranslations() as $translationPage) {
                 $entity->addTranslation($translationPage);
             }
             $em->persist($entity);
             $em->flush();
-            
+
             return $this->redirect($this->generateUrl('admin_pagebytrans_edit', array('id' => $entity->getId(), 'NoLayout' => $NoLayout)));
         }
 
@@ -351,16 +352,16 @@ class PageByTransController extends CmfabstractController
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            'NoLayout'    => $NoLayout,                
+            'NoLayout'    => $NoLayout,
         ));
     }
 
     /**
      * Deletes a Page entity.
-     * 
+     *
      * @param Request $request The request instance
      * @param Page    $entity  A page entity
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return RedirectResponse
      * @access public
@@ -372,20 +373,20 @@ class PageByTransController extends CmfabstractController
         $request = $this->getRequest();
         $form->bind($request);
         if ($form->isValid()) {
-            $em   = $this->getDoctrine()->getManager();  
+            $em   = $this->getDoctrine()->getManager();
             try {
                 $em->remove($entity);
                 $em->flush();
             } catch (\Exception $e) {
-                $this->container->get('request')->getSession()->getFlashBag()->clear();
-                $this->container->get('request')->getSession()->getFlashBag()->add('notice', 'pi.session.flash.wrong.undelete');
-            }            
+                $this->container->get('request_stack')->getCurrentRequest()->getSession()->getFlashBag()->clear();
+                $this->container->get('request_stack')->getCurrentRequest()->getSession()->getFlashBag()->add('notice', 'pi.session.flash.wrong.undelete');
+            }
         }
 
         return $this->redirect($this->generateUrl('admin_pagebytrans'));
     }
 
-    private function createDeleteForm($id)
+    protected function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')

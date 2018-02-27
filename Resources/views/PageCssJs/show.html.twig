@@ -1,5 +1,5 @@
 {% if app.request.query.get('NoLayout') %}
-	{% set layout_nav = getParameter('sfynx.auth.theme.layout.ajax') %}
+	{% set layout_nav = getParameter('sfynx.template.theme.layout.ajax') %}
 {% else %}
 	{% set layout_nav = app.request.attributes.get('sfynx-layout') %}
 {% endif %}	
@@ -50,7 +50,7 @@
 	    </tbody>
 	</table>
 
-	{% if is_granted('ROLE_ALLOWED_TO_SWITCH') %}
+	{% if is_granted('ROLE_EDITOR') %}
 		<ul class="ui-widget-header ui-footer">
 			<li>
 		        <a href="{{ path('admin_pagecssjs') }}" class="button-ui-back-list">{{ 'pi.grid.action.back-to-the-list'|trans }}</a>      

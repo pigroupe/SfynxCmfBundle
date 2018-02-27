@@ -12,9 +12,9 @@
     
 	<!-- Begin tag markup -->
 	<div id="tabs">
-		{% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:new-header.html.twig" %}
-		{% form_theme form getParameter('sfynx.auth.theme.layout.admin.form.template') %}
-		<form class="myform" action="{{ path('admin_tag_create') }}" method="post" {{ form_enctype(form) }} novalidate>
+		{% include getParameter('sfynx.template.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:new-header.html.twig" %}
+		{% form_theme form getParameter('sfynx.template.theme.layout.admin.form.template') %}
+		{{ form_start(form, {'action': path('admin_tag_create'), 'method': 'POST', 'attr': {'class': 'myform', 'novalidate': 'novalidate', 'enctype': 'application/x-www-form-urlencoded'}}) }}
 			<div id="tabs-1">
 				    {{ form_widget(form) }} 
 			</div>		    
@@ -24,9 +24,9 @@
 			    	<button type="submit" class="button-ui-create">{{ 'pi.grid.action.create'|trans }}</button>
 		            <a href="{{ path('admin_tag') }}" class="button-ui-back-list">{{ 'pi.grid.action.back-to-the-list'|trans }}</a>
 			    </li>
-			</ul>		    
-		</form>
-		{% include getParameter('sfynx.auth.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:new-footer.html.twig" %}
+			</ul>
+        {{ form_end(form) }}
+		{% include getParameter('sfynx.template.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:new-footer.html.twig" %}
 	</div>
 	<!-- End tag markup -->	
 	

@@ -14,7 +14,7 @@ namespace Sfynx\CmfBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sfynx\CmfBundle\Controller\CmfabstractController;
-use Sfynx\ToolBundle\Exception\ControllerException;
+use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ControllerException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,13 +24,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
-use Sfynx\CmfBundle\Entity\Page;
-use Sfynx\CmfBundle\Repository\PageRepository;
-use Sfynx\CmfBundle\Form\PageByBlockType as PageType;
+use Sfynx\CmfBundle\Layers\Domain\Entity\Page;
+use Sfynx\CmfBundle\Layers\Infrastructure\Persistence\Repository\PageRepository;
+use Sfynx\CmfBundle\Application\Validation\Type\PageByBlockType as PageType;
 
 /**
  * PageByBlock controller.
- * 
+ *
  * @subpackage   Admin_Controllers
  * @package    Controller
  *
@@ -39,13 +39,13 @@ use Sfynx\CmfBundle\Form\PageByBlockType as PageType;
 class PageByBlockController extends CmfabstractController
 {
     protected $_entityName = "SfynxCmfBundle:Page";
-    
+
     /**
      * Lists all Page entities.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -59,14 +59,14 @@ class PageByBlockController extends CmfabstractController
             'entities' => $entities
         ));
     }
-    
+
     /**
      * Enabled Page entities.
      *
      * @Route("/admin/pagebyblock/enabled", name="admin_pagebyblock_enabledentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -74,14 +74,14 @@ class PageByBlockController extends CmfabstractController
     {
         return parent::enabledajaxAction();
     }
-    
+
     /**
      * Disable Page  entities.
      *
      * @Route("/admin/pagebyblock/disable", name="admin_pagebyblock_disablentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -89,20 +89,20 @@ class PageByBlockController extends CmfabstractController
     {
         return parent::disableajaxAction();
     }
-    
+
     /**
      * Finds and displays a Page entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function showAction($id)
     {
         $em         = $this->getDoctrine()->getManager();
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
 
         $entity = $em->getRepository('SfynxCmfBundle:Page')->find($id);
 
@@ -121,24 +121,24 @@ class PageByBlockController extends CmfabstractController
 
     /**
      * Displays a form to create a new Page entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function newAction()
     {
-        $User   = $this->get('security.context')->getToken()->getUser();
+        $User   = $this->get('security.token_storage')->getToken()->getUser();
         $entity = new Page();
         $entity->setMetaContentType(PageRepository::TYPE_TEXT_HTML);
         $entity->setUser($User);
         $form   = $this->createForm(new PageType($this->container, $User->getRoles()), $entity, array('show_legend' => false));
-        
+
         //$form->remove('page_css');
         //$form->remove('page_js');
-        
+
         return $this->render('SfynxCmfBundle:PageByBlock:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView()
@@ -147,22 +147,22 @@ class PageByBlockController extends CmfabstractController
 
     /**
      * Creates a new Page entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function createAction()
     {
-        $User      = $this->get('security.context')->getToken()->getUser();
+        $User      = $this->get('security.token_storage')->getToken()->getUser();
         $entity  = new Page();
         $entity->setMetaContentType(PageRepository::TYPE_TEXT_HTML);
         $entity->setUser($User);
         $request = $this->getRequest();
         $form    = $this->createForm(new PageType($this->container, $User->getRoles()), $entity, array('show_legend' => false));
-        $form->bind($request);        
+        $form->bind($request);
 
         if ('POST' === $request->getMethod()) {
             if ($form->isValid()) {
@@ -174,32 +174,32 @@ class PageByBlockController extends CmfabstractController
                 }
                 $em->persist($entity);
                 $em->flush();
-    
+
                 return $this->redirect($this->generateUrl('admin_pagebyblock_show', array('id' => $entity->getId())));
-                
+
             }
-    
+
             return $this->render('SfynxCmfBundle:PageByBlock:new.html.twig', array(
                 'entity' => $entity,
                 'form'   => $form->createView()
             ));
         }
-        
+
         return array('form' => $form->createView());
     }
 
     /**
      * Displays a form to edit an existing Page entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function editAction($id)
     {
-        $User     = $this->get('security.context')->getToken()->getUser();
+        $User     = $this->get('security.token_storage')->getToken()->getUser();
         $em     = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('SfynxCmfBundle:Page')->find($id);
 
@@ -209,7 +209,7 @@ class PageByBlockController extends CmfabstractController
 
         $editForm = $this->createForm(new PageType($this->container, $User->getRoles()), $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($id);
-        
+
         return $this->render('SfynxCmfBundle:PageByBlock:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
@@ -219,16 +219,16 @@ class PageByBlockController extends CmfabstractController
 
     /**
      * Edits an existing Page entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function updateAction($id)
     {
-        $User     = $this->get('security.context')->getToken()->getUser();
+        $User     = $this->get('security.token_storage')->getToken()->getUser();
         $em     = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('SfynxCmfBundle:Page')->find($id);
 
@@ -263,10 +263,10 @@ class PageByBlockController extends CmfabstractController
 
     /**
      * Deletes a Page entity.
-     * 
+     *
      * @Secure(roles="ROLE_SUPER_ADMIN")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -292,9 +292,9 @@ class PageByBlockController extends CmfabstractController
         return $this->redirect($this->generateUrl('admin_pagebytrans'));
     }
 
-    private function createDeleteForm($id)
+    protected function createDeleteForm($id)
     {
-        return $this->createFormBuilder(array('id' => $id))
+        return $this->createFormBuilder(['id' => $id])
             ->add('id', 'hidden')
             ->getForm()
         ;

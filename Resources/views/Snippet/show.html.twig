@@ -53,7 +53,7 @@
 	    </tbody>
 	</table>
 	
-	{% if is_granted('ROLE_ALLOWED_TO_SWITCH') %}
+	{% if is_granted('ROLE_EDITOR') %}
 	<ul class="ui-widget-header ui-footer">
 		<li>
 	        <a href="{{ path('admin_snippet') }}" class="button-ui-back-list">{{ 'pi.grid.action.back-to-the-list'|trans }}</a>      
