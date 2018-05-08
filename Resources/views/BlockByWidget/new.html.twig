@@ -1,11 +1,11 @@
 <h1><a href="{{ path('admin_redirection') }}">{{ "pi.home"|trans }}</a> > <a href="{{ path_url('admin_blockbywidget_show') }}">{{ 'pi.page.widget.title'|trans }}</a> > {{ 'pi.grid.action.create'|trans }}</h1>
 
-<form action="{{ path('admin_blockbywidget_create') }}" method="post" {{ form_enctype(form) }}>
+{{ form_start(form, {'action': path('admin_blockbywidget_create'), 'method': 'POST', 'attr': {'novalidate': 'novalidate', 'enctype': 'application/x-www-form-urlencoded'}}) }}
     {{ form_widget(form) }}
     <p>
         <button type="submit">{{ 'pi.grid.action.create'|trans }}</button>
     </p>
-</form>
+{{ form_end(form) }}
 
 <ul class="ui-widget-header">
     <li>

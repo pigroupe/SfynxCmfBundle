@@ -15,7 +15,7 @@ namespace Sfynx\CmfBundle\DataFixtures\ORM;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Sfynx\CmfBundle\Entity\KeyWord;
+use Sfynx\CmfBundle\Layers\Domain\Entity\KeyWord;
 
 /**
  * KeyWords DataFixtures.
@@ -45,27 +45,27 @@ class KeyWordsFixtures extends AbstractFixture implements OrderedFixtureInterfac
         $field2->setName('visible');
         $field2->setEnabled(true);
         $manager->persist($field2);
-        
+
         $field3 = new KeyWord();
         $field3->setGroupname('Group Rubrique');
         $field3->setName('invisible');
         $field3->setEnabled(true);
         $manager->persist($field3);
-        
+
         $field4 = new KeyWord();
         $field4->setGroupname('Groupe Page');
         $field4->setName('invisible');
         $field4->setEnabled(true);
-        $manager->persist($field4);        
-        
+        $manager->persist($field4);
+
         $manager->flush();
-        
+
         $this->addReference('KeyWord-1', $field1);
         $this->addReference('KeyWord-2', $field2);
         $this->addReference('KeyWord-3', $field3);
         $this->addReference('KeyWord-4', $field4);
     }
-    
+
     /**
      * Retrieve the order number of current fixture
      *
@@ -77,5 +77,5 @@ class KeyWordsFixtures extends AbstractFixture implements OrderedFixtureInterfac
     {
         // The order in which fixtures will be loaded
         return 1;
-    }    
+    }
 }

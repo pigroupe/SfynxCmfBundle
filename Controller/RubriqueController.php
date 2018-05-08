@@ -14,7 +14,7 @@ namespace Sfynx\CmfBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sfynx\CmfBundle\Controller\CmfabstractController;
-use Sfynx\ToolBundle\Exception\ControllerException;
+use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ControllerException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,12 +24,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
-use Sfynx\CmfBundle\Entity\Rubrique;
-use Sfynx\CmfBundle\Form\RubriqueType;
+use Sfynx\CmfBundle\Layers\Domain\Entity\Rubrique;
+use Sfynx\CmfBundle\Application\Validation\Type\RubriqueType;
 
 /**
  * Rubrique controller.
- * 
+ *
  * @subpackage   Admin_Controllers
  * @package    Controller
  *
@@ -38,20 +38,20 @@ use Sfynx\CmfBundle\Form\RubriqueType;
 class RubriqueController extends CmfabstractController
 {
     protected $_entityName = "SfynxCmfBundle:Rubrique";
-    
+
     /**
      * Lists all Rubrique entities.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function indexAction()
     {
         $em         = $this->getDoctrine()->getManager();
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         $entities     = $em->getRepository('SfynxCmfBundle:Rubrique')->findAll();
 
         return $this->render('SfynxCmfBundle:Rubrique:index.html.twig', array(
@@ -59,14 +59,14 @@ class RubriqueController extends CmfabstractController
             'NoLayout' => $NoLayout,
         ));
     }
-    
+
     /**
      * Enabled Rubrique entities.
      *
      * @Route("/admin/rubrique/enabled", name="admin_rubrique_enabledentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -74,14 +74,14 @@ class RubriqueController extends CmfabstractController
     {
         return parent::enabledajaxAction();
     }
-    
+
     /**
      * Disable Rubrique  entities.
      *
      * @Route("/admin/rubrique/disable", name="admin_rubrique_disablentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -92,10 +92,10 @@ class RubriqueController extends CmfabstractController
 
     /**
      * Finds and displays a Rubrique entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -103,7 +103,7 @@ class RubriqueController extends CmfabstractController
     {
         $em         = $this->getDoctrine()->getManager();
         $entity     = $em->getRepository('SfynxCmfBundle:Rubrique')->find($id);
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
 
         if (!$entity) {
             throw ControllerException::NotFoundEntity('Rubrique');
@@ -120,10 +120,10 @@ class RubriqueController extends CmfabstractController
 
     /**
      * Displays a form to create a new Rubrique entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -132,10 +132,10 @@ class RubriqueController extends CmfabstractController
         $entity = new Rubrique();
         $em     = $this->getDoctrine()->getManager();
         $form   = $this->createForm(new RubriqueType(), $entity, array('show_legend' => false));
-        
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        $parent_id  = $this->container->get('request')->query->get('parent');
-        
+
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
+        $parent_id  = $this->container->get('request_stack')->getCurrentRequest()->query->get('parent');
+
         if ($parent_id){
             $parent = $em->getRepository("SfynxCmfBundle:Rubrique")->find($parent_id);
             $entity->setParent($parent);
@@ -151,10 +151,10 @@ class RubriqueController extends CmfabstractController
 
     /**
      * Creates a new Rubrique entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -164,15 +164,15 @@ class RubriqueController extends CmfabstractController
         $request = $this->getRequest();
         $form    = $this->createForm(new RubriqueType(), $entity, array('show_legend' => false));
         $form->bind($request);
-        
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            
-            return $this->redirect($this->generateUrl('admin_rubrique_show', array('id' => $entity->getId(), 'NoLayout' => $NoLayout)));            
+
+            return $this->redirect($this->generateUrl('admin_rubrique_show', array('id' => $entity->getId(), 'NoLayout' => $NoLayout)));
         }
 
         return $this->render('SfynxCmfBundle:Rubrique:new.html.twig', array(
@@ -184,10 +184,10 @@ class RubriqueController extends CmfabstractController
 
     /**
      * Displays a form to edit an existing Rubrique entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -195,7 +195,7 @@ class RubriqueController extends CmfabstractController
     {
         $em         = $this->getDoctrine()->getManager();
         $entity     = $em->getRepository('SfynxCmfBundle:Rubrique')->find($id);
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');        
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
 
         if (!$entity) {
             throw ControllerException::NotFoundEntity('Rubrique');
@@ -214,10 +214,10 @@ class RubriqueController extends CmfabstractController
 
     /**
      * Edits an existing Rubrique entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -225,7 +225,7 @@ class RubriqueController extends CmfabstractController
     {
         $em         = $this->getDoctrine()->getManager();
         $entity     = $em->getRepository('SfynxCmfBundle:Rubrique')->find($id);
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
 
         if (!$entity) {
             throw ControllerException::NotFoundEntity('Rubrique');
@@ -234,13 +234,13 @@ class RubriqueController extends CmfabstractController
         $editForm   = $this->createForm(new RubriqueType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        $request = $this->getRequest();
+        $request = $this->container->get('request_stack')->getCurrentRequest();
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
-            
+
             return $this->redirect($this->generateUrl('admin_rubrique_edit', array('id' => $id, 'NoLayout' => $NoLayout)));
         }
 
@@ -254,10 +254,10 @@ class RubriqueController extends CmfabstractController
 
     /**
      * Deletes a Rubrique entity.
-     * 
+     *
      * @Secure(roles="ROLE_SUPER_ADMIN")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -265,7 +265,7 @@ class RubriqueController extends CmfabstractController
     {
         $form         = $this->createDeleteForm($id);
         $request     = $this->getRequest();
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
 
         $form->bind($request);
 
@@ -281,38 +281,38 @@ class RubriqueController extends CmfabstractController
                 $em->remove($entity);
                 $em->flush();
             } catch (\Exception $e) {
-                $this->container->get('request')->getSession()->getFlashBag()->add('notice', 'pi.session.flash.right.undelete');
-            }            
+                $this->container->get('request_stack')->getCurrentRequest()->getSession()->getFlashBag()->add('notice', 'pi.session.flash.right.undelete');
+            }
         }
 
         return $this->redirect($this->generateUrl('admin_rubrique', array('NoLayout' => $NoLayout)));
     }
 
-    private function createDeleteForm($id)
+    protected function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
             ->getForm()
         ;
     }
-    
+
     /**
      * Create a tree of the tree
      *
      * @Secure(roles="ROLE_EDITOR")
      * @param string $category
-     * 
+     *
      * @access public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function treeAction()
     {
         $em        = $this->getDoctrine()->getManager();
-        $locale    = $this->container->get('request')->getLocale();
-         
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $locale    = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
+
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         if (!$NoLayout)     $template = "tree.html.twig"; else $template = "tree_ajax.html.twig";
-    
+
         // tree management
         $self = &$this;
         $self->NoLayout = $NoLayout;
@@ -323,7 +323,7 @@ class RubriqueController extends CmfabstractController
                 'rootClose' => "\n </ul></div> \n",
                 'childOpen' => "    <li> \n",        // 'childOpen' => "    <li class='collapsed' > \n",
                 'childClose' => "    </li> \n",
-                'nodeDecorator' => function($node) use (&$self) {                     
+                'nodeDecorator' => function($node) use (&$self) {
                     // define of all url images
                     $Urlpath0     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/plus.png');
                     $UrlpathAdd   = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/add.png');
@@ -331,47 +331,47 @@ class RubriqueController extends CmfabstractController
                     $Urlpath2     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/up.png');
                     $Urlpath3     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/down.png');
                     $Urlpath4     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/remove.png');
-    
+
                     $linkNode     = '<h4>'. $node['titre'] . '&nbsp;&nbsp;&nbsp; (node: ' .  $node['id'] . ', level : ' .  $node['lvl'] . ')' . '</h4>';
-    
+
                     if ( ($node['lft'] == -1) && ($node['rgt'] == 0) )   $linkNode .= '<div class="inner">';
                     if ( ($node['lft'] !== -1) && ($node['rgt'] !== 0) ) $linkNode .= '<div class="inner">';
                     if ( ($node['lft'] == -1) && ($node['rgt'] !== 0) )  $linkNode .= '<div class="inner">';
-    
+
                     $linkAdd    = '<a href="#" class="tree-action" data-url="' . $self->generateUrl('admin_rubrique_new', array("NoLayout" => true,  'parent' => $node['id'])) . '" ><img src="'.$UrlpathAdd.'" title="'.$self->translator->trans('pi.add').'"  width="16" /></a>';
                     $linkEdit   = '<a href="#" class="tree-action" data-url="' . $self->generateUrl('admin_rubrique_edit', array('id' => $node['id'], "NoLayout" => true)) . '" ><img src="'.$Urlpath1.'" title="'.$self->translator->trans('pi.edit').'"  width="16" /></a>';
                     $linkUp     = '<a href="' . $self->generateUrl('admin_rubrique_move_up', array('id' => $node['id'],  'NoLayout'=> $self->NoLayout)) . '"><img src="'.$Urlpath2.'" title="'.$self->translator->trans('pi.move-up').'" width="16" /></a>';
                     $linkDown   = '<a href="' . $self->generateUrl('admin_rubrique_move_down', array('id' => $node['id'],  'NoLayout'=> $self->NoLayout)) . '"><img src="'.$Urlpath3.'" title="'.$self->translator->trans('pi.move-down').'" width="16" /></a>';
                     $linkDelete = '<a href="' . $self->generateUrl('admin_rubrique_node_remove', array('id' => $node['id'],  'NoLayout'=> $self->NoLayout)) . '"><img src="'.$Urlpath4.'" title="'.$self->translator->trans('pi.delete').'"  width="16" /></a>';
-    
+
                     $linkNode .= $linkAdd . '&nbsp;&nbsp;&nbsp;' . $linkEdit . '&nbsp;&nbsp;&nbsp;' . $linkUp . '&nbsp;&nbsp;&nbsp;' . $linkDown . '&nbsp;&nbsp;&nbsp;' . $linkDelete;
-    
+
                     if ( ($node['lft'] == -1) && ($node['rgt'] == 0) )  $linkNode .= '</div>'; // if ( ($node['lft'] == -1) && ($node['rgt'] !== 0) )
                     if ( ($node['lft'] == -1) && ($node['rgt'] !== 0) ) $linkNode .= '</div>'; // if ( ($node['lft'] == -1) && ($node['rgt'] !== 0) )
                     return $linkNode;
                 }
         );
-         
+
         // we repair the tree
         $em->getRepository("SfynxCmfBundle:Rubrique")->recover();
         $result = $em->getRepository("SfynxCmfBundle:Rubrique")->verify();
-        
-        $node   = $this->container->get('request')->query->get('node');
+
+        $node   = $this->container->get('request_stack')->getCurrentRequest()->query->get('node');
         if (!empty($node) ){
             $node  = $em->getRepository("SfynxCmfBundle:Rubrique")->findNodeOr404($node, $locale,'object');
         } else {
             $node = null;
-        }        
-         
+        }
+
         $nodes  = $em->getRepository("SfynxCmfBundle:Rubrique")->getAllTree($locale, '', 'array', false, true, $node);
         $tree   = $em->getRepository("SfynxCmfBundle:Rubrique")->buildTree($nodes, $options);
-         
+
         return $this->render("SfynxCmfBundle:Rubrique:$template", array(
-                'tree'          => $tree,
-                'NoLayout'      => $NoLayout,
+            'tree'          => $tree,
+            'NoLayout'      => $NoLayout,
         ));
     }
-    
+
     /**
      * Move the node up in the same level
      *
@@ -384,12 +384,12 @@ class RubriqueController extends CmfabstractController
     public function moveUpAction($id)
     {
         $em                 = $this->getDoctrine()->getManager();
-        $locale             = $this->container->get('request')->getLocale();
-        $NoLayout        = $this->container->get('request')->query->get('NoLayout');
-         
+        $locale             = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
+        $NoLayout        = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
+
         $node             = $em->getRepository("SfynxCmfBundle:Rubrique")->findNodeOr404($id, $locale);
         $entity_node_pos = $node->getRoot();
-         
+
         if ($node->getLvl() == NULL){
             $all_root_nodes     = $em->getRepository("SfynxCmfBundle:Rubrique")->getAllByCategory("", null, "ASC")->getQuery()->getResult();
             foreach($all_root_nodes as $key => $routeNode){
@@ -403,14 +403,14 @@ class RubriqueController extends CmfabstractController
             $em->flush();
         }else
             $em->getRepository("SfynxCmfBundle:Rubrique")->moveUp($node);
-    
+
         // we repair the tree
         $em->getRepository("SfynxCmfBundle:Rubrique")->recover();
         $result = $em->getRepository("SfynxCmfBundle:Rubrique")->verify();
-    
+
         return $this->redirect($this->generateUrl('admin_rubrique_tree', array('NoLayout' => $NoLayout)));
     }
-    
+
     /**
      * Move the node down in the same level
      *
@@ -423,12 +423,12 @@ class RubriqueController extends CmfabstractController
     public function moveDownAction($id)
     {
         $em                 = $this->getDoctrine()->getManager();
-        $locale             = $this->container->get('request')->getLocale();
-        $NoLayout        = $this->container->get('request')->query->get('NoLayout');
-         
+        $locale             = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
+        $NoLayout        = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
+
         $node             = $em->getRepository("SfynxCmfBundle:Rubrique")->findNodeOr404($id, $locale);
         $entity_node_pos = $node->getRoot();
-    
+
         if ($node->getLvl() == NULL){
             $all_root_nodes     = $em->getRepository("SfynxCmfBundle:Rubrique")->getAllByCategory("", null, "DESC")->getQuery()->getResult();
             foreach($all_root_nodes as $key => $routeNode){
@@ -442,14 +442,14 @@ class RubriqueController extends CmfabstractController
             $em->flush();
         }else
             $em->getRepository("SfynxCmfBundle:Rubrique")->moveDown($node);
-    
+
         // we repair the tree
         $em->getRepository("SfynxCmfBundle:Rubrique")->recover();
         $result = $em->getRepository("SfynxCmfBundle:Rubrique")->verify();
-         
+
         return $this->redirect($this->generateUrl('admin_rubrique_tree', array('NoLayout' => $NoLayout)));
     }
-    
+
     /**
      * Removes given $node from the tree and reparents its descendants
      *
@@ -462,13 +462,13 @@ class RubriqueController extends CmfabstractController
     public function removeAction($id)
     {
         $em        = $this->getDoctrine()->getManager();
-        $locale    = $this->container->get('request')->getLocale();
+        $locale    = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
         $node    = $em->getRepository("SfynxCmfBundle:Rubrique")->findNodeOr404($id, $locale);
-         
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-    
+
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
+
         $em->getRepository("SfynxCmfBundle:Rubrique")->removeFromTree($node);
         return $this->redirect($this->generateUrl('admin_rubrique_tree', array('NoLayout' => $NoLayout)));
     }
-        
+
 }

@@ -14,7 +14,7 @@ namespace Sfynx\CmfBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sfynx\CmfBundle\Controller\CmfabstractController;
-use Sfynx\ToolBundle\Exception\ControllerException;
+use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ControllerException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,12 +24,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
-use Sfynx\CmfBundle\Entity\Block;
-use Sfynx\CmfBundle\Form\BlockByWidgetType;
+use Sfynx\CmfBundle\Layers\Domain\Entity\Block;
+use Sfynx\CmfBundle\Application\Validation\Type\BlockByWidgetType;
 
 /**
  * BlockByWidget controller.
- * 
+ *
  * @subpackage   Admin_Controllers
  * @package    Controller
  *
@@ -38,14 +38,14 @@ use Sfynx\CmfBundle\Form\BlockByWidgetType;
 class BlockByWidgetController extends CmfabstractController
 {
     protected $_entityName = "SfynxCmfBundle:Block";
-    
+
     /**
      * Enabled Block entities.
      *
      * @Route("/admin/block/enabled", name="admin_page_block_enabledentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -53,14 +53,14 @@ class BlockByWidgetController extends CmfabstractController
     {
         return parent::enabledajaxAction();
     }
-    
+
     /**
      * Disable Block  entities.
      *
      * @Route("/admin/block/disable", name="admin_page_block_disablentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -68,7 +68,7 @@ class BlockByWidgetController extends CmfabstractController
     {
         return parent::disableajaxAction();
     }
-    
+
     /**
      * Position entities.
      *
@@ -82,8 +82,8 @@ class BlockByWidgetController extends CmfabstractController
     public function positionajaxAction()
     {
         return parent::positionajaxAction();
-    }    
-    
+    }
+
     /**
      * Lists all Block entities.
      *
@@ -96,39 +96,39 @@ class BlockByWidgetController extends CmfabstractController
     public function indexAction($page)
     {
         $em = $this->getDoctrine()->getManager();
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-    
-        if (is_null($page))
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
+
+        if ((null === $page))
             $entities = $em->getRepository('SfynxCmfBundle:Block')->findAll();
         else
             $entities = $em->getRepository('SfynxCmfBundle:Block')->findBy(array('page'=>$page));
-    
+
         return $this->render('SfynxCmfBundle:BlockByWidget:index.html.twig', array(
                 'entities' => $entities,
                 'NoLayout'       => $NoLayout,
         ));
-    }    
-    
+    }
+
     /**
      * Finds and displays a Block entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
 
         $entity = $em->getRepository('SfynxCmfBundle:Block')->find($id);
 
         if (!$entity) {
             throw ControllerException::NotFoundEntity('Block');
         }
-        
+
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('SfynxCmfBundle:BlockByWidget:show.html.twig', array(
@@ -140,16 +140,16 @@ class BlockByWidgetController extends CmfabstractController
 
     /**
      * Displays a form to create a new Block entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function newAction()
     {
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         $entity = new Block();
         $form   = $this->createForm(new BlockByWidgetType(), $entity, array('show_legend' => false));
 
@@ -162,16 +162,16 @@ class BlockByWidgetController extends CmfabstractController
 
     /**
      * Creates a new Block entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function createAction()
     {
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         $entity  = new Block();
         $request = $this->getRequest();
         $form    = $this->createForm(new BlockByWidgetType(), $entity, array('show_legend' => false));
@@ -182,11 +182,11 @@ class BlockByWidgetController extends CmfabstractController
             // On persiste tous les widgets d'un block.
             foreach($entity->getWidgets() as $block) {
                 $entity->addWidget($block);
-            }            
+            }
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_blockbywidget_show', array('id' => $entity->getId(), 'NoLayout' => $NoLayout)));            
+            return $this->redirect($this->generateUrl('admin_blockbywidget_show', array('id' => $entity->getId(), 'NoLayout' => $NoLayout)));
         }
 
         return $this->render('SfynxCmfBundle:BlockByWidget:new.html.twig', array(
@@ -198,17 +198,17 @@ class BlockByWidgetController extends CmfabstractController
 
     /**
      * Displays a form to edit an existing Block entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function editAction($id)
     {
         $em     = $this->getDoctrine()->getManager();
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         $entity = $em->getRepository('SfynxCmfBundle:Block')->find($id);
         if (!$entity) {
             throw ControllerException::NotFoundEntity('Block');
@@ -226,18 +226,18 @@ class BlockByWidgetController extends CmfabstractController
 
     /**
      * Edits an existing Block entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function updateAction($id)
     {
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         $em     = $this->getDoctrine()->getManager();
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         $entity = $em->getRepository('SfynxCmfBundle:Block')->find($id);
         if (!$entity) {
             throw ControllerException::NotFoundEntity('Block');
@@ -250,11 +250,11 @@ class BlockByWidgetController extends CmfabstractController
 
         $editForm   = $this->createForm(new BlockByWidgetType(), $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($id);
-        
+
         $request = $this->getRequest();
         $editForm->bind($request);
-        
-        if ($editForm->isValid()) {            
+
+        if ($editForm->isValid()) {
             // filter $originalWidgets to contain tags no longer present
             foreach ($entity->getWidgets() as $widget) {
                 foreach ($originalWidgets as $key => $toDel) {
@@ -265,17 +265,17 @@ class BlockByWidgetController extends CmfabstractController
             }
             // remove the relationship between the widget and the block
             foreach ($originalWidgets as $widget) {
-                $widget->setBlock(null);            
+                $widget->setBlock(null);
                 $em->remove($widget);
             }
-            
+
             // On persiste tous les widgets d'un block.
             foreach($entity->getWidgets() as $widget) {
                 $entity->addWidget($widget);
             }
             $em->persist($entity);
             $em->flush();
-            
+
             return $this->redirect($this->generateUrl('admin_blockbywidget_edit', array('id' => $id, 'NoLayout' => $NoLayout)));
         }
 
@@ -289,16 +289,16 @@ class BlockByWidgetController extends CmfabstractController
 
     /**
      * Deletes a Block entity.
-     * 
+     *
      * @Secure(roles="ROLE_SUPER_ADMIN")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function deleteAction($id)
     {
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
@@ -307,26 +307,26 @@ class BlockByWidgetController extends CmfabstractController
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('SfynxCmfBundle:Block')->find($id);
-            
+
             $id_page = $entity->getPage()->getId();
 
             if (!$entity) {
                 throw ControllerException::NotFoundEntity('Block');
             }
-            
+
             try {
                 $em->remove($entity);
                 $em->flush();
             } catch (\Exception $e) {
-                $this->container->get('request')->getSession()->getFlashBag()->clear();
-                $this->container->get('request')->getSession()->getFlashBag()->add('notice', 'pi.session.flash.wrong.undelete');
+                $this->container->get('request_stack')->getCurrentRequest()->getSession()->getFlashBag()->clear();
+                $this->container->get('request_stack')->getCurrentRequest()->getSession()->getFlashBag()->add('notice', 'pi.session.flash.wrong.undelete');
             }
         }
 
         return $this->redirect($this->generateUrl('admin_pagebyblock_show', array('id' => $id_page, 'NoLayout' => $NoLayout)));
     }
 
-    private function createDeleteForm($id)
+    protected function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')

@@ -1,98 +1,140 @@
 parameters:
-    pi_app_admin.cmf.monolog.processor.cmf.class: Sfynx\CmfBundle\Monolog\Processor\IntrospectionCmfProcessor
-        
-    piapp.admin.repository.class: Sfynx\CmfBundle\Repository\Repository
-    
-    piapp.admin.manager.page.class: Sfynx\CmfBundle\Manager\PiPageManager
-    piapp.admin.manager.widget.class: Sfynx\CmfBundle\Manager\PiWidgetManager
-    piapp.admin.manager.transwidget.class: Sfynx\CmfBundle\Manager\PiTransWidgetManager
-    piapp.admin.manager.listener.class: Sfynx\CmfBundle\Manager\PiListenerManager
-    piapp.admin.manager.tree.class: Sfynx\CmfBundle\Manager\PiTreeManager
-    piapp.admin.manager.slider.class: Sfynx\CmfBundle\Manager\PiSliderManager
-    piapp.admin.manager.jqext.class: Sfynx\CmfBundle\Manager\PiJqextManager
-    piapp.admin.manager.search_lucene.class: Sfynx\CmfBundle\Manager\PiLuceneManager
-    piapp.admin.manager.formbuilder.class: Sfynx\CmfBundle\Manager\PiFormBuilderManager
-    piapp.admin.manager.authentication.class: Sfynx\CmfBundle\Manager\PiAuthenticationManager
+    pi_app_admin.cmf.monolog.processor.cmf.class: Sfynx\CmfBundle\Layers\Infrastructure\Monolog\Processor\IntrospectionCmfProcessor
 
-    piapp.route.route_loader.class: Sfynx\CmfBundle\Route\RouteLoader
-    piapp.route.route_doctrine.class: Sfynx\CmfBundle\Route\DoctrineRoute
-    
-    piapp.twig.loader.class: Sfynx\CmfBundle\Twig\PiTwigLoader
-    piapp.twig.caching.class: Sfynx\CmfBundle\Twig\PiTwigCache
-    
+    piapp.admin.repository.class: Sfynx\CmfBundle\Layers\Infrastructure\Persistence\Repository\Repository
+
+    piapp.admin.manager.page.class: Sfynx\CmfBundle\Layers\Domain\Service\Manager\PiPageManager
+
+    piapp.admin.manager.widget.class: Sfynx\CmfBundle\Layers\Domain\Service\Manager\PiWidgetManager
+    piapp.admin.handler.widget.render.class: Sfynx\CmfBundle\Layers\Domain\Service\Manager\Widget\RenderWidget
+    piapp.admin.handler.widget.render.params:
+      is_render_service_with_ttl: '%pi_app_admin.page.widget.render_service_with_ttl%'
+      is_render_service_with_ajax: '%pi_app_admin.page.widget.render_service_with_ajax%'
+      is_render_service_for_varnish: '%pi_app_admin.page.esi.force_widget_tag_esi_for_varnish%'
+      esi_key: '%pi_app_admin.page.esi.encrypt_key%'
+      isEsi: '%pi_app_admin.page.esi.authorized%'
+
+    piapp.admin.manager.transwidget.class: Sfynx\CmfBundle\Layers\Domain\Service\Manager\PiTransWidgetManager
+    piapp.admin.manager.listener.class: Sfynx\CmfBundle\Layers\Domain\Service\Manager\PiListenerManager
+    piapp.admin.manager.tree.class: Sfynx\CmfBundle\Layers\Domain\Service\Manager\PiTreeManager
+    piapp.admin.manager.slider.class: Sfynx\CmfBundle\Layers\Domain\Service\Manager\PiSliderManager
+    piapp.admin.manager.jqext.class: Sfynx\CmfBundle\Layers\Domain\Service\Manager\PiJqextManager
+    piapp.admin.manager.search_lucene.class: Sfynx\CmfBundle\Layers\Domain\Service\Manager\PiLuceneManager
+    piapp.admin.manager.formbuilder.class: Sfynx\CmfBundle\Layers\Domain\Service\Manager\PiFormBuilderManager
+    piapp.admin.manager.authentication.class: Sfynx\CmfBundle\Layers\Domain\Service\Manager\PiAuthenticationManager
+
+    piapp.route.route_loader.class: Sfynx\CmfBundle\Layers\Domain\Service\Route\RouteLoader
+    piapp.route.route_doctrine.class: Sfynx\CmfBundle\Layers\Domain\Service\Route\DoctrineRoute
+
 services:
     #
     # configuration of the user monolog processor
-    #    
+    #
     pi_app_admin.cmf.monolog.processor.cmf:
-        class: %pi_app_admin.cmf.monolog.processor.cmf.class%
-        arguments:  [ @service_container ]
+        class: '%pi_app_admin.cmf.monolog.processor.cmf.class%'
+        arguments:  [ '@service_container' ]
         tags:
             - { name: monolog.processor, channel: cmf, method: processRecord }
-            
+
     #
     # configuration of the main repository manager allowed for the repository management
-    #  
+    #
     pi_app_admin.repository:
-        class: %piapp.admin.repository.class%
+        class: '%piapp.admin.repository.class%'
         arguments: ['@doctrine.orm.entity_manager']
 
     #
     # configuration of the class manager allowed for the CMS management
-    #  
+    #
     pi_app_admin.manager.page:
-        class: %piapp.admin.manager.page.class%
-        arguments: ["@logger", '@service_container']
+        class: '%piapp.admin.manager.page.class%'
+        arguments:
+            - '@sfynx.core.request.strategy'
+            - "@logger"
+            - '@service_container'
         tags:
-            - { name: monolog.logger , channel: cmf }        
+            - { name: monolog.logger , channel: cmf }
 
     pi_app_admin.manager.widget:
-        class: %piapp.admin.manager.widget.class%
-        arguments: ["@logger", '@service_container']  
+        class: '%piapp.admin.manager.widget.class%'
+        arguments:
+            - '@sfynx.core.request.strategy'
+            - "@logger"
+            - '@service_container'
+            - '@pi_app_admin.twig.extension.widget'
         tags:
-            - { name: monolog.logger , channel: cmf }         
-        
+            - { name: monolog.logger , channel: cmf }
+
+    pi_app_admin.manager.widget.render:
+        class: '%piapp.admin.handler.widget.render.class%'
+        arguments:
+            - '@sfynx.core.request.strategy'
+            - '@sfynx.tool.array_manager'
+            - '@sfynx.tool.string_manager'
+            - '@sfynx.tool.twig.extension.tool'
+            - '@sfynx.tool.route.factory'
+            - '@service_container'
+        calls:
+            - [ setParams, [ '%piapp.admin.handler.widget.render.params%' ] ]
+
     pi_app_admin.manager.transwidget:
-        class: %piapp.admin.manager.transwidget.class%
-        arguments: ['@service_container']
+        class: '%piapp.admin.manager.transwidget.class%'
+        arguments:
+            - '@sfynx.core.request.strategy'
+            - '@service_container'
 
     pi_app_admin.manager.listener:
-        class: %piapp.admin.manager.listener.class%
-        arguments: ['@service_container']
-        
+        class: '%piapp.admin.manager.listener.class%'
+        arguments:
+            - '@sfynx.core.request.strategy'
+            - '@service_container'
+
     pi_app_admin.manager.tree:
-        class: %piapp.admin.manager.tree.class%
-        arguments: ['@service_container']
-        
+        class: '%piapp.admin.manager.tree.class%'
+        arguments:
+            - '@sfynx.core.request.strategy'
+            - '@service_container'
+
     pi_app_admin.manager.slider:
-        class: %piapp.admin.manager.slider.class%
-        arguments: ['@service_container']
-        
+        class: '%piapp.admin.manager.slider.class%'
+        arguments:
+            - '@sfynx.core.request.strategy'
+            - '@service_container'
+
     pi_app_admin.manager.jqext:
-        class: %piapp.admin.manager.jqext.class%
-        arguments: ['@service_container']        
-        
+        class: '%piapp.admin.manager.jqext.class%'
+        arguments:
+            - '@sfynx.core.request.strategy'
+            - '@service_container'
+
     pi_app_admin.manager.search_lucene:
-        class: %piapp.admin.manager.search_lucene.class%
-        arguments: ['@service_container']
-        
+        class: '%piapp.admin.manager.search_lucene.class%'
+        arguments:
+            - '@sfynx.core.request.strategy'
+            - '@service_container'
+
     pi_app_admin.manager.formbuilder:
-        class: %piapp.admin.manager.formbuilder.class%
-        arguments: ['@service_container']        
-        
-    pi_app_admin.manager.authentication: 
-        class: %piapp.admin.manager.authentication.class%
-        arguments: ['@service_container'] 
-        
+        class: '%piapp.admin.manager.formbuilder.class%'
+        arguments:
+            - '@service_container'
+
+    pi_app_admin.manager.authentication:
+        class: '%piapp.admin.manager.authentication.class%'
+        arguments:
+            - '@sfynx.core.request.strategy'
+            - '@translator'
+            - '@sfynx.tool.route.factory'
+            - '@service_container'
+
     #
     # configuration of the route manager
-    # 
+    #
     pi.route.route_loader:
-        class: %piapp.route.route_loader.class%
-        arguments: ['@service_container']       
+        class: '%piapp.route.route_loader.class%'
+        arguments: ['@service_container']
         tags:
-            - { name: routing.loader }            
-        
+            - { name: routing.loader }
+
     pi.route.route_doctrine:
-        class: %piapp.route.route_doctrine.class%
+        class: '%piapp.route.route_doctrine.class%'
         arguments: ['@service_container']

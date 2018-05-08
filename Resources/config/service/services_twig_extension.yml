@@ -1,44 +1,82 @@
 parameters:
-    piapp.twig.extension.widget.class: Sfynx\CmfBundle\Twig\Extension\PiWidgetExtension  
-    piapp.twig.extension.seo.class: Sfynx\CmfBundle\Twig\Extension\PiSeoExtension   
+    piapp.twig.extension.widget.class: Sfynx\CmfBundle\Layers\Domain\Service\Twig\Extension\PiWidgetExtension
+    piapp.twig.extension.seo.class: Sfynx\CmfBundle\Layers\Domain\Service\Twig\Extension\PiSeoExtension
 
-services:        
+    piapp.twig.loader.class: Sfynx\CmfBundle\Layers\Domain\Service\Twig\PiTwigLoader
+    piapp.twig.caching.class: Sfynx\CmfBundle\Layers\Domain\Service\Twig\PiTwigCache
+    twig.options:
+        cache:    '%kernel.cache_dir%/twig'
+        charset:  '%kernel.charset%'
+        debug:    '%kernel.debug%'
+        base_template_class: Twig_Template
+        strict_variables: '%kernel.debug%'
+        autoescape: html
+        auto_reload: null
+        optimizations: -1
+
+services:
     #
     # configuration of the Twig and Template
-    #   
+    #
     pi_app_admin.twig.loader:
-        class: %piapp.twig.loader.class%
-        arguments: ['@pi_app_admin.manager.page', '@pi_app_admin.manager.widget', '@pi_app_admin.manager.transwidget', '@pi_app_admin.manager.tree', '@pi_app_admin.manager.listener', '@pi_app_admin.manager.slider', '@pi_app_admin.manager.jqext', '@pi_app_admin.manager.search_lucene', '@twig.loader']
-        
+        class: '%piapp.twig.loader.class%'
+        public : true
+        arguments:
+            - '@pi_app_admin.manager.page'
+            - '@pi_app_admin.manager.widget'
+            - '@pi_app_admin.manager.transwidget'
+            - '@pi_app_admin.manager.tree'
+            - '@pi_app_admin.manager.listener'
+            - '@pi_app_admin.manager.slider'
+            - '@pi_app_admin.manager.jqext'
+            - '@pi_app_admin.manager.search_lucene'
+            - '@twig.loader'
+
     pi_app_admin.twig.loader_chain:
         class: Twig_Loader_Chain
+        public : true
         arguments: [['@pi_app_admin.twig.loader','@twig.loader']]
 
     pi_app_admin.twig:
-        class: %twig.class%
-        arguments: ['@pi_app_admin.twig.loader_chain', %twig.options%]
+        class: '%twig.class%'
+        public : true
+        arguments: ['@pi_app_admin.twig.loader_chain', '%twig.options%']
         calls:
-             - [ addGlobal, ['app', '@templating.globals'] ]
-        
+             - [ addGlobal, ['app', '@twig.app_variable'] ] # we overload Symfony/Bundle/TwigBundle/Resources/config/twig.xml
+#        configurator: ['@twig.configurator.environment', configure]
+
     pi_app_admin.templating:
-        class: %templating.engine.twig.class%
-        arguments: ['@pi_app_admin.twig', '@templating.name_parser', '@file_locator']
-        
+        class: '%templating.engine.twig.class%'
+        public : true
+#        arguments: ['@pi_app_admin.twig', '@templating.name_parser', '@file_locator']
+        arguments:
+            - '@pi_app_admin.twig'
+            - '@templating.name_parser'
+            - '@templating.locator'
+
     pi_app_admin.caching:
-        class: %piapp.twig.caching.class%
-        arguments: ['@pi_app_admin.twig', '@service_container']
-        
+        class: '%piapp.twig.caching.class%'
+        public : true
+        arguments:
+            - '@pi_app_admin.twig'
+            - '@service_container'
+
     #
     # configuration of the sfynx extensions
-    #         
+    #
     pi_app_admin.twig.extension.widget:
-        class: %piapp.twig.extension.widget.class%
-        arguments: ['@service_container']
+        class: '%piapp.twig.extension.widget.class%'
+        public : true
+        arguments:
+            - '@pi_app_admin.manager.widget.render'
+            - '@service_container'
         tags:
-            - { name: twig.extension }   
-            
+            - { name: 'twig.extension' }
+
     pi_app_admin.twig.extension.seo:
-        class: %piapp.twig.extension.seo.class%
-        arguments: ['@service_container']
+        class: '%piapp.twig.extension.seo.class%'
+        public : true
+        arguments:
+            - '@service_container'
         tags:
-            - { name: twig.extension }                     
+            - { name: 'twig.extension' }

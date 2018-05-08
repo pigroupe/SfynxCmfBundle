@@ -1,28 +1,28 @@
 parameters:
-    pi_app_admin.validator.unique.class: Sfynx\CmfBundle\Validator\Constraints\UniqueValidator
-    pi_app_admin.validator.collectionof.class: Sfynx\CmfBundle\Validator\Constraints\CollectionOfValidator
-    pi_app_admin.validator.partner.class: Sfynx\CmfBundle\Validator\Constraints\MaxEntitiesByQueryValidator
+    pi_app_admin.validator.unique.class: Sfynx\CmfBundle\Application\Validation\Validator\Constraints\UniqueValidator
+    pi_app_admin.validator.collectionof.class: Sfynx\CmfBundle\Application\Validation\Validator\Constraints\CollectionOfValidator
+    pi_app_admin.validator.partner.class: Sfynx\CmfBundle\Application\Validation\Validator\Constraints\MaxEntitiesByQueryValidator
     
-    pi_app_admin.form.page.type.class: Sfynx\CmfBundle\Form\PageByTransType
+    pi_app_admin.form.page.type.class: Sfynx\CmfBundle\Application\Validation\Type\PageByTransType
 
 services:
     #
     # configuration of the FORM VALIDATOR services
     #    
     pi_app_admin.validator.unique:
-       class:      %pi_app_admin.validator.unique.class%
-       arguments: [@service_container]
+       class:      '%pi_app_admin.validator.unique.class%'
+       arguments: ['@service_container']
        tags:
             - { name: validator.constraint_validator, alias: pi_app_admin.validator.unique }
             
     pi_app_admin.validator.collectionof:
-       class:      %pi_app_admin.validator.collectionof.class%
+       class:      '%pi_app_admin.validator.collectionof.class%'
        tags:
             - { name: validator.constraint_validator, alias: pi_app_admin.validator.collectionof }
             
     pi_app_admin.validator.partner:
-       class:      %pi_app_admin.validator.partner.class%
-       arguments: [@service_container]
+       class:      '%pi_app_admin.validator.partner.class%'
+       arguments: ['@service_container']
        tags:
             - { name: validator.constraint_validator, alias: pi_app_admin.validator.partner }                  
             
@@ -31,36 +31,33 @@ services:
     #             
     pi_app_admin.form.pagebytrans:
         class: Symfony\Component\Form\Form
-        factory_service: form.factory
-        factory_method: create
+        factory: ['@form.factory', create]
         arguments:
-            - @pi_app_admin.form.page.type
+            - '@pi_app_admin.form.page.type'
             - ~
             - { rubrique_show: true, translations_show: true, blocks_show: false, layout_show: true, page_css_show: true, page_js_show: true, route_name_show: true }
             
     pi_app_admin.form.pagebyblock:
         class: Symfony\Component\Form\Form
-        factory_service: form.factory
-        factory_method: create
+        factory: ['@form.factory', create]
         arguments:
-            - @pi_app_admin.form.page.type
+            - '@pi_app_admin.form.page.type'
             - ~
             - { rubrique_show: true, translations_show: false, blocks_show: true, layout_show: true, page_css_show: true, page_js_show: true, route_name_show: true }
             
     pi_app_admin.form.pagecssjs:
         class: Symfony\Component\Form\Form
-        factory_service: form.factory
-        factory_method: create
+        factory: ['@form.factory', create]
         arguments:
-            - @pi_app_admin.form.page.type
+            - '@pi_app_admin.form.page.type'
             - ~
             - { rubrique_show: falde, translations_show: true, blocks_show: false, layout_show: false, page_css_show: false, page_js_show: false, route_name_show: false }            
 
     pi_app_admin.form.page.type:
-        class: %pi_app_admin.form.page.type.class%
+        class: '%pi_app_admin.form.page.type.class%'
         tags:
             - { name: form.type, alias: cmf_form_page }
         arguments:
-            - @service_container
+            - '@service_container'
             - ~
             - ~                

@@ -14,7 +14,7 @@ namespace Sfynx\CmfBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sfynx\CmfBundle\Controller\CmfabstractController;
-use Sfynx\ToolBundle\Exception\ControllerException;
+use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ControllerException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,12 +24,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
-use Sfynx\CmfBundle\Entity\TranslationPage;
-use Sfynx\CmfBundle\Form\TranslationPageType;
+use Sfynx\CmfBundle\Layers\Domain\Entity\TranslationPage;
+use Sfynx\CmfBundle\Application\Validation\Type\TranslationPageType;
 
 /**
  * TranslationPage controller.
- * 
+ *
  * @subpackage   Admin_Controllers
  * @package    Controller
  *
@@ -38,13 +38,13 @@ use Sfynx\CmfBundle\Form\TranslationPageType;
 class TranslationPageController extends CmfabstractController
 {
     protected $_entityName = "SfynxCmfBundle:TranslationPage";
-    
+
     /**
      * Lists all TranslationPage entities.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -52,23 +52,23 @@ class TranslationPageController extends CmfabstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        if (is_null($page))
+        if ((null === $page))
             $entities = $em->getRepository('SfynxCmfBundle:TranslationPage')->findAll();
         else
-            $entities = $em->getRepository('SfynxCmfBundle:TranslationPage')->findBy(array('page'=>$page));        
+            $entities = $em->getRepository('SfynxCmfBundle:TranslationPage')->findBy(array('page'=>$page));
 
         return $this->render('SfynxCmfBundle:TranslationPage:index.html.twig', array(
             'entities' => $entities
         ));
     }
-    
+
     /**
      * Enabled TranslationPage entities.
      *
      * @Route("/admin/translationpage/enabled", name="admin_translationpage_enabledentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -76,14 +76,14 @@ class TranslationPageController extends CmfabstractController
     {
         return parent::enabledajaxAction();
     }
-    
+
     /**
      * Disable TranslationPage  entities.
      *
      * @Route("/admin/translationpage/disable", name="admin_translationpage_disablentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -94,10 +94,10 @@ class TranslationPageController extends CmfabstractController
 
     /**
      * Finds and displays a TranslationPage entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -121,17 +121,17 @@ class TranslationPageController extends CmfabstractController
 
     /**
      * Displays a form to create a new TranslationPage entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function newAction()
     {
         $entity = new TranslationPage();
-        $locale    = $this->container->get('request')->getLocale();
+        $locale    = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
         $form   = $this->createForm(new TranslationPageType($locale, $this->container), $entity, array('show_legend' => false));
 
         return $this->render('SfynxCmfBundle:TranslationPage:new.html.twig', array(
@@ -142,16 +142,16 @@ class TranslationPageController extends CmfabstractController
 
     /**
      * Creates a new TranslationPage entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function createAction()
     {
-        $locale     = $this->container->get('request')->getLocale();
+        $locale     = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
         $entity  = new TranslationPage();
         $request = $this->getRequest();
         $form    = $this->createForm(new TranslationPageType($locale, $this->container), $entity, array('show_legend' => false));
@@ -163,7 +163,7 @@ class TranslationPageController extends CmfabstractController
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_transpage_show', array('id' => $entity->getId())));
-            
+
         }
 
         return $this->render('SfynxCmfBundle:TranslationPage:new.html.twig', array(
@@ -174,17 +174,17 @@ class TranslationPageController extends CmfabstractController
 
     /**
      * Displays a form to edit an existing TranslationPage entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function editAction($id)
     {
         $em     = $this->getDoctrine()->getManager();
-        $locale    = $this->container->get('request')->getLocale();
+        $locale    = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
         $entity = $em->getRepository('SfynxCmfBundle:TranslationPage')->find($id);
 
         if (!$entity) {
@@ -203,17 +203,17 @@ class TranslationPageController extends CmfabstractController
 
     /**
      * Edits an existing TranslationPage entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function updateAction($id)
     {
         $em     = $this->getDoctrine()->getManager();
-        $locale    = $this->container->get('request')->getLocale();
+        $locale    = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
         $entity = $em->getRepository('SfynxCmfBundle:TranslationPage')->find($id);
 
         if (!$entity) {
@@ -241,10 +241,10 @@ class TranslationPageController extends CmfabstractController
 
     /**
      * Deletes a TranslationPage entity.
-     * 
+     *
      * @Secure(roles="ROLE_SUPER_ADMIN")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -270,7 +270,7 @@ class TranslationPageController extends CmfabstractController
         return $this->redirect($this->generateUrl('admin_transpage'));
     }
 
-    private function createDeleteForm($id)
+    protected function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')

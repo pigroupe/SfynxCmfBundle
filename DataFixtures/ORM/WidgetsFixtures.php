@@ -15,7 +15,7 @@ namespace Sfynx\CmfBundle\DataFixtures\ORM;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Sfynx\CmfBundle\Entity\Widget;
+use Sfynx\CmfBundle\Layers\Domain\Entity\Widget;
 
 /**
  * Widget DataFixtures.
@@ -45,15 +45,15 @@ class WidgetsFixtures extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($field1);
 
         $manager->flush();
-        
+
         $this->addReference('widget-error', $field1);
     }
-    
+
     /**
      * Retrieve the order number of current fixture
      *
-     * @return integer 
-     * 
+     * @return integer
+     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2012-01-23
      */
@@ -61,5 +61,5 @@ class WidgetsFixtures extends AbstractFixture implements OrderedFixtureInterface
     {
         // The order in which fixtures will be loaded
         return 3;
-    }    
+    }
 }

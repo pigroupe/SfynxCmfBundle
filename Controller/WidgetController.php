@@ -14,7 +14,7 @@ namespace Sfynx\CmfBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sfynx\CmfBundle\Controller\CmfabstractController;
-use Sfynx\ToolBundle\Exception\ControllerException;
+use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ControllerException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,12 +24,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
-use Sfynx\CmfBundle\Entity\Widget;
-use Sfynx\CmfBundle\Form\WidgetByTransType;
+use Sfynx\CmfBundle\Layers\Domain\Entity\Widget;
+use Sfynx\CmfBundle\Application\Validation\Type\WidgetByTransType;
 
 /**
  * Widget controller.
- * 
+ *
  * @subpackage   Admin_Controllers
  * @package    Controller
  *
@@ -38,41 +38,41 @@ use Sfynx\CmfBundle\Form\WidgetByTransType;
 class WidgetController extends CmfabstractController
 {
     protected $_entityName = "SfynxCmfBundle:Widget";
-    
+
     /**
      * Lists all Widget entities.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function indexAction($block, $NoLayout = '')
     {
         $em = $this->getDoctrine()->getManager();
-        
-        if (is_null($block))
+
+        if ((null === $block))
             $entities = $em->getRepository('SfynxCmfBundle:Widget')->findAll(array('position'=> "ASC"));
         else
             $entities = $em->getRepository('SfynxCmfBundle:Widget')->findBy(array('block'=>$block), array('position'=> "ASC"));
-        
+
         if (empty($NoLayout))
-            $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        
+            $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
+
         return $this->render('SfynxCmfBundle:Widget:index.html.twig', array(
             'entities' => $entities,
             'NoLayout' => $NoLayout,
         ));
     }
-    
+
     /**
      * Enabled Widget entities.
      *
      * @Route("/admin/widget/enabled", name="admin_widget_enabledentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -80,14 +80,14 @@ class WidgetController extends CmfabstractController
     {
         return parent::enabledajaxAction();
     }
-    
+
     /**
      * Disable Widget  entities.
      *
      * @Route("/admin/widget/disable", name="admin_widget_disablentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -95,7 +95,7 @@ class WidgetController extends CmfabstractController
     {
         return parent::disableajaxAction();
     }
-    
+
     /**
      * Position entities.
      *
@@ -109,8 +109,8 @@ class WidgetController extends CmfabstractController
     public function positionajaxAction()
     {
         return parent::positionajaxAction();
-    }    
-    
+    }
+
     /**
      * Delete twig cache Widget
      *
@@ -124,21 +124,21 @@ class WidgetController extends CmfabstractController
     public function deletetwigcacheajaxAction($type = 'widget')
     {
     	return parent::deletetwigcacheajaxAction($type);
-    }    
+    }
 
     /**
      * Finds and displays a Widget entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
 
         $entity = $em->getRepository('SfynxCmfBundle:Widget')->find($id);
 
@@ -157,17 +157,17 @@ class WidgetController extends CmfabstractController
 
     /**
      * Displays a form to create a new Widget entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function newAction()
     {
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
-        
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
+
         $entity = new Widget();
         $form   = $this->createForm(new WidgetByTransType($this->container), $entity, array('show_legend' => false));
 
@@ -180,16 +180,16 @@ class WidgetController extends CmfabstractController
 
     /**
      * Creates a new Widget entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function createAction()
     {
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         $entity  = new Widget();
         $request = $this->getRequest();
         $form    = $this->createForm(new WidgetByTransType($this->container), $entity, array('show_legend' => false));
@@ -197,17 +197,17 @@ class WidgetController extends CmfabstractController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            
+
             // On persiste tous les translations d'une page.
             foreach($entity->getTranslations() as $translationPage) {
                 $entity->addTranslation($translationPage);
             }
-                        
+
             $em->persist($entity);
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_widget_show', array('id' => $entity->getId(), 'NoLayout' => $NoLayout)));
-            
+
         }
 
         return $this->render('SfynxCmfBundle:Widget:new.html.twig', array(
@@ -219,10 +219,10 @@ class WidgetController extends CmfabstractController
 
     /**
      * Displays a form to edit an existing Widget entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -230,17 +230,17 @@ class WidgetController extends CmfabstractController
     {
         $em     = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('SfynxCmfBundle:Widget')->find($id);
-        
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         if (!$NoLayout)
             $template = "edit.html.twig";
         else
-            $template = "edit_ajax.html.twig";        
+            $template = "edit_ajax.html.twig";
 
         if (!$entity) {
             throw ControllerException::NotFoundEntity('Widget');
         }
-        
+
         $editForm     = $this->createForm(new WidgetByTransType($this->container), $entity, array('show_legend' => false));
         $deleteForm = $this->createDeleteForm($id);
 
@@ -254,10 +254,10 @@ class WidgetController extends CmfabstractController
 
     /**
      * Edits an existing Widget entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -265,12 +265,12 @@ class WidgetController extends CmfabstractController
     {
         $em     = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('SfynxCmfBundle:Widget')->find($id);
-        
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         if (!$NoLayout)
             $template = "edit.html.twig";
         else
-            $template = "edit_ajax.html.twig";        
+            $template = "edit_ajax.html.twig";
 
         if (!$entity) {
             throw ControllerException::NotFoundEntity('Widget');
@@ -290,7 +290,7 @@ class WidgetController extends CmfabstractController
             }
             $em->persist($entity);
             $em->flush();
-            
+
             return $this->redirect($this->generateUrl('admin_widget_edit', array('id' => $id, 'NoLayout' => $NoLayout)));
         }
 
@@ -304,16 +304,16 @@ class WidgetController extends CmfabstractController
 
     /**
      * Deletes a Widget entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function deleteAction($id)
     {
-        $NoLayout   = $this->container->get('request')->query->get('NoLayout');
+        $NoLayout   = $this->container->get('request_stack')->getCurrentRequest()->query->get('NoLayout');
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
@@ -326,61 +326,61 @@ class WidgetController extends CmfabstractController
             if (!$entity) {
                 throw ControllerException::NotFoundEntity('Widget');
             }
-            
+
             $idBlock = $entity->getBlock()->getId();
 
             $em->remove($entity);
             $em->flush();
         }
-        
-        return $this->redirect($this->generateUrl('admin_blockbywidget_show', array('id' => $idBlock, 'NoLayout' => $NoLayout)));
-    }    
 
-    private function createDeleteForm($id)
+        return $this->redirect($this->generateUrl('admin_blockbywidget_show', array('id' => $idBlock, 'NoLayout' => $NoLayout)));
+    }
+
+    protected function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
         ->add('id', 'hidden')
         ->getForm()
         ;
-    }    
-    
+    }
+
     /**
      * Deletes a Widget entity.
      *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
     public function deleteajaxAction()
     {
-        $request = $this->container->get('request');
+        $request = $this->container->get('request_stack')->getCurrentRequest();
         $em      = $this->getDoctrine()->getManager();
-        
+
         if ($request->isXmlHttpRequest()){
 
                if ($request->query->has('id'))    $id    = $request->query->get('id');    else    $id    = null;
-               
-               if (!is_null($id)){
+
+               if (!(null === $id)){
                    $entity = $em->getRepository('SfynxCmfBundle:Widget')->find($id);
-                   
+
                    if ($entity) {
                        $em->remove($entity);
                        $em->flush();
                    }
             }
-            
+
             // we return the desired url
             $values[0]['request'] = true;
-             
+
             $response = new Response(json_encode($values));
             $response->headers->set('Content-Type', 'application/json');
-            return $response;            
+            return $response;
         }else
             throw ControllerException::callAjaxOnlySupported('deleteajax');
     }
-    
+
     /**
      * Move widget action
      *
@@ -392,51 +392,51 @@ class WidgetController extends CmfabstractController
      */
     public function movewidgetajaxAction()
     {
-        $request = $this->container->get('request');
+        $request = $this->container->get('request_stack')->getCurrentRequest();
         $em      = $this->getDoctrine()->getManager();
-            
+
         if ($request->isXmlHttpRequest()){
-    
+
             if ($request->query->has('id_start_block'))    $id_start_block    = $request->query->get('id_start_block');    else    $id_start_block = null;
             if ($request->query->has('id_end_block'))    $id_end_block    = $request->query->get('id_end_block');        else    $id_end_block     = null;
             if ($request->query->has('id_widget'))        $id_widget        = $request->query->get('id_widget');        else    $id_widget         = null;
-                
-            if (!is_null($id_start_block) && !is_null($id_end_block)){
+
+            if (!(null === $id_start_block) && !(null === $id_end_block)){
                 $entity_end_block = $em->getRepository('SfynxCmfBundle:Block')->find($id_end_block);
                 $entity_widget      = $em->getRepository('SfynxCmfBundle:Widget')->find($id_widget);
-    
+
                 $all_widget_block = $entity_end_block->getWidgets();
-    
+
                 foreach($all_widget_block as $key => $widget){
                     $old_pos = $widget->getPosition();
                     if ($old_pos != null)
                         $new_pos = $old_pos +1;
                     else
                         $new_pos = 1;
-    
+
                     $widget->setPosition($new_pos);
                     $em->persist($widget);
                     //$em->flush();
                 }
-    
+
                 $entity_widget->setBlock($entity_end_block);
                 $entity_widget->setPosition("1");
                 $entity_widget->setEnabled(true);
                 $em->persist($entity_widget);
-    
+
                 $em->flush();
             }
 
             // we return the desired url
             $values[0]['request'] = true;
-            
+
             $response = new Response(json_encode($values));
             $response->headers->set('Content-Type', 'application/json');
-            return $response;            
+            return $response;
         }else
             throw ControllerException::callAjaxOnlySupported('movewidgetajax');
     }
-    
+
     /**
      * Move up/down widget action
      *
@@ -448,21 +448,21 @@ class WidgetController extends CmfabstractController
      */
     public function moveajaxAction()
     {
-        $request = $this->container->get('request');
+        $request = $this->container->get('request_stack')->getCurrentRequest();
         $em      = $this->getDoctrine()->getManager();
-    
+
         if ($request->isXmlHttpRequest()){
-    
+
             if ($request->query->has('id'))        $id        = $request->query->get('id');    else    $id        = null;
             if ($request->query->has('type'))    $type    = $request->query->get('type');    else    $type    = null;
-             
-            if (!is_null($id) && !is_null($type) && in_array($type, array('up', 'down')) ){
+
+            if (!(null === $id) && !(null === $type) && in_array($type, array('up', 'down')) ){
                 $entity_widget        = $em->getRepository('SfynxCmfBundle:Widget')->find($id);
                 $entity_block         = $entity_widget->getBlock();
                 $entity_widget_pos  = $entity_widget->getPosition();
                 $break                 = false;
-                
-                if (is_null($entity_widget_pos)){
+
+                if ((null === $entity_widget_pos)){
                     $entity_widget_pos = 1;
                     $entity_widget->setPosition($entity_widget_pos);
                     $em->persist($entity_widget);
@@ -476,7 +476,7 @@ class WidgetController extends CmfabstractController
                         if (!$break && ($widg_pos < $entity_widget_pos) ){
                             $widget->setPosition($entity_widget_pos);
                             $em->persist($widget);
-                            
+
                             $entity_widget->setPosition($widg_pos);
                             $em->persist($entity_widget);
                             $em->flush();
@@ -491,24 +491,24 @@ class WidgetController extends CmfabstractController
                         if (!$break && ($widg_pos > $entity_widget_pos) ){
                             $widget->setPosition($entity_widget_pos);
                             $em->persist($widget);
-                
+
                             $entity_widget->setPosition($widg_pos);
                             $em->persist($entity_widget);
                             $em->flush();
                             $break= true;
                         }
                     }
-                }                
-                
+                }
+
             }
             // we return the desired url
             $values[0]['request'] = true;
-            
+
             $response = new Response(json_encode($values));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
         }else
             throw ControllerException::callAjaxOnlySupported('moveajax');
     }
-    
+
 }

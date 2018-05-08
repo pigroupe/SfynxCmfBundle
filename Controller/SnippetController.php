@@ -14,7 +14,7 @@ namespace Sfynx\CmfBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sfynx\CmfBundle\Controller\CmfabstractController;
-use Sfynx\ToolBundle\Exception\ControllerException;
+use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ControllerException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,12 +24,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
-use Sfynx\CmfBundle\Entity\Widget;
-use Sfynx\CmfBundle\Form\WidgetByTransType;
+use Sfynx\CmfBundle\Layers\Domain\Entity\Widget;
+use Sfynx\CmfBundle\Application\Validation\Type\WidgetByTransType;
 
 /**
  * Widget controller.
- * 
+ *
  * @subpackage   Admin_Controllers
  * @package    Controller
  *
@@ -38,13 +38,13 @@ use Sfynx\CmfBundle\Form\WidgetByTransType;
 class SnippetController extends CmfabstractController
 {
     protected $_entityName = "SfynxCmfBundle:Widget";
-    
+
     /**
      * Lists all Widget entities.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -52,19 +52,19 @@ class SnippetController extends CmfabstractController
     {
         $em         = $this->getDoctrine()->getManager();
            $entities    = $em->getRepository('SfynxCmfBundle:Widget')->findBy(array('block'=>null));
-           
+
         return $this->render('SfynxCmfBundle:Snippet:index.html.twig', array(
             'entities' => $entities
         ));
     }
-    
+
     /**
      * Enabled Widget entities.
      *
      * @Route("/admin/snippet/enabled", name="admin_snippet_enabledentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -72,14 +72,14 @@ class SnippetController extends CmfabstractController
     {
         return parent::enabledajaxAction();
     }
-    
+
     /**
      * Disable Widget  entities.
      *
      * @Route("/admin/snippet/disable", name="admin_snippet_disablentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -87,7 +87,7 @@ class SnippetController extends CmfabstractController
     {
         return parent::disableajaxAction();
     }
-    
+
     /**
      * Delete twig cache Widget
      *
@@ -101,14 +101,14 @@ class SnippetController extends CmfabstractController
     public function deletetwigcacheajaxAction($type = 'widget')
     {
         return parent::deletetwigcacheajaxAction($type);
-    }    
+    }
 
     /**
      * Finds and displays a Widget entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -132,10 +132,10 @@ class SnippetController extends CmfabstractController
 
     /**
      * Displays a form to create a new Widget entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -152,10 +152,10 @@ class SnippetController extends CmfabstractController
 
     /**
      * Creates a new Widget entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -168,15 +168,15 @@ class SnippetController extends CmfabstractController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            
+
             // On persiste tous les translations d'une page.
             foreach($entity->getTranslations() as $translationPage) {
                 $entity->addTranslation($translationPage);
             }
-                        
+
             $em->persist($entity);
             $em->flush();
-            
+
             return $this->redirect($this->generateUrl('admin_snippet_show', array('id' => $entity->getId())));
         }
 
@@ -188,10 +188,10 @@ class SnippetController extends CmfabstractController
 
     /**
      * Displays a form to edit an existing Widget entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -217,10 +217,10 @@ class SnippetController extends CmfabstractController
 
     /**
      * Edits an existing Widget entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -261,10 +261,10 @@ class SnippetController extends CmfabstractController
 
     /**
      * Deletes a Widget entity.
-     * 
+     *
      * @Secure(roles="ROLE_SUPER_ADMIN")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -290,7 +290,7 @@ class SnippetController extends CmfabstractController
         return $this->redirect($this->generateUrl('admin_snippet'));
     }
 
-    private function createDeleteForm($id)
+    protected function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')

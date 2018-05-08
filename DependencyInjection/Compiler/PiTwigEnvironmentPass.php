@@ -30,9 +30,8 @@ class PiTwigEnvironmentPass implements CompilerPassInterface
         if (false === $container->hasDefinition('pi_app_admin.twig')) {
             return;
         }
-
         $definition = $container->getDefinition('pi_app_admin.twig');
-        
+
         // Extensions must always be registered before everything else.
         // For instance, global variable definitions must be registered
         // afterward. If not, the globals from the extensions will never

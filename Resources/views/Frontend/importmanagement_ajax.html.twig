@@ -1,5 +1,5 @@
 {% initJquery 'TOOL:widgetimport' %}
-{% extends getParameter('sfynx.auth.theme.layout.ajax') %}
+{% extends getParameter('sfynx.template.theme.layout.ajax') %}
 
 {% block global_layout %}
 
@@ -11,5 +11,5 @@
 		 				}
 	%}
 	{{ renderJquery('TOOL', 'widgetimport', options_widgetimport)|raw }}
-	
+
 {% endblock %}

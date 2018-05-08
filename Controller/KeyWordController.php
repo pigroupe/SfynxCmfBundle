@@ -14,7 +14,7 @@ namespace Sfynx\CmfBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sfynx\CmfBundle\Controller\CmfabstractController;
-use Sfynx\ToolBundle\Exception\ControllerException;
+use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ControllerException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,12 +24,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
-use Sfynx\CmfBundle\Entity\KeyWord;
-use Sfynx\CmfBundle\Form\KeyWordType;
+use Sfynx\CmfBundle\Layers\Domain\Entity\KeyWord;
+use Sfynx\CmfBundle\Application\Validation\Type\KeyWordType;
 
 /**
  * KeyWord controller.
- * 
+ *
  * @subpackage   Admin_Controllers
  * @package    Controller
  *
@@ -38,13 +38,13 @@ use Sfynx\CmfBundle\Form\KeyWordType;
 class KeyWordController extends CmfabstractController
 {
     protected $_entityName = "SfynxCmfBundle:KeyWord";
-    
+
     /**
      * Lists all KeyWord entities.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -57,14 +57,14 @@ class KeyWordController extends CmfabstractController
             'entities' => $entities
         ));
     }
-    
+
     /**
      * Enabled KeyWord entities.
      *
      * @Route("/admin/keyWord/enabled", name="admin_keyword_enabledentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -72,14 +72,14 @@ class KeyWordController extends CmfabstractController
     {
         return parent::enabledajaxAction();
     }
-    
+
     /**
      * Disable KeyWord  entities.
      *
      * @Route("/admin/keyWord/disable", name="admin_keyword_disablentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -90,10 +90,10 @@ class KeyWordController extends CmfabstractController
 
     /**
      * Finds and displays a KeyWord entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -117,10 +117,10 @@ class KeyWordController extends CmfabstractController
 
     /**
      * Displays a form to create a new KeyWord entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -138,10 +138,10 @@ class KeyWordController extends CmfabstractController
 
     /**
      * Creates a new KeyWord entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -159,7 +159,7 @@ class KeyWordController extends CmfabstractController
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_keyword_show', array('id' => $entity->getId())));
-            
+
         }
 
         return $this->render('SfynxCmfBundle:KeyWord:new.html.twig', array(
@@ -170,10 +170,10 @@ class KeyWordController extends CmfabstractController
 
     /**
      * Displays a form to edit an existing KeyWord entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -198,10 +198,10 @@ class KeyWordController extends CmfabstractController
 
     /**
      * Edits an existing KeyWord entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -237,10 +237,10 @@ class KeyWordController extends CmfabstractController
 
     /**
      * Deletes a KeyWord entity.
-     * 
+     *
      * @Secure(roles="ROLE_SUPER_ADMIN")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -263,15 +263,15 @@ class KeyWordController extends CmfabstractController
                 $em->remove($entity);
                 $em->flush();
             } catch (\Exception $e) {
-                $this->container->get('request')->getSession()->getFlashBag()->clear();
-                $this->container->get('request')->getSession()->getFlashBag()->add('notice', 'pi.session.flash.wrong.undelete');
+                $this->container->get('request_stack')->getCurrentRequest()->getSession()->getFlashBag()->clear();
+                $this->container->get('request_stack')->getCurrentRequest()->getSession()->getFlashBag()->add('notice', 'pi.session.flash.wrong.undelete');
             }
         }
 
         return $this->redirect($this->generateUrl('admin_keyword'));
     }
 
-    private function createDeleteForm($id)
+    protected function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')

@@ -41,7 +41,7 @@
 	    </tbody>
 	</table>
 	
-	{% if is_granted('ROLE_ALLOWED_TO_SWITCH') %}
+	{% if is_granted('ROLE_EDITOR') %}
 	<ul class="ui-widget-header">
 	    <li>
 	        <form action="{{ path('admin_widget_show', { 'id': entity.getWidget().getId() }) }}" method="post">

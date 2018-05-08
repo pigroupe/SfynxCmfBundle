@@ -14,7 +14,7 @@ namespace Sfynx\CmfBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sfynx\CmfBundle\Controller\CmfabstractController;
-use Sfynx\ToolBundle\Exception\ControllerException;
+use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ControllerException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,12 +24,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
-use Sfynx\CmfBundle\Entity\TranslationWidget;
-use Sfynx\CmfBundle\Form\TranslationWidgetType;
+use Sfynx\CmfBundle\Layers\Domain\Entity\TranslationWidget;
+use Sfynx\CmfBundle\Application\Validation\Type\TranslationWidgetType;
 
 /**
  * Widget controller.
- * 
+ *
  * @subpackage   Admin_Controllers
  * @package    Controller
  *
@@ -38,13 +38,13 @@ use Sfynx\CmfBundle\Form\TranslationWidgetType;
 class TranslationWidgetController extends CmfabstractController
 {
     protected $_entityName = "SfynxCmfBundle:TranslationWidget";
-    
+
     /**
      * Lists all TranslationWidget entities.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -52,23 +52,23 @@ class TranslationWidgetController extends CmfabstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        if (is_null($widget))
+        if ((null === $widget))
             $entities = $em->getRepository('SfynxCmfBundle:TranslationWidget')->findAll();
         else
-            $entities = $em->getRepository('SfynxCmfBundle:TranslationWidget')->findBy(array('widget'=>$widget));        
+            $entities = $em->getRepository('SfynxCmfBundle:TranslationWidget')->findBy(array('widget'=>$widget));
 
         return $this->render('SfynxCmfBundle:TranslationWidget:index.html.twig', array(
             'entities' => $entities
         ));
     }
-    
+
     /**
      * Enabled TranslationWidget entities.
      *
      * @Route("/admin/translationwidget/enabled", name="admin_translationwidget_enabledentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -76,14 +76,14 @@ class TranslationWidgetController extends CmfabstractController
     {
         return parent::enabledajaxAction();
     }
-    
+
     /**
      * Disable TranslationWidget  entities.
      *
      * @Route("/admin/translationwidget/disable", name="admin_translationwidget_disablentity_ajax")
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access  public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -94,10 +94,10 @@ class TranslationWidgetController extends CmfabstractController
 
     /**
      * Finds and displays a TranslationWidget entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -122,10 +122,10 @@ class TranslationWidgetController extends CmfabstractController
 
     /**
      * Displays a form to create a new TranslationWidget entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -142,10 +142,10 @@ class TranslationWidgetController extends CmfabstractController
 
     /**
      * Creates a new TranslationWidget entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -162,7 +162,7 @@ class TranslationWidgetController extends CmfabstractController
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_transwidget_show', array('id' => $entity->getId())));
-            
+
         }
 
         return $this->render('SfynxCmfBundle:TranslationWidget:new.html.twig', array(
@@ -173,10 +173,10 @@ class TranslationWidgetController extends CmfabstractController
 
     /**
      * Displays a form to edit an existing TranslationWidget entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -202,10 +202,10 @@ class TranslationWidgetController extends CmfabstractController
 
     /**
      * Edits an existing TranslationWidget entity.
-     * 
+     *
      * @Secure(roles="ROLE_EDITOR")
      * @return \Symfony\Component\HttpFoundation\Response
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -242,10 +242,10 @@ class TranslationWidgetController extends CmfabstractController
 
     /**
      * Deletes a TranslationWidget entity.
-     * 
+     *
      * @Secure(roles="ROLE_SUPER_ADMIN")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * 
+     *
      * @access    public
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      */
@@ -271,7 +271,7 @@ class TranslationWidgetController extends CmfabstractController
         return $this->redirect($this->generateUrl('admin_transwidget'));
     }
 
-    private function createDeleteForm($id)
+    protected function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')

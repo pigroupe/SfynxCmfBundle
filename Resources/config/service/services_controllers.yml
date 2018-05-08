@@ -1,0 +1,13 @@
+services:
+#    sfynx.cmf.controller.front:
+#        class: 'Sfynx\CmfBundle\Controller\FrontendController'
+#        arguments:
+#            - '@security.csrf.token_manager'
+#            - '@sfynx.core.request.strategy'
+#            - '@doctrine'
+#            - '@templating'
+#            - '@form.factory'
+#            - '@sfynx.auth.role.factory'
+#            - '@sfynx.tool.twig.extension.tool'
+#            - '@sfynx.tool.twig.extension.route'
+#            - '@sfynx.tool.twig.extension.form'

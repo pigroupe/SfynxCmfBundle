@@ -15,8 +15,8 @@ namespace Sfynx\CmfBundle\DataFixtures\ORM;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Sfynx\CmfBundle\Entity\Page;
-use Sfynx\CmfBundle\Repository\PageRepository;
+use Sfynx\CmfBundle\Layers\Domain\Entity\Page;
+use Sfynx\CmfBundle\Layers\Infrastructure\Persistence\Repository\PageRepository;
 
 /**
  * Page DataFixtures.
@@ -69,20 +69,20 @@ class PagesFixtures extends AbstractFixture implements OrderedFixtureInterface
         $field3->setLifetime("0");
         $field3->setPublic(false);
         $field3->setEnabled(true);
-        $manager->persist($field3);        
-        
+        $manager->persist($field3);
+
         $manager->flush();
-        
+
         $this->addReference('page-homepage', $field1);
         $this->addReference('page-error', $field2);
         $this->addReference('page-reset', $field3);
     }
-    
+
     /**
      * Retrieve the order number of current fixture
      *
-     * @return integer 
-     * 
+     * @return integer
+     *
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since 2012-01-23
      */
@@ -90,5 +90,5 @@ class PagesFixtures extends AbstractFixture implements OrderedFixtureInterface
     {
         // The order in which fixtures will be loaded
         return 3;
-    }    
+    }
 }

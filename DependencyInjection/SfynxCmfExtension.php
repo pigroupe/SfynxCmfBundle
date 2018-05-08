@@ -50,11 +50,12 @@ class SfynxCmfExtension extends Extension
         $loaderYaml->load('services.yml');
         $loaderYaml->load("services_form_builder.yml");
         $loaderYaml->load("services_form_validator.yml");
-        $loaderYaml->load('services_listener.yml');        
+        $loaderYaml->load('services_listener.yml');
+        $loaderYaml->load('services_controllers.yml');
         // we load config
         $configuration = new Configuration();
         $config  = $this->processConfiguration($configuration, $config);
-        
+
         /**
          * Cache config parameter
          */
@@ -64,14 +65,14 @@ class SfynxCmfExtension extends Extension
             }
             if (isset($config['cache_dir']['indexation'])) {
                 $container->setParameter('pi_app_admin.cache_dir.indexation', $config['cache_dir']['indexation']);
-            }      
+            }
             if (isset($config['cache_dir']['widget'])) {
                 $container->setParameter('pi_app_admin.cache_dir.widget', $config['cache_dir']['widget']);
-            }             
+            }
             if (isset($config['cache_dir']['seo'])) {
             	$container->setParameter('pi_app_admin.seo.redirection.repository', $config['cache_dir']['seo']);
-            }            
-        }            
+            }
+        }
 
         /**
          * Admin config parameter
@@ -80,8 +81,8 @@ class SfynxCmfExtension extends Extension
             if (isset($config['admin']['context_menu_theme'])) {
                 $container->setParameter('pi_app_admin.admin.context_menu_theme', $config['admin']['context_menu_theme']);
             }
-        }        
-        
+        }
+
         /**
          * Page config parameter
          */
@@ -92,10 +93,10 @@ class SfynxCmfExtension extends Extension
             if (isset($config['page']['page_management_by_user_only'])) {
                 $container->setParameter('pi_app_admin.page.management_by_user_only', $config['page']['page_management_by_user_only']);
             }
-            //            
+            //
             if (isset($config['page']['route']) && isset($config['page']['route']['with_prefix_locale'])) {
             	$container->setParameter('pi_app_admin.page.route.with_prefix_locale', $config['page']['route']['with_prefix_locale']);
-            }          
+            }
             if (isset($config['page']['route']) && isset($config['page']['route']['single_slug'])) {
             	$container->setParameter('pi_app_admin.page.route.single_slug', $config['page']['route']['single_slug']);
             }
@@ -111,20 +112,20 @@ class SfynxCmfExtension extends Extension
             }
             if (isset($config['page']['esi']) && isset($config['page']['esi']['force_private_response_for_all'])) {
             	$container->setParameter('pi_app_admin.page.esi.force_private_response_for_all', $config['page']['esi']['force_private_response_for_all']);
-            } 
+            }
             if (isset($config['page']['esi']) && isset($config['page']['esi']['force_private_response_only_with_authentication'])) {
             	$container->setParameter('pi_app_admin.page.esi.force_private_response_only_with_authentication', $config['page']['esi']['force_private_response_only_with_authentication']);
-            } 
+            }
             if (isset($config['page']['esi']) && isset($config['page']['esi']['disable_after_post_request'])) {
             	$container->setParameter('pi_app_admin.page.esi.disable_after_post_request', $config['page']['esi']['disable_after_post_request']);
-            }       
+            }
             //
             if (isset($config['page']['widget']) && isset($config['page']['widget']['render_service_with_ttl'])) {
             	$container->setParameter('pi_app_admin.page.widget.render_service_with_ttl', $config['page']['widget']['render_service_with_ttl']);
             }
             if (isset($config['page']['widget']) && isset($config['page']['widget']['render_service_with_ajax'])) {
             	$container->setParameter('pi_app_admin.page.widget.render_service_with_ajax', $config['page']['widget']['render_service_with_ajax']);
-            }      
+            }
             if (isset($config['page']['widget']) && isset($config['page']['widget']['ajax_disable_after_post_request'])) {
             	$container->setParameter('pi_app_admin.page.widget.ajax_disable_after_post_request', $config['page']['widget']['ajax_disable_after_post_request']);
             }
@@ -134,8 +135,8 @@ class SfynxCmfExtension extends Extension
             }
             if (isset($config['page']['scop']) && isset($config['page']['scop']['globals'])) {
             	$container->setParameter('pi_app_admin.page.scop.globals', $config['page']['scop']['globals']);
-            }  
-            //                                  
+            }
+            //
             if (isset($config['page']['refresh']) && isset($config['page']['refresh']['allpage'])) {
             	$container->setParameter('pi_app_admin.page.refresh.allpage', $config['page']['refresh']['allpage']);
             }
@@ -144,7 +145,7 @@ class SfynxCmfExtension extends Extension
             }
             if (isset($config['page']['refresh']) && isset($config['page']['refresh']['css_js_cache_file'])) {
             	$container->setParameter('pi_app_admin.page.refresh.css_js_cache_file', $config['page']['refresh']['css_js_cache_file']);
-            }                        
+            }
             //
             if (isset($config['page']['indexation_authorized_automatically'])) {
                 $container->setParameter('pi_app_admin.page.indexation_authorized_automatically', $config['page']['indexation_authorized_automatically']);
@@ -153,7 +154,7 @@ class SfynxCmfExtension extends Extension
             	$container->setParameter('pi_app_admin.page.memcache_enable_all', $config['page']['memcache_enable_all']);
             }
         }
-        
+
         /**
          * Seo config parameter
          */
@@ -162,19 +163,19 @@ class SfynxCmfExtension extends Extension
                 foreach ($config['seo']['meta_head'] as $k => $v) {
                 	$container->setParameter('pi_app_admin.layout.meta.' . $k, $v);
                 }
-            }  
+            }
             if (isset($config['seo']['redirection_oldurl_to_new_url']) && isset($config['seo']['redirection_oldurl_to_new_url']['authorized'])) {
             	$container->setParameter('pi_app_admin.seo.redirection.authorized', $config['seo']['redirection_oldurl_to_new_url']['authorized']);
             }
             if (isset($config['seo']['redirection_oldurl_to_new_url']) && isset($config['seo']['redirection_oldurl_to_new_url']['file_name'])) {
             	$container->setParameter('pi_app_admin.seo.redirection.file_name', $config['seo']['redirection_oldurl_to_new_url']['file_name']);
-            }            
-        }          
-    
+            }
+        }
+
     }
-  
+
     public function getAlias()
     {
         return 'sfynx_cmf';
-    }   
+    }
 }
