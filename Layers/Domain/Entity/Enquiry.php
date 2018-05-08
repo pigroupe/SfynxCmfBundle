@@ -1,7 +1,7 @@
 <?php
 namespace Sfynx\CmfBundle\Layers\Domain\Entity;
 
-use Sfynx\CoreBundle\Layers\Domain\Model\Interfaces\EntityInterface;
+
 use Sfynx\CoreBundle\Layers\Domain\Model\Traits;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints\Length;
  * @link       http://opensource.org/licenses/gpl-license.php
  * @since      2015-02-16
  */
-class Enquiry implements EntityInterface
+class Enquiry  
 {
     use Traits\TraitBuild;
 

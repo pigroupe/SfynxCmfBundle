@@ -20,6 +20,7 @@
     "symfony/framework-bundle": "~2.8|~3.0",
     "doctrine/doctrine-fixtures-bundle": "^2.3.0",
     "besimple/i18n-routing-bundle": "2.4.0",
+    "sfynx-project/tool-cache-bundle": "^2.8",
     "sfynx-project/auth-bundle": "2.x-dev"
   },
 

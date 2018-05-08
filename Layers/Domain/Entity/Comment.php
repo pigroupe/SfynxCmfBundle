@@ -1,7 +1,7 @@
 <?php
 namespace Sfynx\CmfBundle\Layers\Domain\Entity;
 
-use Sfynx\CoreBundle\Layers\Domain\Model\Interfaces\EntityInterface;
+
 use Sfynx\CoreBundle\Layers\Domain\Model\Interfaces\TraitDatetimeInterface;
 use Sfynx\CoreBundle\Layers\Domain\Model\Interfaces\TraitEnabledInterface;
 use Sfynx\CoreBundle\Layers\Domain\Model\Interfaces\TraitPositionInterface;
@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @link       http://opensource.org/licenses/gpl-license.php
  * @since      2015-02-16
  */
-class Comment implements EntityInterface,TraitDatetimeInterface, TraitEnabledInterface, TraitPositionInterface
+class Comment implements TraitDatetimeInterface, TraitEnabledInterface, TraitPositionInterface
 {
     use Traits\TraitBuild;
     use Traits\TraitDatetime;

@@ -12,6 +12,8 @@
  */
 namespace Sfynx\CmfBundle\Layers\Domain\Service\Twig;
 
+use Twig\Loader\LoaderInterface;
+
 use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\PiPageManagerBuilderInterface;
 use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\PiWidgetManagerBuilderInterface;
 use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\PiTransWidgetManagerBuilderInterface;
@@ -29,7 +31,7 @@ use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\PiSe
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
-class PiTwigLoader implements \Twig_LoaderInterface
+class PiTwigLoader implements LoaderInterface
 {
     const SOURCE_TYPE_PAGE = 'page';
     const SOURCE_TYPE_WIDGET = 'widget';

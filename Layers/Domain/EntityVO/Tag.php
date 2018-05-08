@@ -8,7 +8,7 @@ namespace SfynxCmfContext\Domain\Entity;
 // Import from Sfynx\DddBundle
 use Doctrine\ODM\CouchDB\Mapping\Annotations as CouchDB;
 use Doctrine\ORM\Mapping as ORM;
-use Sfynx\CoreBundle\Layers\Domain\Model\Interfaces\EntityInterface;
+
 use SfynxCmfContext\Domain\ValueObject\TagVO;
 
 /**
@@ -31,7 +31,7 @@ use SfynxCmfContext\Domain\ValueObject\TagVO;
  * @license http://www.pigroupe.com under a proprietary license
  * @version 1.1.1
  */
-class Tag implements EntityInterface
+class Tag  
 {
     /**
      * @var integer|string Unique identifier of the Tag.

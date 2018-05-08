@@ -1,7 +1,7 @@
 <?php
 namespace Sfynx\CmfBundle\Layers\Domain\Entity;
 
-use Sfynx\CoreBundle\Layers\Domain\Model\Interfaces\EntityInterface;
+
 use Sfynx\CoreBundle\Layers\Domain\Model\Interfaces\TraitDatetimeInterface;
 use Sfynx\CoreBundle\Layers\Domain\Model\Interfaces\TraitEnabledInterface;
 use Sfynx\CoreBundle\Layers\Domain\Model\Traits;
@@ -25,7 +25,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @link       http://opensource.org/licenses/gpl-license.php
  * @since      2015-02-16
  */
-class HistoricalStatus implements EntityInterface,TraitDatetimeInterface,TraitEnabledInterface
+class HistoricalStatus implements TraitDatetimeInterface,TraitEnabledInterface
 {
     use Traits\TraitBuild;
     use Traits\TraitDatetime;

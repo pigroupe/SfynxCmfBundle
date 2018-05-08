@@ -8,7 +8,7 @@ namespace SfynxCmfContext\Domain\Entity;
 // Import from Sfynx\DddBundle
 use Doctrine\ODM\CouchDB\Mapping\Annotations as CouchDB;
 use Doctrine\ORM\Mapping as ORM;
-use Sfynx\CoreBundle\Layers\Domain\Model\Interfaces\EntityInterface;
+
 use SfynxCmfContext\Domain\ValueObject\BlockVO;
 
 /**
@@ -31,7 +31,7 @@ use SfynxCmfContext\Domain\ValueObject\BlockVO;
  * @license http://www.pigroupe.com under a proprietary license
  * @version 1.1.1
  */
-class Block implements EntityInterface
+class Block  
 {
     /**
      * @var integer|string Unique identifier of the Block.
