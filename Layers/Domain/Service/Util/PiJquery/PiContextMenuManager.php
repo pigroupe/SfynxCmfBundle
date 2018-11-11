@@ -250,7 +250,7 @@ class PiContextMenuManager extends PiJqueryExtension
                         onclick:function() {
                                 window.location.href= "<?php echo $this->container->get('router')->generate('home_page') ?>";
                         },
-                        icon:'<?php echo $this->container->get('templating.helper.assets')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/rotation-16.png"); ?>'
+                        icon:'<?php echo $this->container->get('assets.packages')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/rotation-16.png"); ?>'
                     }
                 },
                 { "<?php echo $this->translator->trans('pi.contextmenu.go_admin'); ?>":
@@ -258,7 +258,7 @@ class PiContextMenuManager extends PiJqueryExtension
                         onclick:function() {
                                 window.location.href= "<?php echo $this->container->get('router')->generate('admin_redirection') ?>";
                         },
-                        icon:'<?php echo $this->container->get('templating.helper.assets')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/rotation-16-inverse.png"); ?>'
+                        icon:'<?php echo $this->container->get('assets.packages')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/rotation-16-inverse.png"); ?>'
                     }
                 },
                 $.contextMenu.separator,
@@ -266,14 +266,14 @@ class PiContextMenuManager extends PiJqueryExtension
                     {
                         onclick:function() {
                         },
-                        icon:'<?php echo $this->container->get('templating.helper.assets')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/organigramme-16.png"); ?>'
+                        icon:'<?php echo $this->container->get('assets.packages')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/organigramme-16.png"); ?>'
                     }
                 },
                 { '<span class="org-tree-page" ><?php echo $this->translator->trans('pi.contextmenu.page.tree'); ?></span>':
                     {
                         onclick:function() {
                         },
-                        icon:'<?php echo $this->container->get('templating.helper.assets')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/tree-16.png"); ?>'
+                        icon:'<?php echo $this->container->get('assets.packages')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/tree-16.png"); ?>'
                     }
                 },
                 $.contextMenu.separator,
@@ -282,28 +282,28 @@ class PiContextMenuManager extends PiJqueryExtension
                         onclick:function() {
                                window.location.href= "<?php echo $this->container->get('router')->generate('public_refresh_page') ?>";
                         },
-                        icon:'<?php echo $this->container->get('templating.helper.assets')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/maj-16.png"); ?>'
+                        icon:'<?php echo $this->container->get('assets.packages')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/maj-16.png"); ?>'
                     }
                 },
                 { '<span class="veneer_blocks_widgets" ><?php echo $this->translator->trans('pi.contextmenu.page.structure'); ?></span>':
                     {
                         onclick:function() {
                         },
-                        icon:'<?php echo $this->container->get('templating.helper.assets')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/block-16.png"); ?>'
+                        icon:'<?php echo $this->container->get('assets.packages')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/block-16.png"); ?>'
                     }
                 },
                 { '<span class="page_action_new" ><?php echo $this->translator->trans('pi.contextmenu.page.add'); ?></span>':
                     {
                         onclick:function() {
                         },
-                        icon:'<?php echo $this->container->get('templating.helper.assets')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/add-page-16.png"); ?>'
+                        icon:'<?php echo $this->container->get('assets.packages')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/add-page-16.png"); ?>'
                     }
                 },
                 { '<span class="page_action_edit" ><?php echo $this->translator->trans('pi.contextmenu.page.update'); ?></span>':
                     {
                         onclick:function() {
                         },
-                        icon:'<?php echo $this->container->get('templating.helper.assets')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/update-page-16.png"); ?>'
+                        icon:'<?php echo $this->container->get('assets.packages')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/update-page-16.png"); ?>'
                     }
                 },
                 { '<span class="page_action_copy" ><?php echo $this->translator->trans('pi.contextmenu.page.copy'); ?></span>':
@@ -311,7 +311,7 @@ class PiContextMenuManager extends PiJqueryExtension
                         onclick:function() {
                                window.location.href= "<?php echo $this->container->get('router')->generate('public_copy_page') ?>";
                         },
-                        icon:'<?php echo $this->container->get('templating.helper.assets')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/copy-page-16.png"); ?>'
+                        icon:'<?php echo $this->container->get('assets.packages')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/copy-page-16.png"); ?>'
                     }
                 },
                 $.contextMenu.separator,
@@ -319,14 +319,14 @@ class PiContextMenuManager extends PiJqueryExtension
                     {
                         onclick:function() {
                         },
-                        icon:'<?php echo $this->container->get('templating.helper.assets')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/archivage-16.png"); ?>'
+                        icon:'<?php echo $this->container->get('assets.packages')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/archivage-16.png"); ?>'
                     }
                 },
                 { '<span class="page_action_desarchivage" ><?php echo $this->translator->trans('pi.contextmenu.page.desindexation'); ?></span>':
                     {
                         onclick:function() {
                         },
-                        icon:'<?php echo $this->container->get('templating.helper.assets')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/desarchivage-16.png"); ?>'
+                        icon:'<?php echo $this->container->get('assets.packages')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/desarchivage-16.png"); ?>'
                     }
                 },
                 $.contextMenu.separator,
@@ -334,7 +334,7 @@ class PiContextMenuManager extends PiJqueryExtension
                     {
                         onclick:function() {
                         },
-                        icon:'<?php echo $this->container->get('templating.helper.assets')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/viewer-16.gif"); ?>'
+                        icon:'<?php echo $this->container->get('assets.packages')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/viewer-16.gif"); ?>'
                     }
                 },
                 $.contextMenu.separator,
@@ -343,7 +343,7 @@ class PiContextMenuManager extends PiJqueryExtension
                         onclick:function() {
                                 window.location.href= "<?php echo $this->container->get('router')->generate('sfynx_auth_security_logout') ?>";
                         },
-                        icon:'<?php echo $this->container->get('templating.helper.assets')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/quitter-16.png"); ?>'
+                        icon:'<?php echo $this->container->get('assets.packages')->getUrl("bundles/sfynxtemplate/images/icons/contextmenu/quitter-16.png"); ?>'
                     }
                 }
             ]

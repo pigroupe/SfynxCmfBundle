@@ -72,12 +72,12 @@ class PiTinyAccordeonManager extends PiJqueryExtension
       *                     $tree   = $self->getContainer()->get('doctrine')->getManager()->getRepository($self->_entityName)->findOneById($node['id']);
       *
       *                     // define of all url images
-      *                     $Urlpath0     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/plus.png');
-      *                     $UrlpathAdd    = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/add.png');
-      *                     $Urlpath1     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/view.png');
-      *                     $Urlpath2     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/up.png');
-      *                     $Urlpath3     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/down.png');
-      *                     $Urlpath4     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/remove.png');
+      *                     $Urlpath0     = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/plus.png');
+      *                     $UrlpathAdd    = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/add.png');
+      *                     $Urlpath1     = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/view.png');
+      *                     $Urlpath2     = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/up.png');
+      *                     $Urlpath3     = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/down.png');
+      *                     $Urlpath4     = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/remove.png');
       *
       *                     $linkNode     = '<h3>'
       *                     . '<img src="'.$Urlpath0.'" height="21px" />&nbsp;&nbsp;&nbsp;' . str_replace('<br>', ' ', $tree->getTitle())
@@ -120,16 +120,16 @@ class PiTinyAccordeonManager extends PiJqueryExtension
       * <code>
       *     {% initJquery 'ACCORDEON:tiny' %}
       *
-      * 	{% if tree %}
-      * 		<div id="tree">
-      * 		    {{ tree|raw }}
-      * 		</div>
-      * 	{% else %}
-      * 		<div class="alert-message info"><p>There are no nodes in tree to display</p></div>
-      * 	{% endif %}
+      *     {% if tree %}
+      *         <div id="tree">
+      *             {{ tree|raw }}
+      *         </div>
+      *     {% else %}
+      *         <div class="alert-message info"><p>There are no nodes in tree to display</p></div>
+      *     {% endif %}
       *
-      * 	{% set options_tiny = {'id': 'acc_'} %}
-      * 	{{ renderJquery('ACCORDEON', 'tiny', options_tiny )|raw }}
+      *     {% set options_tiny = {'id': 'acc_'} %}
+      *     {{ renderJquery('ACCORDEON', 'tiny', options_tiny )|raw }}
       * <code/>
       *
       * @param    $options    tableau d'options.
@@ -144,60 +144,60 @@ class PiTinyAccordeonManager extends PiJqueryExtension
 /* exemple code html
 
 <ul class="acc" id="acc">
-	<li>
-		<h3>About</h3>
-		<div class="acc-section">
-			<div class="acc-content">
-				<ul class="acc" id="nested">
-					<li>
-						<h3>Nested One</h3>
-						<div class="acc-section">
-							<div class="acc-content">
-								Donec elementum lobortis lorem. Sed aliquet lacus vitae nibh. Sed ullamcorper pharetra augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-							</div>
-						</div>
-					</li>
-					<li>
-						<h3>Nested Two</h3>
-						<div class="acc-section">
-							<div class="acc-content">
-								Vestibulum blandit mauris elementum mauris.
-							</div>
-						</div>
-					</li>
-					<li>
-						<h3>Nested Three</h3>
-						<div class="acc-section">
-							<div class="acc-content">
-								Morbi felis libero, porta non, sagittis ac, consectetur in, sem.
-							</div>
-						</div>
-					</li>
-				</ul>
-				This lightweight (1.2 KB) JavaScript accordion can easily be customized to integrate with any website. For more information visit <a href="http://www.leigeber.com">leigeber.com</a>.
-			</div>
-		</div>
-	</li><li>
-		<h3>Instructions</h3>
-		<div class="acc-section">
-			<div class="acc-content">
-				To initialize an accordion use the following code:<br /><br />
-				<code>
-					var accordion=new TINY.accordion.slider(&quot;accordion&quot;);<br />
-					accordion.init(&quot;accordion&quot;,&quot;h3&quot;,false,0,&quot;selected&quot;);
-				</code><br /><br />
-				You must create a new accordion object before initialization. The parameter taken by accordion.slider is the variable name used for the object. The object.init function takes 5 parameters: the id of the accordion ul, the header element tag, whether the panels should be expandable independently (optional), the index of the initially expanded section (optional) and the class for the active header (optional).
-			</div>
-		</div>
-	</li>
-	<li>
-		<h3>Licensing &amp; Support</h3>
-		<div class="acc-section">
-			<div class="acc-content">
-				This script is provided as-is with no warranty or guarantee. It is available at no cost for any project, non-commercial or commercial. Paid support is available by <a href="http://www.leigeber.com/contact/">clicking here</a>
-			</div>
-		</div>
-	</li>
+    <li>
+        <h3>About</h3>
+        <div class="acc-section">
+            <div class="acc-content">
+                <ul class="acc" id="nested">
+                    <li>
+                        <h3>Nested One</h3>
+                        <div class="acc-section">
+                            <div class="acc-content">
+                                Donec elementum lobortis lorem. Sed aliquet lacus vitae nibh. Sed ullamcorper pharetra augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <h3>Nested Two</h3>
+                        <div class="acc-section">
+                            <div class="acc-content">
+                                Vestibulum blandit mauris elementum mauris.
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <h3>Nested Three</h3>
+                        <div class="acc-section">
+                            <div class="acc-content">
+                                Morbi felis libero, porta non, sagittis ac, consectetur in, sem.
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                This lightweight (1.2 KB) JavaScript accordion can easily be customized to integrate with any website. For more information visit <a href="http://www.leigeber.com">leigeber.com</a>.
+            </div>
+        </div>
+    </li><li>
+        <h3>Instructions</h3>
+        <div class="acc-section">
+            <div class="acc-content">
+                To initialize an accordion use the following code:<br /><br />
+                <code>
+                    var accordion=new TINY.accordion.slider(&quot;accordion&quot;);<br />
+                    accordion.init(&quot;accordion&quot;,&quot;h3&quot;,false,0,&quot;selected&quot;);
+                </code><br /><br />
+                You must create a new accordion object before initialization. The parameter taken by accordion.slider is the variable name used for the object. The object.init function takes 5 parameters: the id of the accordion ul, the header element tag, whether the panels should be expandable independently (optional), the index of the initially expanded section (optional) and the class for the active header (optional).
+            </div>
+        </div>
+    </li>
+    <li>
+        <h3>Licensing &amp; Support</h3>
+        <div class="acc-section">
+            <div class="acc-content">
+                This script is provided as-is with no warranty or guarantee. It is available at no cost for any project, non-commercial or commercial. Paid support is available by <a href="http://www.leigeber.com/contact/">clicking here</a>
+            </div>
+        </div>
+    </li>
 </ul>
 
 
@@ -208,10 +208,10 @@ class PiTinyAccordeonManager extends PiJqueryExtension
             throw ExtensionException::optionValueNotSpecified('id', __CLASS__);
         }
         if (!isset($options['menu']) || ($options['menu'] == false) ) {
-        	$options['menu'] = false;
+            $options['menu'] = false;
         }
-        $Urlpath_Moins     = $this->container->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/moins.png');
-        $Urlpath_Plus     = $this->container->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/plus.png');
+        $Urlpath_Moins     = $this->container->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/moins.png');
+        $Urlpath_Plus     = $this->container->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/plus.png');
         // We open the buffer.
         ob_start ();
         ?>

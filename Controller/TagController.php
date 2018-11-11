@@ -91,29 +91,29 @@ class TagController extends CmfabstractController
      */
     public function selectajaxAction()
     {
-    	$request = $this->container->get('request_stack')->getCurrentRequest();
-    	$em      = $this->getDoctrine()->getManager();
-    	$locale  = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
-    	//
-    	$pagination = $this->container->get('request_stack')->getCurrentRequest()->get('pagination', null);
-    	$keyword    = $this->container->get('request_stack')->getCurrentRequest()->get('keyword', '');
-    	$MaxResults = $this->container->get('request_stack')->getCurrentRequest()->get('max', 10);
-    	// we set query
-    	$query  = $em->getRepository("SfynxCmfBundle:Tag")
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $em      = $this->getDoctrine()->getManager();
+        $locale  = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
+        //
+        $pagination = $this->container->get('request_stack')->getCurrentRequest()->get('pagination', null);
+        $keyword    = $this->container->get('request_stack')->getCurrentRequest()->get('keyword', '');
+        $MaxResults = $this->container->get('request_stack')->getCurrentRequest()->get('max', 10);
+        // we set query
+        $query  = $em->getRepository("SfynxCmfBundle:Tag")
                 ->getAllByCategory('', null, '', '', false);
-    	$query
-    	->leftJoin('a.translations', 'trans');
-    	//
+        $query
+        ->leftJoin('a.translations', 'trans');
+        //
         $keyword = array(
-    	    0 => array(
-    	        'field_name' => 'name',
-    	        'field_value' => $keyword,
-    	        'field_trans' => true,
-    	        'field_trans_name' => 'trans',
-    	    ),
-    	);
+            0 => array(
+                'field_name' => 'name',
+                'field_value' => $keyword,
+                'field_trans' => true,
+                'field_trans_name' => 'trans',
+            ),
+        );
 
-    	return $this->selectajaxQuery($pagination, $MaxResults, $keyword, $query, $locale, true);
+        return $this->selectajaxQuery($pagination, $MaxResults, $keyword, $query, $locale, true);
     }
 
     /**
@@ -125,8 +125,8 @@ class TagController extends CmfabstractController
      */
     protected function renderselectajaxQuery($entities, $locale)
     {
-    	$tab = array();
-    	foreach ($entities as $obj) {
+        $tab = array();
+        foreach ($entities as $obj) {
             $content   = $obj->getName();
             if (!empty($content)) {
                 $tab[] = array(
@@ -134,9 +134,9 @@ class TagController extends CmfabstractController
                     'text' => $content
                 );
             }
-    	}
+        }
 
-    	return $tab;
+        return $tab;
     }
 
     /**

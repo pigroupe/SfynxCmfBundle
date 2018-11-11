@@ -12,23 +12,26 @@
  */
 namespace Sfynx\CmfBundle\Layers\Domain\Service\Manager;
 
-use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\PiWidgetManagerBuilderInterface;
-use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Psr\Log\LoggerInterface;
 
+use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\PiWidgetManagerBuilderInterface;
+use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\PiCoreManager;
 use Sfynx\CmfBundle\Layers\Domain\Service\Twig\Extension\PiWidgetExtension;
 use Sfynx\CmfBundle\Layers\Domain\Entity\Widget;
 use Sfynx\CmfBundle\Layers\Domain\Entity\TranslationWidget;
 use Sfynx\CrawlerBundle\Crawler\XmlCrawler;
 use Sfynx\CrawlerBundle\Crawler\XmlCrawlerTransformer;
+use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
+
 
 /**
  * Description of the Widget manager
  *
- * @subpackage   Admin_Managers
- * @package    Widget
+ * @category   Sfynx\CmfBundle\Layers
+ * @package    Domain
+ * @subpackage Service\Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInterface
@@ -168,15 +171,15 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
         $NameAction  = $this->getCurrentWidget()->getAction();
         $id          = $this->getCurrentWidget()->getId();
         $cssClass    = $this->container->get('sfynx.tool.string_manager')->slugify($this->getCurrentWidget()->getConfigCssClass());
-        $lifetime  	 = $this->getCurrentWidget()->getLifetime();
-        $cacheable 	 = strval($this->getCurrentWidget()->getCacheable());
-        $update    	 = $this->getCurrentWidget()->getUpdatedAt()->getTimestamp();
-        $public    	 = strval($this->getCurrentWidget()->getPublic());
+        $lifetime       = $this->getCurrentWidget()->getLifetime();
+        $cacheable      = strval($this->getCurrentWidget()->getCacheable());
+        $update         = $this->getCurrentWidget()->getUpdatedAt()->getTimestamp();
+        $public         = strval($this->getCurrentWidget()->getPublic());
         $cachetemplating = strval($this->getCurrentWidget()->getCacheTemplating());
-        $sluggify  	 = strval($this->getCurrentWidget()->getSluggify());
-        $ajax      	 = strval($this->getCurrentWidget()->getAjax());
-        $is_secure	 = $this->getCurrentWidget()->getSecure();
-        $heritage	 = $this->getCurrentWidget()->getHeritage();
+        $sluggify       = strval($this->getCurrentWidget()->getSluggify());
+        $ajax           = strval($this->getCurrentWidget()->getAjax());
+        $is_secure     = $this->getCurrentWidget()->getSecure();
+        $heritage     = $this->getCurrentWidget()->getHeritage();
 
 //        $configureXml    = $this->container->get('sfynx.tool.string_manager')->filtreString($this->getCurrentWidget()->getConfigXml());
 //        $options = array(
@@ -283,23 +286,23 @@ class PiWidgetManager extends PiCoreManager implements PiWidgetManagerBuilderInt
         if (($xmlConfig instanceof \SimpleXMLElement)
             && $xmlConfig->widgets->css->getName()
         ) {
-        	if (is_object($xmlConfig->widgets->css)) {
+            if (is_object($xmlConfig->widgets->css)) {
                 $all_css = (new XmlCrawlerTransformer())->xml2dataBuilder($xmlConfig->widgets->css);
-        		$this->script['init'][$container.$NameAction.$method.'css'] =  "{% initWidget('css:".json_encode($all_css, JSON_UNESCAPED_UNICODE)."') %}";
-        	} elseif (is_string($xmlConfig->widgets->css)) {
-        		$this->script['init'][$container.$NameAction.$method.'css'] =  "{% initWidget('css:".json_encode([$xmlConfig->widgets->css], JSON_UNESCAPED_UNICODE)."') %}";
-        	}
+                $this->script['init'][$container.$NameAction.$method.'css'] =  "{% initWidget('css:".json_encode($all_css, JSON_UNESCAPED_UNICODE)."') %}";
+            } elseif (is_string($xmlConfig->widgets->css)) {
+                $this->script['init'][$container.$NameAction.$method.'css'] =  "{% initWidget('css:".json_encode([$xmlConfig->widgets->css], JSON_UNESCAPED_UNICODE)."') %}";
+            }
         }
         // we add all js files.
         if (($xmlConfig instanceof \SimpleXMLElement)
             && $xmlConfig->widgets->js->getName()
         ) {
-        	if (is_object($xmlConfig->widgets->js)) {
+            if (is_object($xmlConfig->widgets->js)) {
                 $all_js = (new XmlCrawlerTransformer())->xml2dataBuilder($xmlConfig->widgets->js);
-        		$this->script['init'][$container.$NameAction.$method.'js'] =  "{% initWidget('js:".json_encode($all_js, JSON_UNESCAPED_UNICODE)."') %}";
-        	} elseif (is_string($xmlConfig->widgets->js)) {
-        		$this->script['init'][$container.$NameAction.$method.'js'] =  "{% initWidget('js:".json_encode([$xmlConfig->widgets->js], JSON_UNESCAPED_UNICODE)."') %}";
-        	}
+                $this->script['init'][$container.$NameAction.$method.'js'] =  "{% initWidget('js:".json_encode($all_js, JSON_UNESCAPED_UNICODE)."') %}";
+            } elseif (is_string($xmlConfig->widgets->js)) {
+                $this->script['init'][$container.$NameAction.$method.'js'] =  "{% initWidget('js:".json_encode([$xmlConfig->widgets->js], JSON_UNESCAPED_UNICODE)."') %}";
+            }
         }
         // we apply init methods of the applyed service.
         if (($xmlConfig instanceof \SimpleXMLElement)

@@ -8,13 +8,13 @@ services:
     # configuration of the FORM BUILDER services
     #
     pi_app_admin.formbuilder_manager.model.snippet:
-        class: %piapp.manager.formbuilder.model.snippet.class%
+        class: "%piapp.manager.formbuilder.model.snippet.class%"
         arguments: ['@service_container']
 
     pi_app_admin.formbuilder_manager.model.connexion:
-        class: %piapp.manager.formbuilder.model.connexion.class%
+        class: "%piapp.manager.formbuilder.model.connexion.class%"
         arguments: ['@service_container']
 
     pi_app_admin.formbuilder_manager.model.reset:
-        class: %piapp.manager.formbuilder.model.reset.class%
+        class: "%piapp.manager.formbuilder.model.reset.class%"
         arguments: ['@service_container']

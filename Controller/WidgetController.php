@@ -123,7 +123,7 @@ class WidgetController extends CmfabstractController
      */
     public function deletetwigcacheajaxAction($type = 'widget')
     {
-    	return parent::deletetwigcacheajaxAction($type);
+        return parent::deletetwigcacheajaxAction($type);
     }
 
     /**

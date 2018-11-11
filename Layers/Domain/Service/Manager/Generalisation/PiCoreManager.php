@@ -10,7 +10,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Sfynx\CmfBundle\Layers\Domain\Service\Manager;
+namespace Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation;
 
 use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\PiCoreManagerBuilderInterface;
 use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
@@ -28,8 +28,9 @@ use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 /**
  * Description of the Page manager
  *
- * @subpackage   Admin_Managers
- * @package    Manager
+ * @category   Sfynx\CmfBundle\Layers
+ * @package    Domain
+ * @subpackage Service\Manager\Generalisation
  * @abstract
  *
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
@@ -195,19 +196,19 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      */
     protected function createEtag($tag, $id, $lang, $params = null)
     {
-    	// We cretae and set the Etag value
-    	if (!(null === $params)) {
+        // We cretae and set the Etag value
+        if (!(null === $params)) {
             // we sort an array by key in reverse order
             $this->container->get('sfynx.tool.array_manager')->recursive_method($params, 'krsort');
             $params = $this->paramsEncode($params);
             $id     = $this->_Encode($id, false);
             $this->setEtag("$tag:$id:$lang:$params");
-    	} else {
+        } else {
             $id     = $this->_Encode($id, false);
             $this->setEtag("$tag:$id:$lang");
-    	}
+        }
 
-    	return $this->Etag;
+        return $this->Etag;
     }
 
     /**
@@ -277,16 +278,16 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
         $result = false;
         // we set the time
         $now    = $this->setTimestampNow();
-    	// we set the Etag.
+        // we set the Etag.
         $this->createEtag($tag, $id, $lang, $params);
-    	// we set the path
-    	$path   = $this->container->getParameter("pi_app_admin.cache_dir.etag");
-    	// we set the file name
-    	if ( isset($params['page-url']) && !empty($params['page-url']) && ($tag == "page") ) {
+        // we set the path
+        $path   = $this->container->getParameter("pi_app_admin.cache_dir.etag");
+        // we set the file name
+        if ( isset($params['page-url']) && !empty($params['page-url']) && ($tag == "page") ) {
             // if the page is sluggify
             if ($this->isSluggifyPage()) {
                 $path_json_file_tmp = $this->createJsonFileName('page-sluggify-tmp', $this->Etag, $lang);
-                if (!file_exists($path_json_file_tmp)) {
+                if (!\file_exists($path_json_file_tmp)) {
                     $result = PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", null, LOCK_EX);
                     // we add new Etag in the sluggify file.
                     $path_json_file_sluggify = $this->createJsonFileName('page-sluggify', $id, $lang);
@@ -295,7 +296,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
             // if the page has queries
             } elseif ($this->isQueryStringPage()) {
                 $path_json_file_tmp = $this->createJsonFileName('page-history-tmp', $this->Etag, $lang);
-                if (!file_exists($path_json_file_tmp)) {
+                if (!\file_exists($path_json_file_tmp)) {
                     $result = PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag.'|'.$params['page-url']."\n", null, LOCK_EX);
                     // we add new Etag in the history.
                     $path_json_file_history = $this->createJsonFileName('page-history', $id, $lang);
@@ -303,41 +304,41 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
                 }
             } else {
                 $path_json_file   = $this->createJsonFileName('page', $id, $lang);
-                if (!file_exists($path_json_file)) {
+                if (!\file_exists($path_json_file)) {
                     $result = PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", null, LOCK_EX);
                 }
             }
-    	} elseif ( isset($params['esi-url']) && !empty($params['esi-url']) && ($tag == "esi") ) {
-    	    $path_json_file_tmp = $this->createJsonFileName('esi-tmp', $params['esi-url'], $lang);
-            if (!file_exists($path_json_file_tmp)) {
+        } elseif ( isset($params['esi-url']) && !empty($params['esi-url']) && ($tag == "esi") ) {
+            $path_json_file_tmp = $this->createJsonFileName('esi-tmp', $params['esi-url'], $lang);
+            if (!\file_exists($path_json_file_tmp)) {
                 $result = PiFileManager::save($path_json_file_tmp, $now.'|'.$params['esi-url']."\n", null, LOCK_EX);
                 // we add new ESI tag in the file.
                 $path_json_file = $this->createJsonFileName('esi', $id, $lang);
                 $result = PiFileManager::save($path_json_file, $now.'|'.$params['esi-url']."\n", null, FILE_APPEND);
             }
-    	} elseif (isset($params['widget-id']) && !empty($params['widget-id'])) {
-    	    if (isset($params['widget-sluggify-url'])) {
-    	        $path_json_file_tmp = $this->createJsonFileName('widget-history-tmp', $this->Etag, $lang);
-    	        if (!file_exists($path_json_file_tmp)) {
+        } elseif (isset($params['widget-id']) && !empty($params['widget-id'])) {
+            if (isset($params['widget-sluggify-url'])) {
+                $path_json_file_tmp = $this->createJsonFileName('widget-history-tmp', $this->Etag, $lang);
+                if (!\file_exists($path_json_file_tmp)) {
                     $result = PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag."\n", null, LOCK_EX);
                     // we add new Etag in the history.
                     $path_json_file_history = $this->createJsonFileName('widget-history', $params['widget-id'], $lang);
                     $result = PiFileManager::save($path_json_file_history, $now.'|'.$this->Etag."\n", null, FILE_APPEND);
-    	        }
-    	    } else {
+                }
+            } else {
                 $path_json_file = $this->createJsonFileName('widget', $params['widget-id'], $lang);
                 $result = PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", null, LOCK_EX);
-    	    }
-    	} else {
+            }
+        } else {
             $path_json_file_tmp = $this->createJsonFileName('default-tmp', $this->Etag, $lang);
-            if (!file_exists($path_json_file_tmp)) {
+            if (!\file_exists($path_json_file_tmp)) {
                 $result = PiFileManager::save($path_json_file_tmp, $now.'|'.$this->Etag."\n", null, LOCK_EX);
                 $path_json_file = $this->createJsonFileName('default', $tag, $lang);
                 $result = PiFileManager::save($path_json_file, $now.'|'.$this->Etag."\n", null, FILE_APPEND);
             }
-    	}
+        }
 
-    	return $result;
+        return $result;
     }
 
     /**
@@ -351,9 +352,9 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
     public function createCacheWidgetRepository()
     {
         $path  = $this->container->getParameter("pi_app_admin.cache_dir.widget");
-    	PiFileManager::mkdirr($path);
+        PiFileManager::mkdirr($path);
 
-    	return $path;
+        return $path;
     }
 
     /**
@@ -368,76 +369,76 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      */
     public function cacheRefreshByname($name, $onlyDelete = true)
     {
-//    	$name = str_replace('\\\\', '\\', $name);
-    	// Delete the cache filename of the template.
-    	try {
+//        $name = str_replace('\\\\', '\\', $name);
+        // Delete the cache filename of the template.
+        try {
             $this->container->get('pi_app_admin.caching')->invalidate($name);
-    	} catch (\Exception $e) {
-    	}
-    	// Loads and warms up a template by name.
-    	try {
+        } catch (\Exception $e) {
+        }
+        // Loads and warms up a template by name.
+        try {
             if (!$onlyDelete) {
                 $this->container->get('pi_app_admin.caching')->warmup($name);
             }
-    	} catch (\Exception $e) {
-    	}
+        } catch (\Exception $e) {
+        }
     }
 
     protected function setTimestampNow()
     {
-    	$now = new \Datetime();
+        $now = new \Datetime();
 
-    	return $now->getTimestamp();
+        return $now->getTimestamp();
     }
 
     protected function paramsEncode($params)
     {
-    	$string = json_encode($params, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
+        $string = json_encode($params, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
 
-    	return $this->_Encode($string);
+        return $this->_Encode($string);
     }
 
     protected function _Encode($string, $complet = true)
     {
-//    	$string = str_replace('\\\\', '\\', $string);
-//    	if ($complet) {
+//        $string = str_replace('\\\\', '\\', $string);
+//        if ($complet) {
 //            $string = str_replace('\\', "@@", $string);
 //            $string = str_replace('@@@@@@@@', "@@", $string);
 //            $string = str_replace('@@@@', "@@", $string);
-//    	}
+//        }
 
-    	return str_replace(':', '#', $string);
+        return str_replace(':', '#', $string);
     }
 
     protected function paramsDecode($params)
     {
-    	$params = $this->_Decode($params);
-//    	$params = str_replace('\\', '\\\\', $params);
-    	$params = json_decode($params, true);
-    	if (is_array($params)){
+        $params = $this->_Decode($params);
+//        $params = str_replace('\\', '\\\\', $params);
+        $params = json_decode($params, true);
+        if (is_array($params)){
             $this->container->get('sfynx.tool.array_manager')->recursive_method($params, 'krsort');
 //            $name_key = array_map(function($key, $value) {
 //                    return str_replace('\\\\', '\\', $value);
 //            }, array_keys($params),array_values($params));
 //            $params = array_combine(array_keys($params), $name_key);
-    	}
+        }
 
-    	return $params;
+        return $params;
     }
 
     protected function _Decode($string)
     {
-//    	$string = str_replace("@@", '\\', $string);
-//    	$string = str_replace('\\\\', '\\', $string);
-    	$string = str_replace('#', ':', $string);
-    	$string = str_replace("$$$", "&", $string);
+//        $string = str_replace("@@", '\\', $string);
+//        $string = str_replace('\\\\', '\\', $string);
+        $string = str_replace('#', ':', $string);
+        $string = str_replace("$$$", "&", $string);
 
-    	return $string;
+        return $string;
     }
 
     protected function recursive_map(array &$array, $curlevel=0)
     {
-    	foreach ($array as $k=>$v) {
+        foreach ($array as $k=>$v) {
             if (is_array($v)) {
                 $this->recursive_map($v, $curlevel+1);
             } else {
@@ -447,7 +448,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
                 $v = str_replace("$$$", "&", $v);
                 $array[$k] =  mb_convert_encoding($v, "UTF-8", "HTML-ENTITIES");
             }
-    	}
+        }
     }
 
     /**
@@ -487,7 +488,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
             return $response;
         } else {
             // or render a template with the $response you've already started
-            $response = $this->container->get('pi_app_admin.caching')->renderResponse($this->Etag, array(), $response);
+            $response = $this->container->get('pi_app_admin.caching')->renderResponse($this->Etag, [], $response);
             // We set the reponse
             $this->setResponse($this->Etag, $response);
             // we don't send the header but the content only.
@@ -522,6 +523,8 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      * @access protected
      * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
      * @since  2012-01-05
+     * @link https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching?hl=fr
+     * @link https://developer.mozilla.org/fr/docs/Web/HTTP/Cache
      */
     protected function configureCache($object, Response $response)
     {
@@ -546,7 +549,7 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
             if ($isEsi) {
             } else {
                 // browser side caching
-            	$response->setMaxAge($object->getLifetime());
+                $response->setMaxAge($object->getLifetime());
             }
         }
         // Returns a 304 "not modified" status, when the template has not changed since last visit.
@@ -901,12 +904,12 @@ abstract class PiCoreManager implements PiCoreManagerBuilderInterface
      */
     public function getPageMetaInfo($lang = '', $title = '', $description = '', $keywords = '', $pathInfo = "")
     {
-    	// we set values.
-    	$options['title']       = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($title)));
-    	$options['description'] = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($description)));
-    	$options['keywords']    = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($keywords)));
-    	// we set sluggify values.
-    	try {
+        // we set values.
+        $options['title']       = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($title)));
+        $options['description'] = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($description)));
+        $options['keywords']    = str_replace(array('"',"’"), array("'","'"), strip_tags($this->container->get('translator')->trans($keywords)));
+        // we set sluggify values.
+        try {
             if (empty($lang)) {
                 $lang     = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
             }

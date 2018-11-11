@@ -65,7 +65,7 @@ class Indexation
         // ignore invalid characters for lucene text search
         \Zend_Search_Lucene_Search_QueryParser::setDefaultEncoding('utf-8');
         \Zend_Search_Lucene_Analysis_Analyzer::setDefault(
-        		new \Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8_CaseInsensitive ()
+                new \Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8_CaseInsensitive ()
         );
         self::$_index = $Index;
         self::$_doc   = null;

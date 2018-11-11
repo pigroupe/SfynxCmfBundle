@@ -14,6 +14,7 @@ namespace Sfynx\CmfBundle\Layers\Domain\Service\Util\PiJquery;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Sfynx\ToolBundle\Twig\Extension\PiJqueryExtension;
 use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ExtensionException;
 
@@ -26,6 +27,11 @@ use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ExtensionException;
  */
 class PiBackstretchManager extends PiJqueryExtension
 {
+    /** @var Request */
+    protected $request;
+    /** @var string */
+    protected $projectWebDir;
+
     /**
      * Constructor.
      *
@@ -35,6 +41,17 @@ class PiBackstretchManager extends PiJqueryExtension
     public function __construct(ContainerInterface $container, TranslatorInterface $translator)
     {
         parent::__construct($container, $translator);
+        $this->request = $container->get('request_stack')->getCurrentRequest();
+    }
+
+    /**
+     * @return string
+     */
+    public function getProjectWebDir()
+    {
+        $this->projectWebDir = $this->projectWebDir ?? $this->request->server->get('DOCUMENT_ROOT') . '/';
+
+        return $this->projectWebDir;
     }
 
     /**
@@ -45,7 +62,8 @@ class PiBackstretchManager extends PiJqueryExtension
      *
      * @author Etienne de Longeaux <etienne_delongeaux@hotmail.com>
      */
-    protected function init($options = null) {
+    protected function init($options = null)
+    {
         // js
         $this->container->get('sfynx.tool.twig.extension.layouthead')->addJsFile("bundles/sfynxtemplate/js/jquery/jquery.backstretch.min.js");
     }
@@ -74,11 +92,11 @@ class PiBackstretchManager extends PiJqueryExtension
             throw ExtensionException::optionValueNotSpecified('img', __CLASS__);
         }
         // if the file doesn't exist, we call an exception
-        $is_file_exist = realpath($this->container->get('kernel')->getRootDir(). '/../web/' . $options['img']);
+        $is_file_exist = realpath($this->getProjectWebDir() . $options['img']);
         if (!$is_file_exist) {
             throw ExtensionException::FileUnDefined('img', __CLASS__);
         }
-        $Urlpath = $this->container->get('templating.helper.assets')->getUrl($options['img']);
+        $Urlpath = $this->container->get('assets.packages')->getUrl($options['img']);
         // We open the buffer.
         ob_start ();
         ?>

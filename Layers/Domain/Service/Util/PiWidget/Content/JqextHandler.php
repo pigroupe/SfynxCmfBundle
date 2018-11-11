@@ -123,7 +123,7 @@ class JqextHandler extends AbstractHandler implements HandlerWidgetInterface
 //                $params['widget-sluggify']  = ((int) $options['widget-sluggify']) ? true : false;
 //                $params['cachable']         = ((int) $options['widget-cachetemplating']) ? true : false;
                 if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
-                	$params['cachable'] = ($xmlConfig->widgets->content->params->cachable === 'true') ? true : false;
+                    $params['cachable'] = ($xmlConfig->widgets->content->params->cachable === 'true') ? true : false;
                 }
                 if ($params['cachable']) {
                     return $this->renderWidget->renderCache('pi_app_admin.manager.jqext', $this->action, "$JQcontainer~$JQservice", $lang, $params);

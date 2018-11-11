@@ -145,7 +145,7 @@ class PiwidgetimportManager extends PiJqueryExtension
                 $i++;
             }
         }
-        $response        = $this->container->get('templating')->renderResponse("SfynxTemplateBundle:Template\\Widgetimport:$template", array(
+        $response        = $this->container->get('templating')->renderResponse("$template", array(
                 'form_col_1'    => $array_col_1,
                 'form_col_2'    => $array_col_2,
                 'form_col_3'    => $array_col_3,

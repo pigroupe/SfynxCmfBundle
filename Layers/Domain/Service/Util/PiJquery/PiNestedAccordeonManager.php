@@ -73,24 +73,24 @@ class PiNestedAccordeonManager extends PiJqueryExtension
      */
     protected function render($options = null)
     {
-    	// Options management
+        // Options management
         if (!isset($options['acc-id-box']) || empty($options['acc-id-box'])) {
-        	throw ExtensionException::optionValueNotSpecified('acc-id-box', __CLASS__);
+            throw ExtensionException::optionValueNotSpecified('acc-id-box', __CLASS__);
         }
         if (!isset($options['acc-id']) || empty($options['acc-id'])) {
-        	throw ExtensionException::optionValueNotSpecified('acc-id', __CLASS__);
+            throw ExtensionException::optionValueNotSpecified('acc-id', __CLASS__);
         }
-    	if (!isset($options['acc-type']) || empty($options['acc-type']) || (isset($options['acc-type']) && !in_array($options['acc-type'], self::$types))) {
-    		throw ExtensionException::optionValueNotSpecified('acc-type', __CLASS__);
-    	}
+        if (!isset($options['acc-type']) || empty($options['acc-type']) || (isset($options['acc-type']) && !in_array($options['acc-type'], self::$types))) {
+            throw ExtensionException::optionValueNotSpecified('acc-type', __CLASS__);
+        }
 
-    	if ( $options['acc-type'] == "accordeonUl" ) {
-    		return $this->accUlAction($options);
-    	} elseif ( $options['acc-type'] == "accordeonDiv" ) {
-    		return $this->accDivAction($options);
-    	} elseif ( $options['acc-type'] == "accordeonTree" ) {
-    		return $this->accTreeAction($options);
-    	}
+        if ( $options['acc-type'] == "accordeonUl" ) {
+            return $this->accUlAction($options);
+        } elseif ( $options['acc-type'] == "accordeonDiv" ) {
+            return $this->accDivAction($options);
+        } elseif ( $options['acc-type'] == "accordeonTree" ) {
+            return $this->accTreeAction($options);
+        }
     }
 
     /**
@@ -113,12 +113,12 @@ class PiNestedAccordeonManager extends PiJqueryExtension
       *                     $tree   = $self->getContainer()->get('doctrine')->getManager()->getRepository($self->_entityName)->findOneById($node['id']);
       *
       *                     // define of all url images
-      *                     $Urlpath0     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/plus.png');
-      *                     $UrlpathAdd    = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/add.png');
-      *                     $Urlpath1     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/view.png');
-      *                     $Urlpath2     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/up.png');
-      *                     $Urlpath3     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/down.png');
-      *                     $Urlpath4     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/remove.png');
+      *                     $Urlpath0     = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/plus.png');
+      *                     $UrlpathAdd    = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/add.png');
+      *                     $Urlpath1     = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/view.png');
+      *                     $Urlpath2     = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/up.png');
+      *                     $Urlpath3     = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/down.png');
+      *                     $Urlpath4     = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/remove.png');
       *
       *                     $linkNode     = '<h4>'
       *                     . str_replace('<br>', ' ', $tree->getTitle())
@@ -161,16 +161,16 @@ class PiNestedAccordeonManager extends PiJqueryExtension
       * <code>
       *     {% initJquery 'ACCORDEON:nested' %}
       *
-      * 	{% if tree %}
-      * 		<div id="tree">
-      * 		    {{ tree|raw }}
-      * 		</div>
-      * 	{% else %}
-      * 		<div class="alert-message info"><p>There are no nodes in tree to display</p></div>
-      * 	{% endif %}
+      *     {% if tree %}
+      *         <div id="tree">
+      *             {{ tree|raw }}
+      *         </div>
+      *     {% else %}
+      *         <div class="alert-message info"><p>There are no nodes in tree to display</p></div>
+      *     {% endif %}
       *
-      * 	{% set options_nested = {'acc-id-box': 'tree', 'acc-id': 'acc1', 'acc-type': "accordeonUl"} %}
-      * 	{{ renderJquery('ACCORDEON', 'nested', options_nested )|raw }}
+      *     {% set options_nested = {'acc-id-box': 'tree', 'acc-id': 'acc1', 'acc-type': "accordeonUl"} %}
+      *     {{ renderJquery('ACCORDEON', 'nested', options_nested )|raw }}
       * <code/>
       *
       * @param    $options    tableau d'options.
@@ -404,12 +404,12 @@ class PiNestedAccordeonManager extends PiJqueryExtension
 
  */
 
-    	// We open the buffer.
-    	ob_start ();
-    	?>
+        // We open the buffer.
+        ob_start ();
+        ?>
             $.fn.accordion.defaults.container = false;
             $(function() {
-            	$("#<?php echo $options['acc-id-box']?> ul:first").attr('id', '<?php echo $options['acc-id']?>');
+                $("#<?php echo $options['acc-id-box']?> ul:first").attr('id', '<?php echo $options['acc-id']?>');
                 $("#<?php echo $options['acc-id-box']?> ul:first").attr('class', 'accordion');
                 $("#<?php echo $options['acc-id']?>").accordion({
                   obj: "div",
@@ -440,16 +440,16 @@ class PiNestedAccordeonManager extends PiJqueryExtension
       * <code>
       *     {% initJquery 'ACCORDEON:nested' %}
       *
-      * 	{% if tree %}
-      * 		<div id="side">
-      * 		    {{ tree|raw }}
-      * 		</div>
-      * 	{% else %}
-      * 		<div class="alert-message info"><p>There are no nodes in tree to display</p></div>
-      * 	{% endif %}
+      *     {% if tree %}
+      *         <div id="side">
+      *             {{ tree|raw }}
+      *         </div>
+      *     {% else %}
+      *         <div class="alert-message info"><p>There are no nodes in tree to display</p></div>
+      *     {% endif %}
       *
-      * 	{% set options_nested = {'acc-id-box': 'side', 'acc-id': 'acc3', 'acc-type': "accordeonTree"} %}
-      * 	{{ renderJquery('ACCORDEON', 'nested', options_nested )|raw }}
+      *     {% set options_nested = {'acc-id-box': 'side', 'acc-id': 'acc3', 'acc-type': "accordeonTree"} %}
+      *     {{ renderJquery('ACCORDEON', 'nested', options_nested )|raw }}
       * <code/>
       *
      * @param    $options    tableau d'options.
@@ -522,12 +522,12 @@ class PiNestedAccordeonManager extends PiJqueryExtension
                 </ul>
 
  */
-    	// We open the buffer.
-    	ob_start ();
-    	?>
+        // We open the buffer.
+        ob_start ();
+        ?>
             $.fn.accordion.defaults.container = false;
             $(function() {
-            	$("#<?php echo $options['acc-id-box']?> ul:first").attr('id', '<?php echo $options['acc-id']?>');
+                $("#<?php echo $options['acc-id-box']?> ul:first").attr('id', '<?php echo $options['acc-id']?>');
                 $("#<?php echo $options['acc-id-box']?> ul:first").attr('class', 'accordion');
                 $("#<?php echo $options['acc-id']?>").accordion({
                   initShow: "#current"

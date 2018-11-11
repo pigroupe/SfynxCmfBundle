@@ -8,7 +8,7 @@
  
 {% block content %}
 
-    {% include getParameter('sfynx.template.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-header.html.twig" %}
+    {% include getParameter('sfynx.template.theme.layout.admin.pc')~"Crud/index-header.html.twig" %}
 	<table id="grid_page" >
 	    <thead>
 	        <tr>
@@ -56,7 +56,7 @@
 	    {% endfor %}
 	    </tbody>
 	</table>
-	{% include getParameter('sfynx.template.theme.layout.admin.pc')|replace({'::': ':'})~"Crud:index-footer.html.twig" %}
+	{% include getParameter('sfynx.template.theme.layout.admin.pc')~"Crud/index-footer.html.twig" %}
 	
 {% endblock %}
 

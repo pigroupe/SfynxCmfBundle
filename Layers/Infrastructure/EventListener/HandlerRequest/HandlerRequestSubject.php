@@ -103,7 +103,6 @@ class HandlerRequestSubject implements SplSubject
         $this->request = $event->getRequest();
 
         $isResponse = $this->notify();
-
         if ($isResponse instanceof Response) {
             $event->setResponse($isResponse);
         }
@@ -126,7 +125,10 @@ class HandlerRequestSubject implements SplSubject
      */
     public function attach(SplObserver $observer)
     {
-        $this->observers[] = $observer;
+        $key = array_search($observer,$this->observers, true);
+        if (!$key) {
+            $this->observers[] = $observer;
+        }
         return $this;
     }
 
@@ -136,7 +138,7 @@ class HandlerRequestSubject implements SplSubject
     public function detach(SplObserver $observer)
     {
         $key = array_search($observer,$this->observers, true);
-        if($key){
+        if ($key) {
             unset($this->observers[$key]);
         }
     }
@@ -148,7 +150,11 @@ class HandlerRequestSubject implements SplSubject
     {
         $this->observers = array_merge(self::$handlerList, $this->observers);
         foreach ($this->observers as $observer) {
-            $isResponse = (new $observer())->update($this);
+            if (is_object($observer)) {
+                $isResponse = $observer->update($this);
+            } else {
+                $isResponse = (new $observer())->update($this);
+            }
             if ($isResponse instanceof Response) {
                 return $isResponse;
             }

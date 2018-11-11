@@ -33,26 +33,25 @@ services:
             - '@twig.loader'
 
     pi_app_admin.twig.loader_chain:
-        class: Twig_Loader_Chain
+        class: 'Twig_Loader_Chain'
         public : true
         arguments: [['@pi_app_admin.twig.loader','@twig.loader']]
 
     pi_app_admin.twig:
-        class: '%twig.class%'
+        class: 'Twig\Environment'
         public : true
         arguments: ['@pi_app_admin.twig.loader_chain', '%twig.options%']
         calls:
              - [ addGlobal, ['app', '@twig.app_variable'] ] # we overload Symfony/Bundle/TwigBundle/Resources/config/twig.xml
-#        configurator: ['@twig.configurator.environment', configure]
+        configurator: ['@twig.configurator.environment', 'configure']
 
     pi_app_admin.templating:
-        class: '%templating.engine.twig.class%'
+        class: 'Symfony\Bundle\TwigBundle\TwigEngine'
         public : true
-#        arguments: ['@pi_app_admin.twig', '@templating.name_parser', '@file_locator']
         arguments:
             - '@pi_app_admin.twig'
             - '@templating.name_parser'
-            - '@templating.locator'
+            - '@file_locator'
 
     pi_app_admin.caching:
         class: '%piapp.twig.caching.class%'

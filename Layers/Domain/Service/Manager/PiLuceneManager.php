@@ -12,20 +12,21 @@
  */
 namespace Sfynx\CmfBundle\Layers\Domain\Service\Manager;
 
-use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\PiSearchLuceneManagerBuilderInterface;
-use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Sfynx\ToolBundle\Util\PiFileManager;
+use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\PiSearchLuceneManagerBuilderInterface;
+use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\PiCoreManager;
 use Sfynx\CmfBundle\Layers\Domain\Service\Manager\SearchLucene\Indexation;
 use Sfynx\CmfBundle\Layers\Domain\Entity\Page;
+use Sfynx\ToolBundle\Util\PiFileManager;
+use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
 
 /**
  * Description of the search lucnene manager
  *
- * @subpackage   Admin_Managers
- * @package    Manager
- *
+ * @category   Sfynx\CmfBundle\Layers
+ * @package    Domain
+ * @subpackage Service\Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiLuceneManager extends PiCoreManager implements PiSearchLuceneManagerBuilderInterface

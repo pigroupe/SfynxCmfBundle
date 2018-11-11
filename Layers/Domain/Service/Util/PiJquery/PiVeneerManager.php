@@ -190,7 +190,7 @@ class PiVeneerManager extends PiJqueryExtension
                                             //alert(response);
                                             $("#hProBar").progressbar( "destroy" );
                                             window.location.href= "<?php echo $this->container->get('router')->generate('public_refresh_page') ?>";
-                                 	    });
+                                         });
                                     }
                                 },
                                 // Lorsque l'on passe un élément au dessus d'un block

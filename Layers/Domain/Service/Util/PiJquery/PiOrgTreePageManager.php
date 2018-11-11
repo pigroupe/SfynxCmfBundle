@@ -98,7 +98,7 @@ class PiOrgTreePageManager extends PiJqueryExtension
                 treeObj = new JSDragDropTree();
                 treeObj.setTreeId('dhtmlgoodies_tree2');
                 treeObj.setMaximumDepth(7);
-                treeObj.setImageFolder("<?php echo $this->container->get('templating.helper.assets')->getUrl("bundles/sfynxtemplate/js/drag-drop-folder-tree/images/"); ?>");
+                treeObj.setImageFolder("<?php echo $this->container->get('assets.packages')->getUrl("bundles/sfynxtemplate/js/drag-drop-folder-tree/images/"); ?>");
                 treeObj.setMessageMaximumDepthReached('Maximum depth reached'); // If you want to show a message when maximum depth is reached, i.e. on drop.
                 treeObj.initTree();
                 treeObj.expandAll();

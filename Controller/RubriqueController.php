@@ -325,12 +325,12 @@ class RubriqueController extends CmfabstractController
                 'childClose' => "    </li> \n",
                 'nodeDecorator' => function($node) use (&$self) {
                     // define of all url images
-                    $Urlpath0     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/plus.png');
-                    $UrlpathAdd   = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/add.png');
-                    $Urlpath1     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/view.png');
-                    $Urlpath2     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/up.png');
-                    $Urlpath3     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/down.png');
-                    $Urlpath4     = $self->get('templating.helper.assets')->getUrl('bundles/sfynxtemplate/images/icons/tree/remove.png');
+                    $Urlpath0     = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/plus.png');
+                    $UrlpathAdd   = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/add.png');
+                    $Urlpath1     = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/view.png');
+                    $Urlpath2     = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/up.png');
+                    $Urlpath3     = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/down.png');
+                    $Urlpath4     = $self->get('assets.packages')->getUrl('bundles/sfynxtemplate/images/icons/tree/remove.png');
 
                     $linkNode     = '<h4>'. $node['titre'] . '&nbsp;&nbsp;&nbsp; (node: ' .  $node['id'] . ', level : ' .  $node['lvl'] . ')' . '</h4>';
 

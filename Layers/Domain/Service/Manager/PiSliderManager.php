@@ -12,16 +12,18 @@
  */
 namespace Sfynx\CmfBundle\Layers\Domain\Service\Manager;
 
-use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\PiSliderManagerBuilderInterface;
-use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
+use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\PiSliderManagerBuilderInterface;
+use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\PiCoreManager;
+use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
 
 /**
  * Description of the slider Widget manager
  *
- * @subpackage   Admin_Managers
- * @package    Manager
- *
+ * @category   Sfynx\CmfBundle\Layers
+ * @package    Domain
+ * @subpackage Service\Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiSliderManager extends PiCoreManager implements PiSliderManagerBuilderInterface
@@ -177,10 +179,10 @@ class PiSliderManager extends PiCoreManager implements PiSliderManagerBuilderInt
             $parameters['last']   = $last_key_value;
 
             if (!isset($parameters['width']) || empty($parameters['width'])) {
-            	$parameters['width'] = "100%";
+                $parameters['width'] = "100%";
             }
             if (!isset($parameters['height']) || empty($parameters['height'])) {
-            	$parameters['height'] = "100%";
+                $parameters['height'] = "100%";
             }
             $templateContent = $this->container->get('twig')->loadTemplate($template);
             if ($templateContent->hasBlock("boucle")) {

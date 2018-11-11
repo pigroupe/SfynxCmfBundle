@@ -38,9 +38,9 @@ abstract class CmfabstractController extends abstractController
      */
     public function deletetwigcacheajaxAction($type)
     {
-    	$request = $this->container->get('request_stack')->getCurrentRequest();
-    	$em      = $this->getDoctrine()->getManager();    	 
-    	if ($request->isXmlHttpRequest()) {
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $em      = $this->getDoctrine()->getManager();         
+        if ($request->isXmlHttpRequest()) {
             $data        = $request->get('data', null);
             $new_data    = null;
             foreach ($data as $key => $value) {
@@ -82,8 +82,8 @@ abstract class CmfabstractController extends abstractController
             $response->headers->set('Content-Type', 'application/json');
 
             return $response;
-    	} else {
+        } else {
             throw ControllerException::callAjaxOnlySupported('deleteajax');
-    	}
+        }
     }    
 }

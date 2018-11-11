@@ -73,7 +73,7 @@ class PiDialogManager extends PiJqueryExtension
         // Options management
         // Options management
         if (!isset($options['id']) || empty($options['id'])) {
-        	throw ExtensionException::optionValueNotSpecified('id', __CLASS__);
+            throw ExtensionException::optionValueNotSpecified('id', __CLASS__);
         }
         if (!isset($options['action']) || empty($options['action']) || (isset($options['action']) && !in_array(strtolower($options['action']), self::$actions)) ) {
             throw ExtensionException::optionValueNotSpecified('action', __CLASS__);
@@ -111,31 +111,31 @@ class PiDialogManager extends PiJqueryExtension
         ob_start ();
         ?>
                 jQuery(document).ready(function() {
-                	$('body').append('<div id="confirm-dialog-delete"><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span><p></p></div>');
+                    $('body').append('<div id="confirm-dialog-delete"><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span><p></p></div>');
                     $ ("<?php echo $options['id']; ?>").click(function(e) {
-                       	 e.preventDefault();
-                       	 var confirm_url_redirection = $(this).data('url');
-                       	 var confirm_title = $(this).data('title');
-                       	 var confirm_msg = $(this).data('msg');
-                       	 $("#confirm-dialog-delete").find('p').html(confirm_msg);
-                       	 $("#confirm-dialog-delete").data('url', confirm_url_redirection);
-                       	 $("#confirm-dialog-delete").dialog("option", "title", confirm_title);
-                       	 $("#confirm-dialog-delete").dialog('open');
+                            e.preventDefault();
+                            var confirm_url_redirection = $(this).data('url');
+                            var confirm_title = $(this).data('title');
+                            var confirm_msg = $(this).data('msg');
+                            $("#confirm-dialog-delete").find('p').html(confirm_msg);
+                            $("#confirm-dialog-delete").data('url', confirm_url_redirection);
+                            $("#confirm-dialog-delete").dialog("option", "title", confirm_title);
+                            $("#confirm-dialog-delete").dialog('open');
                     });
                     $("#confirm-dialog-delete").dialog({
-                 		 autoOpen: false,
-                 		 resizable: false,
-                 		 height:140,
-                 		 modal: true,
-                 		 buttons: {
-                     		 "<?php echo $this->container->get('translator')->trans('pi.form.tab.box.delete'); ?>": function() {
-                     			window.location.href = $(this).data('url');
-                     		 },
-                     		 "<?php echo $this->container->get('translator')->trans('pi.form.tab.box.cancel'); ?>": function() {
-                     		 	$( this ).dialog( "close" );
-                     		 }
-                 		 }
-             	 	});
+                          autoOpen: false,
+                          resizable: false,
+                          height:140,
+                          modal: true,
+                          buttons: {
+                              "<?php echo $this->container->get('translator')->trans('pi.form.tab.box.delete'); ?>": function() {
+                                 window.location.href = $(this).data('url');
+                              },
+                              "<?php echo $this->container->get('translator')->trans('pi.form.tab.box.cancel'); ?>": function() {
+                                  $( this ).dialog( "close" );
+                              }
+                          }
+                      });
                 });
         <?php
         // We retrieve the contents of the buffer.

@@ -78,12 +78,12 @@ class PiSeoExtension extends \Twig_Extension
      */
     public function getTitlePageFunction($lang, $title)
     {
-    	if (empty($title)) {
-    		$title  = $this->container->getParameter('pi_app_admin.layout.meta.title');
-    	}
-    	$options 		  = $this->container->get('pi_app_admin.manager.page')->getPageMetaInfo($lang, $title);
-    	$options['title'] = str_replace(array('"',"'"), array("’","’"), $options['title']);
-    	return $options['title'];
+        if (empty($title)) {
+            $title  = $this->container->getParameter('pi_app_admin.layout.meta.title');
+        }
+        $options           = $this->container->get('pi_app_admin.manager.page')->getPageMetaInfo($lang, $title);
+        $options['title'] = str_replace(array('"',"'"), array("’","’"), $options['title']);
+        return $options['title'];
     }
     
     /**
@@ -93,43 +93,39 @@ class PiSeoExtension extends \Twig_Extension
      */
     public function getMetaPageFunction($lang, array $options)
     {
-    	// we get the param.
-    	if (empty($lang)) {
-    		$lang            = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
-    	}
-    	$Uri             = $this->container->get('request_stack')->getCurrentRequest()->getUri();
-    	$BasePath        = $this->container->get('request_stack')->getCurrentRequest()->getUriForPath('');
-    	$author          = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.author'));
-    	$copyright       = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.copyright'));
-    	$description     = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.description'));
-    	$keywords        = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.keywords'));
-    	$og_title_add    = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.og_title_add'));
-    	$og_type         = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.og_type'));
-    	$og_image        = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.og_image'));
-    	$og_site_name    = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.og_site_name'));
+        // we get the param.
+        if (empty($lang)) {
+            $lang = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
+        }
+        $Uri = $this->container->get('request_stack')->getCurrentRequest()->getUri();
+        $BasePath = $this->container->get('request_stack')->getCurrentRequest()->getUriForPath('');
+        $author = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.author'));
+        $copyright = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.copyright'));
+        $description = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.description'));
+        $keywords = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.keywords'));
+        $og_title_add = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.og_title_add'));
+        $og_type = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.og_type'));
+        $og_image = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.og_image'));
+        $og_site_name = str_replace(array('"',"'"), array("’","’"), $this->container->getParameter('pi_app_admin.layout.meta.og_site_name'));
         // if the file doesn't exist, we call an exception
-        $og_image        = strip_tags($this->container->get('translator')->trans($og_image));
-        $is_file_exist   = realpath($this->container->get('kernel')->getRootDir(). '/../web/' . $og_image);
-        if (!$is_file_exist) {
-            throw ExtensionException::FileUnDefined('img',__CLASS__);
-        }        
-        $og_image = $this->container->get('templating.helper.assets')->getUrl($og_image);
+        $og_image = strip_tags($this->container->get('translator')->trans($og_image));
+        $og_image = $this->container->get('assets.packages')->getUrl($og_image);
         //
         if (isset($options['title']) && !empty($options['title'])) {
-        	$title = $options['title'];
+            $title = $options['title'];
         }
         if (isset($options['description']) && !empty($options['description'])) {
-        	$description = $options['description'];
+            $description = $options['description'];
         }        
         if (isset($options['keywords']) && !empty($options['keywords'])) {
-        	$keywords = $options['keywords'];
+            $keywords = $options['keywords'];
         }        
         // we get all info of a the current page.
         $options = $this->container->get('pi_app_admin.manager.page')->getPageMetaInfo($lang, $title, $description, $keywords);
         // we create the copyright link
         if (isset($copyright) && !empty($copyright)) {
-        	$copyright = strip_tags($this->container->get('translator')->trans($copyright));
-        	$metas[] = "<link rel='copyright' href=\"".$copyright."\"/>";
+            $copyright = strip_tags($this->container->get('translator')->trans($copyright));
+            $metas[] = "<link rel='copyright' href=\"".$copyright."\"/>";
         }
         // we create all meta tags.
         $metas[] = "    <meta charset='".$this->container->get('twig')->getCharset()."'/>";
@@ -139,7 +135,7 @@ class PiSeoExtension extends \Twig_Extension
         //
         if (isset($author) && !empty($author)) {
             $author = strip_tags($this->container->get('translator')->trans($author));
-        	$metas[] = "    <meta name='author' content=\"".$author."\"/>";
+            $metas[] = "    <meta name='author' content=\"".$author."\"/>";
         }
         if (isset($options['description']) && !empty($options['description'])) {
             $metas[] = "    <meta name='description' content=\"".$options['description']."\"/>";
@@ -170,7 +166,7 @@ class PiSeoExtension extends \Twig_Extension
         $additions       = $this->container->getParameter('pi_app_admin.layout.meta.additions');
         ksort($additions);
         foreach ($additions as $k => $values) {
-        	$metas[] = $values;
+            $metas[] = $values;
         }
         
         return implode(" \n", $metas);

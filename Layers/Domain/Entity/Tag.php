@@ -134,7 +134,8 @@ class Tag extends AbstractTranslation implements TraitDatetimeInterface,TraitEna
      * ex: $value = (string)$entity;
      *
      */
-    public function __toString() {
+    public function __toString() 
+    {
         return (string) $this->name;
     }
 
@@ -145,8 +146,8 @@ class Tag extends AbstractTranslation implements TraitDatetimeInterface,TraitEna
     public function setUpdatedValue()
     {
         $other  = $this->getGroupnameother();
-        //print_r($other);exit;
-        if (!empty($other)){
+
+        if (!empty($other)) {
             $this->setGroupname($other);
             $this->setGroupnameother('');
             $this->translate($this->locale)->setGroupname($other);
@@ -291,7 +292,7 @@ class Tag extends AbstractTranslation implements TraitDatetimeInterface,TraitEna
      */
     public function setWeight( array $weights)
     {
-        $this->weight = array();
+        $this->weight = [];
 
         foreach ($weights as $key => $value) {
             $this->addWeight($key, $value);
@@ -305,13 +306,14 @@ class Tag extends AbstractTranslation implements TraitDatetimeInterface,TraitEna
      */
     public function getWeight($key = "")
     {
-        if (!empty($key)){
-            if ($this->weight && array_key_exists($key, $this->weight))
-                return $this->weight[ $key ];
-            else
-                return 0;
-        }else
-            return $this->weight;
+        if (!empty($key)) {
+            if ($this->weight && array_key_exists($key, $this->weight)) {
+                return $this->weight[$key];
+            }
+            return 0;
+        }
+
+        return $this->weight;
     }
 
     /**
@@ -333,12 +335,12 @@ class Tag extends AbstractTranslation implements TraitDatetimeInterface,TraitEna
     {
         if (!$this->weight) {
             $this->addWeight($key, 1);
-        }
-        else {
+        } else {
             if (array_key_exists($key, $this->weight)) {
                 $this->addWeight($key, $this->weight[$key] + 1);
-            }else
+            } else {
                 $this->addWeight($key, 1);
+            }
         }
     }
 
@@ -349,12 +351,12 @@ class Tag extends AbstractTranslation implements TraitDatetimeInterface,TraitEna
      */
     public function decrementWeight($key)
     {
-           if ($this->weight && array_key_exists($key, $this->weight)) {
-               if ($this->weight[$key] > 1)
-                   $this->addWeight($key, $this->weight[$key] - 1);
-               else
-                   unset($this->weight[$key]);
+        if ($this->weight && array_key_exists($key, $this->weight)) {
+           if ($this->weight[$key] > 1) {
+               $this->addWeight($key, $this->weight[$key] - 1);
+           } else {
+               unset($this->weight[$key]);
            }
+        }
     }
-
 }
