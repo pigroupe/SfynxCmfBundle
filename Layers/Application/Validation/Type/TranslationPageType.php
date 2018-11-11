@@ -147,8 +147,8 @@ class TranslationPageType extends AbstractType
 //                    ),
 //            ))
              ->add('tags', EntityType::class, array(
-             		'class' => 'SfynxCmfBundle:Tag',
-             		'query_builder' => function(EntityRepository $er) use ($array_tags) {
+                     'class' => 'SfynxCmfBundle:Tag',
+                     'query_builder' => function(EntityRepository $er) use ($array_tags) {
                             $translatableListener = $this->_container->get('gedmo.listener.translatable');
                             $translatableListener->setTranslationFallback(true);
                             return $er->createQueryBuilder('a')
@@ -161,17 +161,17 @@ class TranslationPageType extends AbstractType
                             //->andWhere("a.enabled = 1")
                             ->orderBy('a.id', 'ASC')
                             ;
-             		},
-             		'empty_value' => 'pi.form.label.select.choose.tag',
-             		'label' => "Tag",
-             		'multiple' => true,
-             		'required'  => false,
-             		"attr" => array(
+                     },
+                     'empty_value' => 'pi.form.label.select.choose.tag',
+                     'label' => "Tag",
+                     'multiple' => true,
+                     'required'  => false,
+                     "attr" => array(
                             "class"=>"pi_multiselect ajaxselect", // ajaxselect
                             "data-url"=>$this->_container->get('sfynx.tool.route.factory')->generate("admin_content_tag_selectentity_ajax"),
                             "data-selectid" => json_encode($array_tags),
                             "data-max" => 40,
-             		)
+                     )
              ))
             ->add('breadcrumb', HiddenType::class, array(
                     'label'    => 'pi.page.form.breadcrumb',

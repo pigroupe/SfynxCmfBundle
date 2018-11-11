@@ -12,17 +12,19 @@
  */
 namespace Sfynx\CmfBundle\Layers\Domain\Service\Manager;
 
-use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\PiTreeManagerBuilderInterface;
-use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
+use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\PiTreeManagerBuilderInterface;
+use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\PiCoreManager;
 use Sfynx\ToolBundle\Util\PiArrayManager;
+use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
 
 /**
  * Description of the Tree Widget manager
  *
- * @subpackage   Admin_Managers
- * @package    Manager
- *
+ * @category   Sfynx\CmfBundle\Layers
+ * @package    Domain
+ * @subpackage Service\Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiTreeManager extends PiCoreManager implements PiTreeManagerBuilderInterface
@@ -134,33 +136,33 @@ class PiTreeManager extends PiCoreManager implements PiTreeManagerBuilderInterfa
                 if (isset($self->params->enabledonly)
                     && (!$self->params->enabledonly)
                 ) {
-                	$query  = $em->getRepository($entity)->$query_function($locale, $category, 'query', false, false, $node);
+                    $query  = $em->getRepository($entity)->$query_function($locale, $category, 'query', false, false, $node);
                 } else {
                     $query = $em->getRepository($entity)->$query_function($locale, $category, 'query', false, true, $node);
                 }
             } else {
-            	throw new \InvalidArgumentException("The metohd 'query_function' does not exist in the entity's repository {$entity}");
+                throw new \InvalidArgumentException("The metohd 'query_function' does not exist in the entity's repository {$entity}");
             }
             if (isset($self->params->navigation->searchFields)
                 && !empty($self->params->navigation->searchFields)
             ) {
-            	if (
-                	count($self->params->navigation->searchFields) == 2
-                	&& isset($self->params->navigation->searchFields->nameField)
-            	) {
-            		if (!empty($self->params->navigation->searchFields->nameField)) {
-            			$query->andWhere('node.' . $self->params->navigation->searchFields->nameField .' :value')
-            			->setParameters([
+                if (
+                    count($self->params->navigation->searchFields) == 2
+                    && isset($self->params->navigation->searchFields->nameField)
+                ) {
+                    if (!empty($self->params->navigation->searchFields->nameField)) {
+                        $query->andWhere('node.' . $self->params->navigation->searchFields->nameField .' :value')
+                        ->setParameters([
                             'value'   => $self->params->navigation->searchFields->valueField
-            			]);
-            		}
-            	} else {
-            		foreach ($self->params->navigation->searchFields as $searchFields) {
-            			if (!empty($searchFields->nameField)) {
-            				$query->andWhere('node.' . $searchFields->nameField . ' ' . $searchFields->valueField);
-            			}
-            		}
-            	}
+                        ]);
+                    }
+                } else {
+                    foreach ($self->params->navigation->searchFields as $searchFields) {
+                        if (!empty($searchFields->nameField)) {
+                            $query->andWhere('node.' . $searchFields->nameField . ' ' . $searchFields->valueField);
+                        }
+                    }
+                }
             }
             if (!empty($template)) {
                 $self->nodes = $em->getRepository($entity)->findTranslationsByQuery($locale, $query->getQuery(), 'object', false);
@@ -333,13 +335,13 @@ class PiTreeManager extends PiCoreManager implements PiTreeManagerBuilderInterfa
         $node = null;
         $query_function = null;
         if (isset($params['node']) && !empty($params['node']) ){
-        	$node = $em->getRepository($entity)->findNodeOr404($params['node'], $locale,'object');
+            $node = $em->getRepository($entity)->findNodeOr404($params['node'], $locale,'object');
         }
         $category = utf8_decode($category);
         try {
             // we construct the query
             if (isset($params['navigation>']['query_function']) && !empty($params['navigation>']['query_function'])) {
-            	$query_function = $params['navigation>']['query_function'];
+                $query_function = $params['navigation>']['query_function'];
             }
             if ((null === $query_function)) {
                 if (isset($params['enabledonly']) && ($params['enabledonly'] == "false")) {
@@ -349,45 +351,45 @@ class PiTreeManager extends PiCoreManager implements PiTreeManagerBuilderInterfa
                 }
             } elseif (method_exists($em->getRepository($entity), $query_function)) {
                 if (isset($params['enabledonly']) && ($params['enabledonly'] == "false")) {
-                	$query  = $em->getRepository($entity)->$query_function($locale, $category, 'query', false, false, $node);
+                    $query  = $em->getRepository($entity)->$query_function($locale, $category, 'query', false, false, $node);
                 } else {
-                	$query  = $em->getRepository($entity)->$query_function($locale, $category, 'query', false, true, $node);
+                    $query  = $em->getRepository($entity)->$query_function($locale, $category, 'query', false, true, $node);
                 }
             } else {
-            	throw new \InvalidArgumentException("The metohd 'query_function' does not exist in the entity's repository {$entity}");
+                throw new \InvalidArgumentException("The metohd 'query_function' does not exist in the entity's repository {$entity}");
             }
             if (isset($params['navigation>']['searchFields']) && !empty($params['navigation>']['searchFields'])) {
-            	if (
-                	count($params['navigation>']['searchFields']) == 2
-                	&&
-                	isset($params['navigation>']['searchFields']['nameField'])
-            	) {
-            		if (!empty($params['navigation>']['searchFields']['nameField'])) {
-            			$query->andWhere('node.'.$params['navigation>']['searchFields']['nameField'] .' :value')
-            			->setParameters([
+                if (
+                    count($params['navigation>']['searchFields']) == 2
+                    &&
+                    isset($params['navigation>']['searchFields']['nameField'])
+                ) {
+                    if (!empty($params['navigation>']['searchFields']['nameField'])) {
+                        $query->andWhere('node.'.$params['navigation>']['searchFields']['nameField'] .' :value')
+                        ->setParameters([
                             'value' => $params['navigation>']['searchFields']['valueField']
-            			]);
-            		}
-            	} else {
-            		foreach ($params['navigation>']['searchFields'] as $searchFields) {
-            			if (!empty($searchFields['nameField'])) {
-            				$query->andWhere('node.'.$searchFields['nameField'] .' '.$searchFields['valueField']);
-            			}
-            		}
-            	}
+                        ]);
+                    }
+                } else {
+                    foreach ($params['navigation>']['searchFields'] as $searchFields) {
+                        if (!empty($searchFields['nameField'])) {
+                            $query->andWhere('node.'.$searchFields['nameField'] .' '.$searchFields['valueField']);
+                        }
+                    }
+                }
             }
             $nodes = $em->getRepository($entity)->findTranslationsByQuery($locale, $query->getQuery(), 'array', false);
         } catch (\Exception $e) {
             $nodes = null;
         }
         if (!empty($template)) {
-        	$params['locale']     = $locale;
-        	$params['nodes']      = $nodes;
-        	$params['repository'] = $em->getRepository($entity);
-        	$response             = $this->container->get('templating')->renderResponse($template, $params);
-        	$tree                 = $response->getContent() . " \n";
-        	$tree                 = $this->container->get('sfynx.tool.string_manager')->closetags($tree);
-        	$tree                 = utf8_decode(mb_convert_encoding($tree, "UTF-8", "HTML-ENTITIES"));
+            $params['locale']     = $locale;
+            $params['nodes']      = $nodes;
+            $params['repository'] = $em->getRepository($entity);
+            $response             = $this->container->get('templating')->renderResponse($template, $params);
+            $tree                 = $response->getContent() . " \n";
+            $tree                 = $this->container->get('sfynx.tool.string_manager')->closetags($tree);
+            $tree                 = utf8_decode(mb_convert_encoding($tree, "UTF-8", "HTML-ENTITIES"));
         } else {
             // we set the tree option
             $self         = &$this;

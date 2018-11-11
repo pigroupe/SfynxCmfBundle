@@ -12,23 +12,24 @@
  */
 namespace Sfynx\CmfBundle\Layers\Domain\Service\Manager;
 
-use Sfynx\AuthBundle\Domain\Service\User\Generalisation\Interfaces\UserManagerInterface;
-use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\PiAuthenticationManagerInterface;
-use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
-use Symfony\Component\Translation\TranslatorInterface;
-use Sfynx\ToolBundle\Builder\RouteTranslatorFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\Response as Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Security;
 
+use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\PiAuthenticationManagerInterface;
+use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\PiCoreManager;
+use Sfynx\AuthBundle\Domain\Service\User\Generalisation\Interfaces\UserManagerInterface;
+use Sfynx\ToolBundle\Builder\RouteTranslatorFactoryInterface;
+use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
+
 /**
  * Description of the Authentication Widget manager
  *
- * @subpackage Admin_Managers
- * @package    Manager
- *
+ * @category   Sfynx\CmfBundle\Layers
+ * @package    Domain
+ * @subpackage Service\Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiAuthenticationManager extends PiCoreManager implements PiAuthenticationManagerInterface
@@ -117,12 +118,12 @@ class PiAuthenticationManager extends PiCoreManager implements PiAuthenticationM
      */
     public function defaultConnexion($params = null)
     {
-        $template = $this->container->getParameter('sfynx.template.theme.login') . "Security:login.html.twig";
+        $template = $this->container->getParameter('sfynx.template.theme.login') . "Security/login.html.twig";
         $referer_url = "";
         $roles = "";
         $error = '';
 
-    	if (isset($params['template']) && !empty($params['template'])) {
+        if (isset($params['template']) && !empty($params['template'])) {
             $template = $params['template'];
         }
         if (empty($params['locale'])) {
@@ -203,17 +204,17 @@ class PiAuthenticationManager extends PiCoreManager implements PiAuthenticationM
         $userManager = $this->container->get('sfynx.auth.manager.user');
 
         if (isset($params['template']) && !empty($params['template'])) {
-        	$template = $params['template'];
+            $template = $params['template'];
         } else {
-        	$template = $this->container->getParameter('sfynx.template.theme.login') . "Resetting:reset_content.html.twig";
+            $template = $this->container->getParameter('sfynx.template.theme.login') . "Resetting:reset_content.html.twig";
         }
         if (isset($params['url_redirection']) && !empty($params['url_redirection'])) {
-        	$url_redirection = $params['url_redirection'];
+            $url_redirection = $params['url_redirection'];
         } elseif(isset($params['path_url_redirection']) && !empty($params['path_url_redirection'])) {
-        	$url_redirection = $this->container->get('sfynx.tool.route.factory')
+            $url_redirection = $this->container->get('sfynx.tool.route.factory')
                         ->generate($params['path_url_redirection'], ['locale'=> $this->request->getLocale()]);
         } else {
-        	$url_redirection = $this->container->get('router')->generate("home_page");
+            $url_redirection = $this->container->get('router')->generate("home_page");
         }
         $token = $this->request->query->get('token');
         // if a user is connected, we generate automatically the token if it is not given in parameter.
@@ -246,7 +247,7 @@ class PiAuthenticationManager extends PiCoreManager implements PiAuthenticationM
                 $this->session->getFlashBag()->add('error', $flash);
             }
         }
-    	if (isset($params['clearflashes'])) {
+        if (isset($params['clearflashes'])) {
             $this->getFlashBag()->clear();
         } else {
             $this->getFlashBag()->get('permission');

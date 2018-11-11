@@ -13,18 +13,19 @@
 namespace Sfynx\CmfBundle\Layers\Domain\Service\Manager\Widget;
 
 use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Widget\Generalisation\RenderInterface;
-use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
-use Sfynx\CmfBundle\Layers\Domain\Service\Manager\PiCoreManager;
+use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\PiCoreManager;
 use Sfynx\ToolBundle\Util\PiArrayManager;
 use Sfynx\ToolBundle\Util\PiStringManager;
 use Sfynx\ToolBundle\Twig\Extension\PiToolExtension;
 use Sfynx\ToolBundle\Route\RouteTranslatorFactory;
+use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
 
 /**
  * Description of the Widget render
  *
- * @subpackage   Admin_Managers
- * @package    Widget
+ * @category   Sfynx\CmfBundle\Layers
+ * @package    Domain
+ * @subpackage Service\Manager\Widget
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class RenderWidget extends PiCoreManager implements RenderInterface

@@ -96,23 +96,23 @@ abstract class CoreListener extends abstractListener
      */
     final protected function _locales_language_json_file(LifecycleEventArgs $eventArgs)
     {
-    	$entity         = $eventArgs->getEntity();
-    	$entityManager  = $eventArgs->getEntityManager();
-    	// If  autentication user, we set the persist of the Page entity
-    	if ($this->tokenStorage->isUsernamePasswordToken()
+        $entity         = $eventArgs->getEntity();
+        $entityManager  = $eventArgs->getEntityManager();
+        // If  autentication user, we set the persist of the Page entity
+        if ($this->tokenStorage->isUsernamePasswordToken()
                 && ($entity instanceof Langue)
         ) {
             $this->container
                 ->get('sfynx.auth.locale_manager')
                 ->setJsonFileLocales();
-    	}
+        }
     }
 
     /**
      * We remove json file Etag of Page and Widget.
      *
      * @param LifecycleEventArgs $eventArgs         The LifecycleEventArgs class
-     * @param boolean     	 $delete_cache_only True to delete only cache
+     * @param boolean          $delete_cache_only True to delete only cache
      *
      * @return void
      * @access protected
@@ -121,17 +121,17 @@ abstract class CoreListener extends abstractListener
      */
     final protected function _deleteJsonFileEtag($eventArgs, $delete_cache_only = false)
     {
-    	$entity = $eventArgs->getEntity();
-    	if ($this->tokenStorage->isUsernamePasswordToken()
+        $entity = $eventArgs->getEntity();
+        if ($this->tokenStorage->isUsernamePasswordToken()
             && ($entity instanceof Page
                 || $entity instanceof TranslationPage
                 || $entity instanceof Widget
             )
-    	) {
-    	    $this->container
+        ) {
+            $this->container
                 ->get('pi_app_admin.manager.page')
                 ->cacheDelete($entity, $delete_cache_only);
-	    }
+        }
     }
 
     /**
@@ -147,16 +147,16 @@ abstract class CoreListener extends abstractListener
      */
     final protected function _JsonFilePage($eventArgs, $type)
     {
-    	$entity = $eventArgs->getEntity();
-    	if ($this->tokenStorage->isUsernamePasswordToken()
+        $entity = $eventArgs->getEntity();
+        if ($this->tokenStorage->isUsernamePasswordToken()
             && ($entity instanceof Page
                 || $entity instanceof TranslationPage
             )
-    	) {
-    	    $this->container
+        ) {
+            $this->container
                 ->get('pi_app_admin.manager.page')
                 ->cachePage($entity, $type);
-	    }
+        }
     }
 
     /**
@@ -207,9 +207,9 @@ abstract class CoreListener extends abstractListener
      */
     protected function _recursive($eventArgs, $entity, $all_locales)
     {
-    	if ($entity instanceof TranslationPage) {
+        if ($entity instanceof TranslationPage) {
             $entity = $entity->getPage();
-    	}
+        }
         // we set the persist of the Page entity
         if ($entity instanceof Page) {
             $type = 'page:';
@@ -269,7 +269,7 @@ abstract class CoreListener extends abstractListener
                         $is_refresh_snippet_authorized = $this->container
                                 ->getParameter('pi_app_admin.page.refresh.allpage_containing_snippet');
                         if ($is_refresh_snippet_authorized) {
-                        	// we get all widgets which use the gedmo snippet
+                            // we get all widgets which use the gedmo snippet
                             $all_widget_used_snippet = $this->getRepository('Widget')
                                     ->getWidgetByOptions('gedmo', 'snippet', '<id>'.$entity->getId().'</id>')->getQuery()->getResult();
                             if (is_array($all_widget_used_snippet)) {
@@ -442,10 +442,10 @@ abstract class CoreListener extends abstractListener
                 }
                 $path_pc_layout     = realpath($this->container
                         ->get('kernel')
-                        ->locateResource($this->container->getParameter('sfynx.template.theme.layout.front.pc.path') . $init_pc_layout));
+                        ->locateResource($this->container->getParameter('sfynx.template.theme.layout.front.pc') . $init_pc_layout));
                 $path_mobile_layout = realpath($this->container
                         ->get('kernel')
-                        ->locateResource($this->container->getParameter('sfynx.template.theme.layout.front.mobile.path') . $init_mobile_layout . '/' . 'modele.html.twig'));
+                        ->locateResource($this->container->getParameter('sfynx.template.theme.layout.front.mobile') . $init_mobile_layout . '/' . 'modele.html.twig'));
                 // if the both path layout exist.
                 if (!empty($path_pc_layout) && !empty($path_mobile_layout)) {
                     $content_file_pc         = $this->container
@@ -652,7 +652,7 @@ abstract class CoreListener extends abstractListener
             if ($entity instanceof Page) {
                 // if we try to delete a page other than the home page.
                 if (($entity->getRouteName() != 'home_page' )
-                	&& $eventArgs->hasChangedField('route_name')
+                    && $eventArgs->hasChangedField('route_name')
                 ) {
                     // we delete the row in relation with the pi_routing table
                     $query  = "SELECT id FROM pi_routing WHERE route = ?";
@@ -987,7 +987,7 @@ abstract class CoreListener extends abstractListener
                 && $entity instanceof TranslationPage
         ){
             if ($eventArgs->hasChangedField('status')
-            	&& ($eventArgs->getOldValue('status') != $eventArgs->getNewValue('status'))
+                && ($eventArgs->getOldValue('status') != $eventArgs->getNewValue('status'))
             ) {
                 $historicalStatus = new HistoricalStatus();
                 $historicalStatus->setCreatedAt(new \DateTime(date('Y-m-d')));

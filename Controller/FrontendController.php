@@ -69,30 +69,30 @@ class FrontendController extends CmfabstractController
      */
     public function esipageAction($method, $serviceName, $id, $lang, $params, $server, $key)
     {
-    	$method      = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($method, $key);
-    	$serviceName = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($serviceName, $key);
-    	$id          = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($id, $key);
-    	$lang        = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($lang, $key);
-    	$params      = json_decode($this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($params, $key), true);
-    	$options     = json_decode($this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($server, $key), true);
-    	// we get the page manager
-    	$pageManager = $this->get('pi_app_admin.manager.page');
-    	// we set the ESI page result
-    	$response    = $pageManager->renderESISource($serviceName, $method, $id, $lang, $params, $options);
+        $method      = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($method, $key);
+        $serviceName = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($serviceName, $key);
+        $id          = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($id, $key);
+        $lang        = $this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($lang, $key);
+        $params      = json_decode($this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($params, $key), true);
+        $options     = json_decode($this->container->get('sfynx.tool.twig.extension.tool')->decryptFilter($server, $key), true);
+        // we get the page manager
+        $pageManager = $this->get('pi_app_admin.manager.page');
+        // we set the ESI page result
+        $response    = $pageManager->renderESISource($serviceName, $method, $id, $lang, $params, $options);
 
-    	//     	print_r($server['REQUEST_URI']);
-    	//     	print_r($serviceName);
-    	//     	print_r($method);
-    	//     	print_r($id);
-    	//     	print_r($lang);
-    	//     	print_r($params);
-    	//     	exit;
-    	//$route_name = $this->container->get('request_stack')->getCurrentRequest()->get('_route');
-    	//$route_name = $this->container->get('request_stack')->getCurrentRequest()->attributes->get('_route');
-    	//$path_info = $this->container->get('request_stack')->getCurrentRequest()->getRequestUri();
-    	//print_r($path_info);exit;
+        //         print_r($server['REQUEST_URI']);
+        //         print_r($serviceName);
+        //         print_r($method);
+        //         print_r($id);
+        //         print_r($lang);
+        //         print_r($params);
+        //         exit;
+        //$route_name = $this->container->get('request_stack')->getCurrentRequest()->get('_route');
+        //$route_name = $this->container->get('request_stack')->getCurrentRequest()->attributes->get('_route');
+        //$path_info = $this->container->get('request_stack')->getCurrentRequest()->getRequestUri();
+        //print_r($path_info);exit;
 
-    	return $response;
+        return $response;
     }
 
     /**
@@ -105,7 +105,7 @@ class FrontendController extends CmfabstractController
      */
     public function copypageAction()
     {
-    	try {
+        try {
             $locale = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
             $data   = $this->container->get('sfynx.tool.route.factory')->getRefererRoute($locale, ['result' => 'match']);
             // we get the page manager
@@ -116,11 +116,11 @@ class FrontendController extends CmfabstractController
             if ($page instanceof Page){
                 $new_url = $pageManager->copyPage();
             }
-    	} catch (\Exception $e) {
+        } catch (\Exception $e) {
             $new_url = $this->container->get('router')->generate('home_page');
-    	}
+        }
 
-    	return new RedirectResponse($new_url);
+        return new RedirectResponse($new_url);
     }
 
     /**
@@ -133,7 +133,7 @@ class FrontendController extends CmfabstractController
      */
     public function refreshpageAction()
     {
-    	try {
+        try {
             $lang    = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
             $data    = $this->container->get('sfynx.tool.route.factory')->getRefererRoute($lang, array('result' => 'match'));
             $new_url = $this->container->get('sfynx.tool.route.factory')->getRefererRoute($lang);
@@ -146,11 +146,11 @@ class FrontendController extends CmfabstractController
                 $pageManager->cacheRefresh();
             }
             $this->container->get('request_stack')->getCurrentRequest()->setLocale($lang);
-    	} catch (\Exception $e) {
+        } catch (\Exception $e) {
             $new_url = $this->container->get('router')->generate('home_page');
-    	}
+        }
 
-    	return new RedirectResponse($new_url);
+        return new RedirectResponse($new_url);
     }
 
     /**
@@ -276,9 +276,9 @@ class FrontendController extends CmfabstractController
      */
     public function contentfileAction($file)
     {
-    	$fileFormatter    = $this->container->get('sfynx.tool.file_manager');
+        $fileFormatter    = $this->container->get('sfynx.tool.file_manager');
 
-    	return $fileFormatter->getContentCodeFile($file);
+        return $fileFormatter->getContentCodeFile($file);
     }
 
     /**

@@ -37,16 +37,16 @@ class WidgetType extends AbstractType
                     'label'    => 'pi.form.label.field.enabled',
             ))
             ->add('secure', 'checkbox', array(
-            		'label'    => 'pi.page.form.secure',
-            		'required' => false,
+                    'label'    => 'pi.page.form.secure',
+                    'required' => false,
             ))
             ->add('heritage', SecurityRolesType::class, array(
-            		'multiple' => true,
-            		'required' => false,
-            		'label'    => 'pi.page.form.heritage',
-            		"attr" => array(
-            				"class"=>"pi_multiselect",
-            		),
+                    'multiple' => true,
+                    'required' => false,
+                    'label'    => 'pi.page.form.heritage',
+                    "attr" => array(
+                            "class"=>"pi_multiselect",
+                    ),
             ))
             ->add('plugin', 'choice', array(
                     'choices'   => PiWidgetExtension::getAvailableWidgetPlugins(),
@@ -68,15 +68,15 @@ class WidgetType extends AbstractType
                     'required'  => false,
                     'help_block' => 'pi.page.form.field.cacheable',
                     "label_attr" => array(
- 						"class"=>"widget_httpcache",
- 					)
+                         "class"=>"widget_httpcache",
+                     )
             ))
             ->add('public', 'checkbox', array(
                     'label'     => 'pi.page.form.public',
                     'required'  => false,
                     'help_block' => 'pi.page.form.field.public',
                     "label_attr" => array(
-                    		"class"=>"widget_httpcache",
+                            "class"=>"widget_httpcache",
                     )
             ))
             ->add('lifetime', 'number', array(
@@ -84,37 +84,37 @@ class WidgetType extends AbstractType
                     'required'  => false,
                     'help_block' => 'pi.page.form.field.lifetime',
                     "label_attr" => array(
-                    		"class"=>"widget_httpcache",
+                            "class"=>"widget_httpcache",
                     )
             ))
             ->add('cacheTemplating', 'choice', array(
-            		'choices'   => \Sfynx\CmfBundle\Layers\Infrastructure\Persistence\Repository\WidgetRepository::getAvailableCacheTemplating(),
-            		'label'    => 'pi.widget.form.cachetemplating',
-            		'required'  => true,
-            		'multiple'    => false,
-            		'expanded' => true,
-            		"label_attr" => array(
-            				"class"=>"widget_behavior widget_cachetemplating",
-            		),
+                    'choices'   => \Sfynx\CmfBundle\Layers\Infrastructure\Persistence\Repository\WidgetRepository::getAvailableCacheTemplating(),
+                    'label'    => 'pi.widget.form.cachetemplating',
+                    'required'  => true,
+                    'multiple'    => false,
+                    'expanded' => true,
+                    "label_attr" => array(
+                            "class"=>"widget_behavior widget_cachetemplating",
+                    ),
             ))
             ->add('sluggify', 'choice', array(
-            		'choices'   => \Sfynx\CmfBundle\Layers\Infrastructure\Persistence\Repository\WidgetRepository::getAvailableSluggify(),
-            		'label'    => 'pi.widget.form.sluggify',
-            		'required'  => true,
-            		'multiple'    => false,
-            		'expanded' => true,
-            		"label_attr" => array(
-            				"class"=>"widget_behavior widget_sluggify",
-            		),
+                    'choices'   => \Sfynx\CmfBundle\Layers\Infrastructure\Persistence\Repository\WidgetRepository::getAvailableSluggify(),
+                    'label'    => 'pi.widget.form.sluggify',
+                    'required'  => true,
+                    'multiple'    => false,
+                    'expanded' => true,
+                    "label_attr" => array(
+                            "class"=>"widget_behavior widget_sluggify",
+                    ),
             ))
             ->add('ajax', 'choice', array(
-            		'choices'   => \Sfynx\CmfBundle\Layers\Infrastructure\Persistence\Repository\WidgetRepository::getAvailableAjax(),
-            		'label'    => 'pi.widget.form.ajax',
-            		'required'  => true,
-            		'multiple'    => false,
-            		'expanded' => true,
+                    'choices'   => \Sfynx\CmfBundle\Layers\Infrastructure\Persistence\Repository\WidgetRepository::getAvailableAjax(),
+                    'label'    => 'pi.widget.form.ajax',
+                    'required'  => true,
+                    'multiple'    => false,
+                    'expanded' => true,
                     "label_attr" => array(
-                    		"class"=>"widget_behavior widget_ajax",
+                            "class"=>"widget_behavior widget_ajax",
                     ),
             ))
         ;

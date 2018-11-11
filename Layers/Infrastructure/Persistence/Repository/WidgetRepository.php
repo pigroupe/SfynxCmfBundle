@@ -53,10 +53,10 @@ class WidgetRepository extends EntityRepository
      */
     public static function getAvailableCacheTemplating()
     {
-    	return array(
-    			self::CACHE_YES  => 'pi.widget.cache.yes',
-    			self::CACHE_NO   => 'pi.widget.cache.no'
-    	);
+        return array(
+                self::CACHE_YES  => 'pi.widget.cache.yes',
+                self::CACHE_NO   => 'pi.widget.cache.no'
+        );
     }
 
     /**
@@ -71,10 +71,10 @@ class WidgetRepository extends EntityRepository
      */
     public static function getAvailableAjax()
     {
-    	return array(
-    			self::AJAX_YES  => 'pi.widget.ajax.yes',
-    			self::AJAX_NO   => 'pi.widget.ajax.no'
-    	);
+        return array(
+                self::AJAX_YES  => 'pi.widget.ajax.yes',
+                self::AJAX_NO   => 'pi.widget.ajax.no'
+        );
     }
 
     /**
@@ -89,10 +89,10 @@ class WidgetRepository extends EntityRepository
      */
     public static function getAvailableSluggify()
     {
-    	return array(
-    			self::SLUGGIFY_YES  => 'pi.widget.sluggify.yes',
-    			self::SLUGGIFY_NO   => 'pi.widget.sluggify.no'
-    	);
+        return array(
+                self::SLUGGIFY_YES  => 'pi.widget.sluggify.yes',
+                self::SLUGGIFY_NO   => 'pi.widget.sluggify.no'
+        );
     }
 
     /**

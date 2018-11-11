@@ -137,8 +137,8 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('route')->isRequired()
                     ->isRequired()
                         ->children()
-                    	    ->booleanNode('with_prefix_locale')->isRequired()->defaultValue(false)->end()
-                    	    ->booleanNode('single_slug')->isRequired()->defaultValue(false)->end()
+                            ->booleanNode('with_prefix_locale')->isRequired()->defaultValue(false)->end()
+                            ->booleanNode('single_slug')->isRequired()->defaultValue(false)->end()
                         ->end()
                     ->end()                       
 

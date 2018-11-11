@@ -156,7 +156,7 @@ class PiWidgetAdminManager extends PiJqueryExtension
                                       "restore" : "ui-icon-bullet"
                                     },
                                 });
-                     	    });
+                             });
                             // end ajax
                         }
 
@@ -210,7 +210,7 @@ class PiWidgetAdminManager extends PiJqueryExtension
                                       "restore" : "ui-icon-bullet"
                                     },
                                 });
-                     	    });
+                             });
                             // end ajax
                         }
 
@@ -260,7 +260,7 @@ class PiWidgetAdminManager extends PiJqueryExtension
                                       "restore" : "ui-icon-bullet"
                                     },
                                 });
-                     	    });
+                             });
                             // end ajax
                         }
 
@@ -322,7 +322,7 @@ class PiWidgetAdminManager extends PiJqueryExtension
                                       "restore" : "ui-icon-bullet"
                                     },
                                 });
-                     	    });
+                             });
                             // end ajax
                         }
 
@@ -382,7 +382,7 @@ class PiWidgetAdminManager extends PiJqueryExtension
                                    "restore" : "ui-icon-bullet"
                                  },
                                });
-                 	    });
+                         });
                         // end ajax
                     });
                     // end click
@@ -498,7 +498,7 @@ class PiWidgetAdminManager extends PiJqueryExtension
                                     },
                                 });
                             }
-                 	    });
+                         });
                         // end ajax
                     });
                     // end click

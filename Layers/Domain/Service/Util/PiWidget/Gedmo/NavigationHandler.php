@@ -140,10 +140,10 @@ class NavigationHandler extends AbstractHandler implements HandlerWidgetInterfac
 //                }
 //                if ($xmlConfig->widgets->gedmo->params->get('navigation')) {
 //                    if ($xmlConfig->widgets->gedmo->params->navigation->get('searchFields')) {
-//                    	$params['searchFields'] = $xmlConfig->widgets->gedmo->params->navigation->searchFields->toArray();
+//                        $params['searchFields'] = $xmlConfig->widgets->gedmo->params->navigation->searchFields->toArray();
 //                    }
 //                    if ($xmlConfig->widgets->gedmo->params->navigation->get('query_function')) {
-//                    	$params['query_function'] = $xmlConfig->widgets->gedmo->params->navigation->query_function;
+//                        $params['query_function'] = $xmlConfig->widgets->gedmo->params->navigation->query_function;
 //                    }
 //                    if ($xmlConfig->widgets->gedmo->params->navigation->get('separatorClass')) {
 //                        $params['separatorClass'] = $xmlConfig->widgets->gedmo->params->navigation->separatorClass;

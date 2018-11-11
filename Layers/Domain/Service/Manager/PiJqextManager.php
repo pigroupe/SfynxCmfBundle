@@ -12,16 +12,18 @@
  */
 namespace Sfynx\CmfBundle\Layers\Domain\Service\Manager;
 
-use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\PiJqextManagerBuilderInterface;
-use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
+use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\Interfaces\PiJqextManagerBuilderInterface;
+use Sfynx\CmfBundle\Layers\Domain\Service\Manager\Generalisation\PiCoreManager;
+use Sfynx\CoreBundle\Layers\Domain\Service\Request\Generalisation\RequestInterface;
 
 /**
  * Description of the jquery Extension manager
  *
- * @subpackage   Admin_Managers
- * @package    Manager
- * 
+ * @category   Sfynx\CmfBundle\Layers
+ * @package    Domain
+ * @subpackage Service\Manager
  * @author Etienne de Longeaux <etienne.delongeaux@gmail.com>
  */
 class PiJqextManager extends PiCoreManager implements PiJqextManagerBuilderInterface 

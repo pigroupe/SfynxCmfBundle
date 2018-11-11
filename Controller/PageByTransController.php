@@ -89,7 +89,7 @@ class PageByTransController extends CmfabstractController
      */
     public function deletetwigcacheajaxAction($type = 'page')
     {
-    	return parent::deletetwigcacheajaxAction($type);
+        return parent::deletetwigcacheajaxAction($type);
     }
 
     /**

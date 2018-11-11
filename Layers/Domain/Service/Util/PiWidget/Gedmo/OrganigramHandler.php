@@ -179,11 +179,11 @@ class OrganigramHandler extends AbstractHandler implements HandlerWidgetInterfac
                 }
                 if ($xmlConfig->widgets->gedmo->params->get('organigram')) {
                     if ($xmlConfig->widgets->gedmo->params->organigram->get('searchFields')) {
-                    	$params['searchFields'] = $xmlConfig->widgets->gedmo->params->organigram->searchFields->toArray();
+                        $params['searchFields'] = $xmlConfig->widgets->gedmo->params->organigram->searchFields->toArray();
                     }
                     $params['query_function'] = null;
                     if ($xmlConfig->widgets->gedmo->params->organigram->get('query_function')) {
-                    	$params['query_function'] = $xmlConfig->widgets->gedmo->params->organigram->query_function;
+                        $params['query_function'] = $xmlConfig->widgets->gedmo->params->organigram->query_function;
                     }
                     if ($xmlConfig->widgets->gedmo->params->organigram->get('params')) {
                         $params = array_merge($params, $xmlConfig->widgets->gedmo->params->organigram->params->toArray());

@@ -70,13 +70,13 @@ class DoctrineRoute implements DoctrineRouteInterface
      */
     public function addAllRoutePageCollections()
     {
-    	$all_route_values = $this->getAllRouteValues();
-    	if ((null === $all_route_values)){
-    		$this->parseRoutePages();
-    		$all_route_values = $this->getAllRouteValues();
-    	}
+        $all_route_values = $this->getAllRouteValues();
+        if ((null === $all_route_values)){
+            $this->parseRoutePages();
+            $all_route_values = $this->getAllRouteValues();
+        }
 
-    	return $all_route_values;
+        return $all_route_values;
     }
 
     /**
@@ -90,44 +90,44 @@ class DoctrineRoute implements DoctrineRouteInterface
      */
     public function parseRoutePages()
     {
-    	$all_routes = [];
-    	$results    = $this->connection->fetchAll("SELECT id,route,locales,defaults,requirements FROM pi_routing");
-    	foreach ($results as $key => $values) {
-    		$all_routes[ $values['route'] ]['id']           = $values['id'];
-    		$all_routes[ $values['route'] ]['locales']      = $values['locales'];
-    		$all_routes[ $values['route'] ]['defaults']     = $values['defaults'];
-    		$all_routes[ $values['route'] ]['requirements'] = $values['requirements'];
-    	}
-//    	print_r($all_routes);
-    	$all_pages = $this->em->getRepository('SfynxCmfBundle:Page')->getAllPageHtml()->getQuery()->getResult();
+        $all_routes = [];
+        $results    = $this->connection->fetchAll("SELECT id,route,locales,defaults,requirements FROM pi_routing");
+        foreach ($results as $key => $values) {
+            $all_routes[ $values['route'] ]['id']           = $values['id'];
+            $all_routes[ $values['route'] ]['locales']      = $values['locales'];
+            $all_routes[ $values['route'] ]['defaults']     = $values['defaults'];
+            $all_routes[ $values['route'] ]['requirements'] = $values['requirements'];
+        }
+//        print_r($all_routes);
+        $all_pages = $this->em->getRepository('SfynxCmfBundle:Page')->getAllPageHtml()->getQuery()->getResult();
         foreach ($all_pages as $key => $page) {
-        	if (($page instanceof \Sfynx\CmfBundle\Layers\Domain\Entity\Page) && $page->getEnabled()) {
-        	    if (!$page->getTranslations()->isEmpty()) {
+            if (($page instanceof \Sfynx\CmfBundle\Layers\Domain\Entity\Page) && $page->getEnabled()) {
+                if (!$page->getTranslations()->isEmpty()) {
                     $fieldEntity = null;
-            		$route   = $page->getRouteName();
+                    $route   = $page->getRouteName();
                     $locales = $this->container->get('pi_app_admin.manager.page')->getUrlByPage($page);
                     $defaults  = array('_controller'=>'SfynxCmfBundle:Frontend:page');
                     $requirements = array('_method'=>'GET|POST');
                     if (isset($all_routes[ $route ])) {
                         $fieldEntity = $all_routes[ $route ];
                     }
-            		if (isset($all_routes[ $route ]) && !empty($all_routes[ $route ]['defaults'])) {
-            			$defaults = json_decode($all_routes[ $route ]['defaults'], true);
-            	    }
-                	if (isset($all_routes[ $route ]['requirements']) && !empty($all_routes[ $route ]['requirements'])) {
-                	    $requirements = json_decode($all_routes[ $route ]['requirements'], true);
-                	}
-                	if (
+                    if (isset($all_routes[ $route ]) && !empty($all_routes[ $route ]['defaults'])) {
+                        $defaults = json_decode($all_routes[ $route ]['defaults'], true);
+                    }
+                    if (isset($all_routes[ $route ]['requirements']) && !empty($all_routes[ $route ]['requirements'])) {
+                        $requirements = json_decode($all_routes[ $route ]['requirements'], true);
+                    }
+                    if (
                         isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ])
                         && !empty($GLOBALS['ROUTE']['SLUGGABLE'][ $route ])
                         && isset($GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['requirement'])
-                	){
-                	    $requirements = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['requirement'];
-                	}
+                    ){
+                        $requirements = $GLOBALS['ROUTE']['SLUGGABLE'][ $route ]['requirement'];
+                    }
                     $this->addRoute($fieldEntity, $route, $locales, $defaults, $requirements);
-       		    }
-    		}
-    	}
+                   }
+            }
+        }
     }
 
     /**

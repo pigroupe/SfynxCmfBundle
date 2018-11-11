@@ -186,7 +186,7 @@ class Widget implements TraitDatetimeInterface,TraitEnabledInterface,TraitPositi
      */
     public function setId($id)
     {
-    	$this->id = (int) $id;
+        $this->id = (int) $id;
         return $this;
     }
 
@@ -302,7 +302,7 @@ class Widget implements TraitDatetimeInterface,TraitEnabledInterface,TraitPositi
      */
     public function setCacheTemplating($cacheTemplating)
     {
-    	$this->cacheTemplating = $cacheTemplating;
+        $this->cacheTemplating = $cacheTemplating;
         return $this;
     }
 
@@ -313,7 +313,7 @@ class Widget implements TraitDatetimeInterface,TraitEnabledInterface,TraitPositi
      */
     public function getCacheTemplating()
     {
-    	return $this->cacheTemplating;
+        return $this->cacheTemplating;
     }
 
     /**
@@ -323,7 +323,7 @@ class Widget implements TraitDatetimeInterface,TraitEnabledInterface,TraitPositi
      */
     public function setAjax($ajax)
     {
-    	$this->ajax = $ajax;
+        $this->ajax = $ajax;
         return $this;
     }
 
@@ -334,7 +334,7 @@ class Widget implements TraitDatetimeInterface,TraitEnabledInterface,TraitPositi
      */
     public function getAjax()
     {
-    	return $this->ajax;
+        return $this->ajax;
     }
 
     /**
@@ -344,7 +344,7 @@ class Widget implements TraitDatetimeInterface,TraitEnabledInterface,TraitPositi
      */
     public function setSluggify($sluggify)
     {
-    	$this->sluggify = $sluggify;
+        $this->sluggify = $sluggify;
         return $this;
     }
 
@@ -355,7 +355,7 @@ class Widget implements TraitDatetimeInterface,TraitEnabledInterface,TraitPositi
      */
     public function getSluggify()
     {
-    	return $this->sluggify;
+        return $this->sluggify;
     }
 
     /**
@@ -461,7 +461,7 @@ class Widget implements TraitDatetimeInterface,TraitEnabledInterface,TraitPositi
      */
     public function setSecure($secure)
     {
-    	$this->secure = $secure;
+        $this->secure = $secure;
         return $this;
     }
 
@@ -472,6 +472,6 @@ class Widget implements TraitDatetimeInterface,TraitEnabledInterface,TraitPositi
      */
     public function getSecure()
     {
-    	return $this->secure;
+        return $this->secure;
     }
 }

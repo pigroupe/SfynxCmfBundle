@@ -15,7 +15,7 @@ namespace Sfynx\CmfBundle\Layers\Domain\Service\Util\PiJquery;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Sfynx\ToolBundle\Twig\Extension\PiJqueryExtension;
-use Sfynx\CoreBundle\Layers\Infrastructure\Exception\ExtensionException;
+use Sfynx\CoreBundle\Layers\Infrastructure\Exception\{ServiceException, ExtensionException};
 use Sfynx\CmfBundle\Layers\Domain\Service\Manager\PiPageManager;
 use Sfynx\CmfBundle\Layers\Domain\Service\Manager\PiTreeManager;
 
@@ -282,7 +282,7 @@ class PiOrgChartPageManager extends PiJqueryExtension
 
             return $htmlTree;
         }
-        throw ExtensionException::serviceUndefined('PiPageManager');
+        throw ServiceException::serviceNotSupported('PiPageManager');
     }
 
     /**

@@ -91,7 +91,7 @@ class TranslationWidget implements TraitDatetimeInterface,TraitEnabledInterface
      */
     public function setId($id)
     {
-    	$this->id = (int) $id;
+        $this->id = (int) $id;
     }
 
     /**

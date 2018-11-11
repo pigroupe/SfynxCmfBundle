@@ -120,7 +120,7 @@ class LuceneHandler extends AbstractHandler implements HandlerWidgetInterface
 //                       $params['widget-sluggify']  = ((int) $options['widget-sluggify']) ? true : false;
 //                       $params['cachable']         = ((int) $options['widget-cachetemplating']) ? true : false;
                        if ($xmlConfig->widgets->gedmo->params->get('cachable')) {
-                       	$params['cachable'] = ($xmlConfig->widgets->search->params->cachable === 'true') ? true : false;
+                           $params['cachable'] = ($xmlConfig->widgets->search->params->cachable === 'true') ? true : false;
                        }                       
                        if ($params['cachable']) {
                            return $this->renderWidget->renderCache('pi_app_admin.manager.search_lucene', $this->action, "$JQcontainer~$JQservice", $lang, $params);
